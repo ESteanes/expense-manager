@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,18 +11,18 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the RoundUpObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RoundUpObject{}
 
-// RoundUpObject Provides information about how a Round Up was applied, such as whether or not a boost was included in the Round Up. 
+// RoundUpObject Provides information about how a Round Up was applied, such as whether or not a boost was included in the Round Up.
 type RoundUpObject struct {
-	// The total amount of this Round Up, including any boosts, represented as a negative value. 
-	Amount MoneyObject `json:"amount"`
+	// The total amount of this Round Up, including any boosts, represented as a negative value.
+	Amount       MoneyObject                       `json:"amount"`
 	BoostPortion NullableRoundUpObjectBoostPortion `json:"boostPortion"`
 }
 
@@ -98,7 +98,7 @@ func (o *RoundUpObject) SetBoostPortion(v RoundUpObjectBoostPortion) {
 }
 
 func (o RoundUpObject) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -126,10 +126,10 @@ func (o *RoundUpObject) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -185,5 +185,3 @@ func (v *NullableRoundUpObject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

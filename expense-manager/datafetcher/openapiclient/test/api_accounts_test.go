@@ -11,10 +11,10 @@ package openapiclient
 
 import (
 	"context"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/esteanes/expense-manager"
 )
 
 func Test_openapiclient_AccountsAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_openapiclient_AccountsAPIService(t *testing.T) {
 
 	t.Run("Test AccountsAPIService AccountsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.AccountsAPI.AccountsGet(context.Background()).Execute()
 
@@ -36,7 +36,7 @@ func Test_openapiclient_AccountsAPIService(t *testing.T) {
 
 	t.Run("Test AccountsAPIService AccountsIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id string
 

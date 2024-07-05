@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -102,8 +101,6 @@ docs/WebhookResourceAttributes.md
 docs/WebhookResourceRelationships.md
 docs/WebhooksAPI.md
 git_push.sh
-go.mod
-go.sum
 model_account_resource.go
 model_account_resource_attributes.go
 model_account_resource_links.go
@@ -189,10 +186,4 @@ model_webhook_resource.go
 model_webhook_resource_attributes.go
 model_webhook_resource_relationships.go
 response.go
-test/api_accounts_test.go
-test/api_categories_test.go
-test/api_tags_test.go
-test/api_transactions_test.go
-test/api_utility_endpoints_test.go
-test/api_webhooks_test.go
 utils.go

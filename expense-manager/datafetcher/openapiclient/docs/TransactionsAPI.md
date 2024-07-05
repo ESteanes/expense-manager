@@ -28,7 +28,7 @@ import (
 	"fmt"
 	"os"
     "time"
-	openapiclient "github.com/esteanes/expense-manager"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 )
 
 func main() {
@@ -111,7 +111,7 @@ import (
 	"fmt"
 	"os"
     "time"
-	openapiclient "github.com/esteanes/expense-manager"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 )
 
 func main() {
@@ -187,7 +187,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/esteanes/expense-manager"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 )
 
 func main() {

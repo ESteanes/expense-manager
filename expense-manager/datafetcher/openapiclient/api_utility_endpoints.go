@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -18,12 +18,11 @@ import (
 	"net/url"
 )
 
-
 // UtilityEndpointsAPIService UtilityEndpointsAPI service
 type UtilityEndpointsAPIService service
 
 type ApiUtilPingGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UtilityEndpointsAPIService
 }
 
@@ -39,25 +38,25 @@ authentication is functioning correctly. On authentication success an
 HTTP `200` status is returned. On failure an HTTP `401` error response
 is returned.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUtilPingGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUtilPingGetRequest
 */
 func (a *UtilityEndpointsAPIService) UtilPingGet(ctx context.Context) ApiUtilPingGetRequest {
 	return ApiUtilPingGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PingResponse
+//
+//	@return PingResponse
 func (a *UtilityEndpointsAPIService) UtilPingGetExecute(r ApiUtilPingGetRequest) (*PingResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PingResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *PingResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UtilityEndpointsAPIService.UtilPingGet")
@@ -117,8 +116,8 @@ func (a *UtilityEndpointsAPIService) UtilPingGetExecute(r ApiUtilPingGetRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

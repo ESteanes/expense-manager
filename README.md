@@ -56,7 +56,33 @@ endpoitns to drive the UI
 3. Generate the REST client code
 ```
 cd ./datafetcher
-openapi-generator-cli generate   -i openapi.json   -g go   -o ./openapiclient   --additional-properties packageName=openapiclient   --git-user-id esteanes   --git-repo-id expense-manager
+openapi-generator-cli generate   -i openapi.json   -g go   -o ./openapiclient   --additional-properties packageName=openapiclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/openapiclient
 ```
+Its recommended to have a file called `.openapi-generator-ignore` inside the /openapiclient with the following contents:
+```
+# OpenAPI Generator Ignore
+
+go.mod
+go.sum
+LICENSE
+```
+This will stop the generator from generating those files (which will mess up the Go compilation)
+
+
 4. Format code
 `gofmt -s -w .`
+
+5. Fix up any import changes
+`go mod tidy`
+
+6. Build an executable
+```
+go build -o expense-manager.exe #windows
+go build -o expense-manager #linux
+```
+
+7. Run the executable
+```
+.\expense-manager.exe #windows
+./expense-manager #linux
+```

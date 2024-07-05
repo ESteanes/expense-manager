@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,8 +11,8 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
@@ -21,8 +21,8 @@ var _ MappedNullable = &TransactionResourceRelationshipsCategory{}
 
 // TransactionResourceRelationshipsCategory struct for TransactionResourceRelationshipsCategory
 type TransactionResourceRelationshipsCategory struct {
-	Data NullableCategoryResourceRelationshipsParentData `json:"data"`
-	Links *TransactionResourceRelationshipsCategoryLinks `json:"links,omitempty"`
+	Data  NullableCategoryResourceRelationshipsParentData `json:"data"`
+	Links *TransactionResourceRelationshipsCategoryLinks  `json:"links,omitempty"`
 }
 
 type _TransactionResourceRelationshipsCategory TransactionResourceRelationshipsCategory
@@ -104,7 +104,7 @@ func (o *TransactionResourceRelationshipsCategory) SetLinks(v TransactionResourc
 }
 
 func (o TransactionResourceRelationshipsCategory) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -133,10 +133,10 @@ func (o *TransactionResourceRelationshipsCategory) UnmarshalJSON(data []byte) (e
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -192,5 +192,3 @@ func (v *NullableTransactionResourceRelationshipsCategory) UnmarshalJSON(src []b
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

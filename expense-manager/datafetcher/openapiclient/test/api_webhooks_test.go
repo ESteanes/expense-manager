@@ -11,10 +11,10 @@ package openapiclient
 
 import (
 	"context"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/esteanes/expense-manager"
 )
 
 func Test_openapiclient_WebhooksAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_openapiclient_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.WebhooksAPI.WebhooksGet(context.Background()).Execute()
 
@@ -36,7 +36,7 @@ func Test_openapiclient_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id string
 
@@ -49,7 +49,7 @@ func Test_openapiclient_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id string
 
@@ -63,7 +63,7 @@ func Test_openapiclient_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.WebhooksAPI.WebhooksPost(context.Background()).Execute()
 
@@ -75,7 +75,7 @@ func Test_openapiclient_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksWebhookIdLogsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var webhookId string
 
@@ -89,7 +89,7 @@ func Test_openapiclient_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksWebhookIdPingPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var webhookId string
 

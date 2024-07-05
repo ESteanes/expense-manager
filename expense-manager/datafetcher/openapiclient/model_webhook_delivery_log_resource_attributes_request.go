@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,17 +11,17 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the WebhookDeliveryLogResourceAttributesRequest type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &WebhookDeliveryLogResourceAttributesRequest{}
 
-// WebhookDeliveryLogResourceAttributesRequest Information about the request that was sent to the webhook URL. 
+// WebhookDeliveryLogResourceAttributesRequest Information about the request that was sent to the webhook URL.
 type WebhookDeliveryLogResourceAttributesRequest struct {
-	// The payload that was sent in the request body. 
+	// The payload that was sent in the request body.
 	Body string `json:"body"`
 }
 
@@ -70,7 +70,7 @@ func (o *WebhookDeliveryLogResourceAttributesRequest) SetBody(v string) {
 }
 
 func (o WebhookDeliveryLogResourceAttributesRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -96,10 +96,10 @@ func (o *WebhookDeliveryLogResourceAttributesRequest) UnmarshalJSON(data []byte)
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -155,5 +155,3 @@ func (v *NullableWebhookDeliveryLogResourceAttributesRequest) UnmarshalJSON(src 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

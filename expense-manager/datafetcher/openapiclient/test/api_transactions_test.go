@@ -11,10 +11,10 @@ package openapiclient
 
 import (
 	"context"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/esteanes/expense-manager"
 )
 
 func Test_openapiclient_TransactionsAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_openapiclient_TransactionsAPIService(t *testing.T) {
 
 	t.Run("Test TransactionsAPIService AccountsAccountIdTransactionsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var accountId string
 
@@ -38,7 +38,7 @@ func Test_openapiclient_TransactionsAPIService(t *testing.T) {
 
 	t.Run("Test TransactionsAPIService TransactionsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.TransactionsAPI.TransactionsGet(context.Background()).Execute()
 
@@ -50,7 +50,7 @@ func Test_openapiclient_TransactionsAPIService(t *testing.T) {
 
 	t.Run("Test TransactionsAPIService TransactionsIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id string
 

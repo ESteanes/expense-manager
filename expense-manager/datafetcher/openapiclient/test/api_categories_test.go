@@ -11,10 +11,10 @@ package openapiclient
 
 import (
 	"context"
+	openapiclient "github.com/esteanes/expense-manager/datafetcher/openapiclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/esteanes/expense-manager"
 )
 
 func Test_openapiclient_CategoriesAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_openapiclient_CategoriesAPIService(t *testing.T) {
 
 	t.Run("Test CategoriesAPIService CategoriesGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.CategoriesAPI.CategoriesGet(context.Background()).Execute()
 
@@ -36,7 +36,7 @@ func Test_openapiclient_CategoriesAPIService(t *testing.T) {
 
 	t.Run("Test CategoriesAPIService CategoriesIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id string
 
@@ -50,7 +50,7 @@ func Test_openapiclient_CategoriesAPIService(t *testing.T) {
 
 	t.Run("Test CategoriesAPIService TransactionsTransactionIdRelationshipsCategoryPatch", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var transactionId string
 

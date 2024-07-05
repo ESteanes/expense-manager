@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -15,12 +15,12 @@ import (
 	"fmt"
 )
 
-// AccountTypeEnum Specifies the type of bank account. Currently returned values are `SAVER` and `TRANSACTIONAL`. 
+// AccountTypeEnum Specifies the type of bank account. Currently returned values are `SAVER` and `TRANSACTIONAL`.
 type AccountTypeEnum string
 
 // List of AccountTypeEnum
 const (
-	SAVER AccountTypeEnum = "SAVER"
+	SAVER         AccountTypeEnum = "SAVER"
 	TRANSACTIONAL AccountTypeEnum = "TRANSACTIONAL"
 )
 
@@ -108,4 +108,3 @@ func (v *NullableAccountTypeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

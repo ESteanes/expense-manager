@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,19 +11,19 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the WebhookDeliveryLogResourceAttributesResponse type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &WebhookDeliveryLogResourceAttributesResponse{}
 
-// WebhookDeliveryLogResourceAttributesResponse Information about the response that was received from the webhook URL. 
+// WebhookDeliveryLogResourceAttributesResponse Information about the response that was received from the webhook URL.
 type WebhookDeliveryLogResourceAttributesResponse struct {
-	// The HTTP status code received in the response. 
+	// The HTTP status code received in the response.
 	StatusCode int32 `json:"statusCode"`
-	// The payload that was received in the response body. 
+	// The payload that was received in the response body.
 	Body string `json:"body"`
 }
 
@@ -97,7 +97,7 @@ func (o *WebhookDeliveryLogResourceAttributesResponse) SetBody(v string) {
 }
 
 func (o WebhookDeliveryLogResourceAttributesResponse) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -125,10 +125,10 @@ func (o *WebhookDeliveryLogResourceAttributesResponse) UnmarshalJSON(data []byte
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -184,5 +184,3 @@ func (v *NullableWebhookDeliveryLogResourceAttributesResponse) UnmarshalJSON(src
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,10 +11,10 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
-	"time"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // checks if the AccountResourceAttributes type satisfies the MappedNullable interface at compile time
@@ -22,15 +22,15 @@ var _ MappedNullable = &AccountResourceAttributes{}
 
 // AccountResourceAttributes struct for AccountResourceAttributes
 type AccountResourceAttributes struct {
-	// The name associated with the account in the Up application. 
+	// The name associated with the account in the Up application.
 	DisplayName string `json:"displayName"`
-	// The bank account type of this account. 
+	// The bank account type of this account.
 	AccountType AccountTypeEnum `json:"accountType"`
-	// The ownership structure for this account. 
+	// The ownership structure for this account.
 	OwnershipType OwnershipTypeEnum `json:"ownershipType"`
-	// The available balance of the account, taking into account any amounts that are currently on hold. 
+	// The available balance of the account, taking into account any amounts that are currently on hold.
 	Balance MoneyObject `json:"balance"`
-	// The date-time at which this account was first opened. 
+	// The date-time at which this account was first opened.
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -179,7 +179,7 @@ func (o *AccountResourceAttributes) SetCreatedAt(v time.Time) {
 }
 
 func (o AccountResourceAttributes) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -213,10 +213,10 @@ func (o *AccountResourceAttributes) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -272,5 +272,3 @@ func (v *NullableAccountResourceAttributes) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

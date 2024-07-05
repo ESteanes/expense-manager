@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,15 +11,15 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the UpdateTransactionCategoryRequest type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateTransactionCategoryRequest{}
 
-// UpdateTransactionCategoryRequest Request to update the category associated with a transaction. 
+// UpdateTransactionCategoryRequest Request to update the category associated with a transaction.
 type UpdateTransactionCategoryRequest struct {
 	Data NullableUpdateTransactionCategoryRequestData `json:"data"`
 }
@@ -71,7 +71,7 @@ func (o *UpdateTransactionCategoryRequest) SetData(v UpdateTransactionCategoryRe
 }
 
 func (o UpdateTransactionCategoryRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -97,10 +97,10 @@ func (o *UpdateTransactionCategoryRequest) UnmarshalJSON(data []byte) (err error
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -156,5 +156,3 @@ func (v *NullableUpdateTransactionCategoryRequest) UnmarshalJSON(src []byte) err
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,19 +11,19 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the TransactionResourceAttributesCashback type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &TransactionResourceAttributesCashback{}
 
-// TransactionResourceAttributesCashback If all or part of this transaction was instantly reimbursed in the form of cashback, details of the reimbursement. 
+// TransactionResourceAttributesCashback If all or part of this transaction was instantly reimbursed in the form of cashback, details of the reimbursement.
 type TransactionResourceAttributesCashback struct {
-	// A brief description of why this cashback was paid. 
+	// A brief description of why this cashback was paid.
 	Description string `json:"description"`
-	// The total amount of cashback paid, represented as a positive value. 
+	// The total amount of cashback paid, represented as a positive value.
 	Amount MoneyObject `json:"amount"`
 }
 
@@ -97,7 +97,7 @@ func (o *TransactionResourceAttributesCashback) SetAmount(v MoneyObject) {
 }
 
 func (o TransactionResourceAttributesCashback) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -125,10 +125,10 @@ func (o *TransactionResourceAttributesCashback) UnmarshalJSON(data []byte) (err 
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -184,5 +184,3 @@ func (v *NullableTransactionResourceAttributesCashback) UnmarshalJSON(src []byte
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

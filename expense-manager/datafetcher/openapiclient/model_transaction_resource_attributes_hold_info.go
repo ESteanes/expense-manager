@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,18 +11,18 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the TransactionResourceAttributesHoldInfo type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &TransactionResourceAttributesHoldInfo{}
 
-// TransactionResourceAttributesHoldInfo If this transaction is currently in the `HELD` status, or was ever in the `HELD` status, the `amount` and `foreignAmount` of the transaction while `HELD`. 
+// TransactionResourceAttributesHoldInfo If this transaction is currently in the `HELD` status, or was ever in the `HELD` status, the `amount` and `foreignAmount` of the transaction while `HELD`.
 type TransactionResourceAttributesHoldInfo struct {
-	// The amount of this transaction while in the `HELD` status, in Australian dollars. 
-	Amount MoneyObject `json:"amount"`
+	// The amount of this transaction while in the `HELD` status, in Australian dollars.
+	Amount        MoneyObject                         `json:"amount"`
 	ForeignAmount NullableHoldInfoObjectForeignAmount `json:"foreignAmount"`
 }
 
@@ -98,7 +98,7 @@ func (o *TransactionResourceAttributesHoldInfo) SetForeignAmount(v HoldInfoObjec
 }
 
 func (o TransactionResourceAttributesHoldInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -126,10 +126,10 @@ func (o *TransactionResourceAttributesHoldInfo) UnmarshalJSON(data []byte) (err 
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -185,5 +185,3 @@ func (v *NullableTransactionResourceAttributesHoldInfo) UnmarshalJSON(src []byte
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

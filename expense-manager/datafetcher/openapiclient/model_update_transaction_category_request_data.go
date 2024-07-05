@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,19 +11,19 @@ API version: v1
 package openapiclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the UpdateTransactionCategoryRequestData type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateTransactionCategoryRequestData{}
 
-// UpdateTransactionCategoryRequestData The category to set on the transaction. Set this entire key to `null` de-categorize a transaction. 
+// UpdateTransactionCategoryRequestData The category to set on the transaction. Set this entire key to `null` de-categorize a transaction.
 type UpdateTransactionCategoryRequestData struct {
 	// The type of this resource: `categories`
 	Type string `json:"type"`
-	// The unique identifier of the category, as returned by the `/categories` endpoint. 
+	// The unique identifier of the category, as returned by the `/categories` endpoint.
 	Id string `json:"id"`
 }
 
@@ -97,7 +97,7 @@ func (o *UpdateTransactionCategoryRequestData) SetId(v string) {
 }
 
 func (o UpdateTransactionCategoryRequestData) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -125,10 +125,10 @@ func (o *UpdateTransactionCategoryRequestData) UnmarshalJSON(data []byte) (err e
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -184,5 +184,3 @@ func (v *NullableUpdateTransactionCategoryRequestData) UnmarshalJSON(src []byte)
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
