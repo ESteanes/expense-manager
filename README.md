@@ -24,3 +24,41 @@ Phase 3:
 sudo docker run --rm   -v ${PWD}:/local openapitools/openapi-generator-cli generate   -i /local/openapi.json   -g go   -o /local/expense-manager/up-bank-interface
 ```
 
+
+
+## Modules
+
+* expense-manager
+    * data-fetcher
+    * data-storer
+    * data-manager
+    * visualisation
+
+### data-fetcher
+Fetching spending data from UpBank using their open api spec
+
+### data-storer
+Storing the data in a local sqlite database
+
+### data-manager
+interface for updating the transactions/metadata
+
+### visualisation
+endpoitns to drive the UI
+
+
+## How to develop
+
+1. Install the OpenAPI generator
+`brew install openapi-generator`
+2. Fetch the open-api definition JSON file
+`curl https://raw.githubusercontent.com/up-banking/api/master/v1/openapi.json`
+3. Generate the REST client code
+```
+openapi-generator generate \
+  -i openapi.json \
+  -g go \
+  -o ./openapi
+  --git-user-id esteanes \
+  --git-repo-id expense-manager
+```
