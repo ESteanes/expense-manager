@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/esteanes/expense-manager/datafetcher/openapi"
+	"github.com/esteanes/expense-manager/datafetcher/openapiclient"
 )
 
 // homePage function to handle requests to the root URL
@@ -17,13 +17,13 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
-	pageSize := int32(30)                                          // int32 | The number of records to return in each page.  (optional)
-	filterAccountType := openapi.AccountTypeEnum("SAVER")          // AccountTypeEnum | The type of account for which to return records. This can be used to filter Savers from spending accounts.  (optional)
-	filterOwnershipType := openapi.OwnershipTypeEnum("INDIVIDUAL") // OwnershipTypeEnum | The account ownership structure for which to return records. This can be used to filter 2Up accounts from Up accounts.  (optional)
-	auth := context.WithValue(context.Background(), openapi.ContextAccessToken, os.Getenv("up-bank-bearer-token"))
+	pageSize := int32(30)                                                // int32 | The number of records to return in each page.  (optional)
+	filterAccountType := openapiclient.AccountTypeEnum("SAVER")          // AccountTypeEnum | The type of account for which to return records. This can be used to filter Savers from spending accounts.  (optional)
+	filterOwnershipType := openapiclient.OwnershipTypeEnum("INDIVIDUAL") // OwnershipTypeEnum | The account ownership structure for which to return records. This can be used to filter 2Up accounts from Up accounts.  (optional)
+	auth := context.WithValue(context.Background(), openapiclient.ContextAccessToken, os.Getenv("up-bank-bearer-token"))
 
-	configuration := openapi.NewConfiguration()
-	apiClient := openapi.NewAPIClient(configuration)
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
 	resp, r2, err := apiClient.AccountsAPI.AccountsGet(auth).PageSize(pageSize).FilterAccountType(filterAccountType).FilterOwnershipType(filterOwnershipType).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AccountsAPI.AccountsGet``: %v\n", err)

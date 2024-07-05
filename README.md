@@ -55,10 +55,8 @@ endpoitns to drive the UI
 `curl https://raw.githubusercontent.com/up-banking/api/master/v1/openapi.json`
 3. Generate the REST client code
 ```
-openapi-generator generate \
-  -i openapi.json \
-  -g go \
-  -o ./openapi
-  --git-user-id esteanes \
-  --git-repo-id expense-manager
+cd ./datafetcher
+openapi-generator-cli generate   -i openapi.json   -g go   -o ./openapiclient   --additional-properties packageName=openapiclient   --git-user-id esteanes   --git-repo-id expense-manager
 ```
+4. Format code
+`gofmt -s -w .`
