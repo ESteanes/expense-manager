@@ -20,7 +20,7 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	pageSize := int32(30)                                          // int32 | The number of records to return in each page.  (optional)
 	filterAccountType := openapi.AccountTypeEnum("SAVER")          // AccountTypeEnum | The type of account for which to return records. This can be used to filter Savers from spending accounts.  (optional)
 	filterOwnershipType := openapi.OwnershipTypeEnum("INDIVIDUAL") // OwnershipTypeEnum | The account ownership structure for which to return records. This can be used to filter 2Up accounts from Up accounts.  (optional)
-	auth := context.WithValue(context.Background(), openapi.ContextAccessToken, "up:yeah:C3DlfCwIE5Xm2NmTAlIubIlkp5COFGasxeRE9N5kkzdgNOb671WwKVr7ZBZC7tnIogXLsGA7ph5u2cJ1ceVBps6HLG9pco66hmj6GTGoum4pcwEjKW2z0SBryb0dY7W6")
+	auth := context.WithValue(context.Background(), openapi.ContextAccessToken, os.Getenv("up-bank-bearer-token"))
 
 	configuration := openapi.NewConfiguration()
 	apiClient := openapi.NewAPIClient(configuration)
