@@ -55,10 +55,9 @@ endpoitns to drive the UI
 `curl https://raw.githubusercontent.com/up-banking/api/master/v1/openapi.json`
 3. Generate the REST client code
 ```
-cd ./datafetcher
-openapi-generator-cli generate   -i openapi.json   -g go   -o ./openapiclient   --additional-properties packageName=openapiclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/openapiclient
+openapi-generator-cli generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/upclient
 ```
-Its recommended to have a file called `.openapi-generator-ignore` inside the /openapiclient with the following contents:
+Its recommended to have a file called `.openapi-generator-ignore` inside the /upclient with the following contents:
 ```
 # OpenAPI Generator Ignore
 
