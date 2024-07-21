@@ -14,17 +14,7 @@ Phase 2:
 Phase 3:
 * Interactable UI
     * Have a UI in which you can interact with the transactions - give them additional metadata such as tags, photos (receipts/invoices)
-    * Mutate the graphs - apply filters to change what the graphs output
-
-
-## Notes
-
-* To generate the open-api interface run the following command: 
-```
-sudo docker run --rm   -v ${PWD}:/local openapitools/openapi-generator-cli generate   -i /local/openapi.json   -g go   -o /local/expense-manager/up-bank-interface
-```
-
-
+    * Mutate the graphs - apply filters to change what the graphs output    
 
 ## Modules
 
@@ -67,6 +57,10 @@ LICENSE
 ```
 This will stop the generator from generating those files (which will mess up the Go compilation)
 
+4. Generate the TEMPL components
+`templ generate`
+
+    * Note if you're finding it hard to run `templ`, it might be because `$GOPATH` is not on your `$PATH` so your computer can't find the executable. In that case either update your path or run `./$GOPATH/templ`
 
 4. Format code
 `gofmt -s -w .`
