@@ -31,7 +31,7 @@ func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
 	filterAccountType := upclient.AccountTypeEnum("SAVER")
 	filterOwnershipType := upclient.OwnershipTypeEnum("INDIVIDUAL")
 	resp, r2, err := h.UpClient.AccountsAPI.AccountsGet(h.UpAuth).PageSize(pageSize).FilterAccountType(filterAccountType).FilterOwnershipType(filterOwnershipType).Execute()
-	
+
 	if err != nil {
 		fmt.Fprintf(w, "Error when calling `AccountsAPI.AccountsGet``: %v\n", err)
 		fmt.Fprintf(w, "Full HTTP response: %v\n", r2)
