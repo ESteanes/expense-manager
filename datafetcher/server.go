@@ -5,9 +5,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+	"time"
 
+	"github.com/a-h/templ"
+	"github.com/esteanes/expense-manager/datafetcher/handlers"
+	templates "github.com/esteanes/expense-manager/datafetcher/templ"
 	"github.com/esteanes/expense-manager/datafetcher/upclient"
+
+	"github.com/alexedwards/scs/v2"
 )
 
 // homePage function to handle requests to the root URL
@@ -17,36 +22,84 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
-	pageSize := int32(30)                                                // int32 | The number of records to return in each page.  (optional)
-	filterAccountType := upclient.AccountTypeEnum("SAVER")          // AccountTypeEnum | The type of account for which to return records. This can be used to filter Savers from spending accounts.  (optional)
-	filterOwnershipType := upclient.OwnershipTypeEnum("INDIVIDUAL") // OwnershipTypeEnum | The account ownership structure for which to return records. This can be used to filter 2Up accounts from Up accounts.  (optional)
-	auth := context.WithValue(context.Background(), upclient.ContextAccessToken, os.Getenv("up-bank-bearer-token"))
-
-	configuration := upclient.NewConfiguration()
-	apiClient := upclient.NewAPIClient(configuration)
-	resp, r2, err := apiClient.AccountsAPI.AccountsGet(auth).PageSize(pageSize).FilterAccountType(filterAccountType).FilterOwnershipType(filterOwnershipType).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AccountsAPI.AccountsGet``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r2)
-	}
-	// response from `AccountsGet`: ListAccountsResponse
-	fmt.Fprintf(os.Stdout, "Response from `AccountsAPI.AccountsGet`: %v\n", resp)
-
-	resp2, r2, err := apiClient.TransactionsAPI.TransactionsGet(auth).PageSize(pageSize).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TransactionsAPI.TransactionsGet``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r2.Body)
-	}
-	// response from `TransactionsGet`: ListTransactionsResponse
-	fmt.Fprintf(os.Stdout, "Response from `TransactionsAPI.TransactionsGet`: %v\n", resp2)
 
 }
 
-// HandleRequests function to define the routes and start the server
-func HandleRequests() {
-	http.HandleFunc("/", homePage) // Set the root URL to call homePage function
-	http.HandleFunc("/info", getInfo)
-	log.Default().Println("Serving request at localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil)) // Start the server on port 8080
+func NewNowHandler(now func() time.Time) NowHandler {
+	return NowHandler{Now: now}
+}
 
+type NowHandler struct {
+	Now func() time.Time
+}
+
+func (nh NowHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	templates.TimeComponent(nh.Now()).Render(r.Context(), w)
+}
+
+type GlobalState struct {
+	Count int
+}
+
+var global GlobalState
+var sessionManager *scs.SessionManager
+
+func getHandler(w http.ResponseWriter, r *http.Request) {
+	userCount := sessionManager.GetInt(r.Context(), "count")
+	component := templates.Page(global.Count, userCount)
+	component.Render(r.Context(), w)
+}
+
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	// Update state.
+	r.ParseForm()
+
+	// Check to see if the global button was pressed.
+	if r.Form.Has("global") {
+		global.Count++
+	}
+	//TODO: Update session.
+	if r.Form.Has("user") {
+		currentCount := sessionManager.GetInt(r.Context(), "count")
+		sessionManager.Put(r.Context(), "count", currentCount+1)
+	}
+	// Display the form.
+	getHandler(w, r)
+}
+
+func handleInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		postHandler(w, r)
+		return
+	}
+	getHandler(w, r)
+}
+
+// HandleRequests function to define the routes and start the server
+func HandleRequests(upBankToken string, log *log.Logger) {
+	sessionManager = scs.New()
+	sessionManager.Lifetime = 24 * time.Hour
+
+	auth := context.WithValue(context.Background(), upclient.ContextAccessToken, upBankToken)
+
+	configuration := upclient.NewConfiguration()
+	apiClient := upclient.NewAPIClient(configuration)
+
+	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
+	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth)
+	component := templates.Hello("its ya boi")
+	mux := http.NewServeMux()
+	mux.HandleFunc(accountHandler.Uri, accountHandler.ServeHTTP)
+	mux.HandleFunc(transactionsHandler.Uri, transactionsHandler.ServeHTTP)
+
+	mux.HandleFunc("/", homePage)
+	mux.HandleFunc("/info", getInfo)
+	mux.Handle("/time", NewNowHandler(time.Now))
+	mux.Handle("/hello", templ.Handler(component))
+	mux.HandleFunc("/counter", handleInfo)
+	log.Println("Serving request at localhost:8080")
+	muxWithSessionMiddleware := sessionManager.LoadAndSave(mux)
+	if err := http.ListenAndServe("localhost:8080", muxWithSessionMiddleware); err != nil {
+		log.Printf("error listening: %v", err)
+	}
 }
