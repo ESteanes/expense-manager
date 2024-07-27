@@ -16,12 +16,16 @@ Name | Type | Description | Notes
 **ForeignAmount** | [**NullableMoneyObject**](MoneyObject.md) | The foreign currency amount of this transaction. This field will be &#x60;null&#x60; for domestic transactions. The amount was converted to the AUD amount reflected in the &#x60;amount&#x60; of this transaction. Refer to the &#x60;holdInfo&#x60; field for the original &#x60;foreignAmount&#x60; the transaction was &#x60;HELD&#x60; at.  | 
 **SettledAt** | **NullableTime** | The date-time at which this transaction settled. This field will be &#x60;null&#x60; for transactions that are currently in the &#x60;HELD&#x60; status.  | 
 **CreatedAt** | **time.Time** | The date-time at which this transaction was first encountered.  | 
+**CardPurchaseMethod** | Pointer to [**NullableCardPurchaseMethodObject**](CardPurchaseMethodObject.md) | Information about the card used for this transaction, if applicable.  | [optional] 
+**TransactionType** | Pointer to **NullableString** | A description of the transaction method used e.g. Purchase, BPAY Payment.  | [optional] 
+**Note** | [**NullableNoteObject**](NoteObject.md) | A customer provided note about the transaction. Can only be provided by Up High subscribers.  | 
+**PerformingCustomer** | [**NullableCustomerObject**](CustomerObject.md) | The Up Name of the person who performed the transaction.  | 
 
 ## Methods
 
 ### NewTransactionResourceAttributes
 
-`func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, settledAt NullableTime, createdAt time.Time, ) *TransactionResourceAttributes`
+`func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, settledAt NullableTime, createdAt time.Time, note NullableNoteObject, performingCustomer NullableCustomerObject, ) *TransactionResourceAttributes`
 
 NewTransactionResourceAttributes instantiates a new TransactionResourceAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -346,6 +350,136 @@ and a boolean to check if the value has been set.
 SetCreatedAt sets CreatedAt field to given value.
 
 
+### GetCardPurchaseMethod
+
+`func (o *TransactionResourceAttributes) GetCardPurchaseMethod() CardPurchaseMethodObject`
+
+GetCardPurchaseMethod returns the CardPurchaseMethod field if non-nil, zero value otherwise.
+
+### GetCardPurchaseMethodOk
+
+`func (o *TransactionResourceAttributes) GetCardPurchaseMethodOk() (*CardPurchaseMethodObject, bool)`
+
+GetCardPurchaseMethodOk returns a tuple with the CardPurchaseMethod field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCardPurchaseMethod
+
+`func (o *TransactionResourceAttributes) SetCardPurchaseMethod(v CardPurchaseMethodObject)`
+
+SetCardPurchaseMethod sets CardPurchaseMethod field to given value.
+
+### HasCardPurchaseMethod
+
+`func (o *TransactionResourceAttributes) HasCardPurchaseMethod() bool`
+
+HasCardPurchaseMethod returns a boolean if a field has been set.
+
+### SetCardPurchaseMethodNil
+
+`func (o *TransactionResourceAttributes) SetCardPurchaseMethodNil(b bool)`
+
+ SetCardPurchaseMethodNil sets the value for CardPurchaseMethod to be an explicit nil
+
+### UnsetCardPurchaseMethod
+`func (o *TransactionResourceAttributes) UnsetCardPurchaseMethod()`
+
+UnsetCardPurchaseMethod ensures that no value is present for CardPurchaseMethod, not even an explicit nil
+### GetTransactionType
+
+`func (o *TransactionResourceAttributes) GetTransactionType() string`
+
+GetTransactionType returns the TransactionType field if non-nil, zero value otherwise.
+
+### GetTransactionTypeOk
+
+`func (o *TransactionResourceAttributes) GetTransactionTypeOk() (*string, bool)`
+
+GetTransactionTypeOk returns a tuple with the TransactionType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTransactionType
+
+`func (o *TransactionResourceAttributes) SetTransactionType(v string)`
+
+SetTransactionType sets TransactionType field to given value.
+
+### HasTransactionType
+
+`func (o *TransactionResourceAttributes) HasTransactionType() bool`
+
+HasTransactionType returns a boolean if a field has been set.
+
+### SetTransactionTypeNil
+
+`func (o *TransactionResourceAttributes) SetTransactionTypeNil(b bool)`
+
+ SetTransactionTypeNil sets the value for TransactionType to be an explicit nil
+
+### UnsetTransactionType
+`func (o *TransactionResourceAttributes) UnsetTransactionType()`
+
+UnsetTransactionType ensures that no value is present for TransactionType, not even an explicit nil
+### GetNote
+
+`func (o *TransactionResourceAttributes) GetNote() NoteObject`
+
+GetNote returns the Note field if non-nil, zero value otherwise.
+
+### GetNoteOk
+
+`func (o *TransactionResourceAttributes) GetNoteOk() (*NoteObject, bool)`
+
+GetNoteOk returns a tuple with the Note field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNote
+
+`func (o *TransactionResourceAttributes) SetNote(v NoteObject)`
+
+SetNote sets Note field to given value.
+
+
+### SetNoteNil
+
+`func (o *TransactionResourceAttributes) SetNoteNil(b bool)`
+
+ SetNoteNil sets the value for Note to be an explicit nil
+
+### UnsetNote
+`func (o *TransactionResourceAttributes) UnsetNote()`
+
+UnsetNote ensures that no value is present for Note, not even an explicit nil
+### GetPerformingCustomer
+
+`func (o *TransactionResourceAttributes) GetPerformingCustomer() CustomerObject`
+
+GetPerformingCustomer returns the PerformingCustomer field if non-nil, zero value otherwise.
+
+### GetPerformingCustomerOk
+
+`func (o *TransactionResourceAttributes) GetPerformingCustomerOk() (*CustomerObject, bool)`
+
+GetPerformingCustomerOk returns a tuple with the PerformingCustomer field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPerformingCustomer
+
+`func (o *TransactionResourceAttributes) SetPerformingCustomer(v CustomerObject)`
+
+SetPerformingCustomer sets PerformingCustomer field to given value.
+
+
+### SetPerformingCustomerNil
+
+`func (o *TransactionResourceAttributes) SetPerformingCustomerNil(b bool)`
+
+ SetPerformingCustomerNil sets the value for PerformingCustomer to be an explicit nil
+
+### UnsetPerformingCustomer
+`func (o *TransactionResourceAttributes) UnsetPerformingCustomer()`
+
+UnsetPerformingCustomer ensures that no value is present for PerformingCustomer, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

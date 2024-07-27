@@ -80,11 +80,12 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 	sessionManager = scs.New()
 	sessionManager.Lifetime = 24 * time.Hour
 
+	// Registering client
 	auth := context.WithValue(context.Background(), upclient.ContextAccessToken, upBankToken)
-
 	configuration := upclient.NewConfiguration()
 	apiClient := upclient.NewAPIClient(configuration)
 
+	// Creating individual handlers
 	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
 	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth)
 	component := templates.Hello("its ya boi")

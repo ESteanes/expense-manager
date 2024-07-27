@@ -21,11 +21,12 @@ var _ MappedNullable = &TransactionResourceRelationships{}
 
 // TransactionResourceRelationships struct for TransactionResourceRelationships
 type TransactionResourceRelationships struct {
-	Account         TransactionResourceRelationshipsAccount         `json:"account"`
-	TransferAccount TransactionResourceRelationshipsTransferAccount `json:"transferAccount"`
-	Category        TransactionResourceRelationshipsCategory        `json:"category"`
-	ParentCategory  CategoryResourceRelationshipsParent             `json:"parentCategory"`
-	Tags            TransactionResourceRelationshipsTags            `json:"tags"`
+	Account         TransactionResourceRelationshipsAccount            `json:"account"`
+	TransferAccount TransactionResourceRelationshipsTransferAccount    `json:"transferAccount"`
+	Category        TransactionResourceRelationshipsCategory           `json:"category"`
+	ParentCategory  CategoryResourceRelationshipsParent                `json:"parentCategory"`
+	Tags            TransactionResourceRelationshipsTags               `json:"tags"`
+	Attachment      NullableTransactionResourceRelationshipsAttachment `json:"attachment"`
 }
 
 type _TransactionResourceRelationships TransactionResourceRelationships
@@ -34,13 +35,14 @@ type _TransactionResourceRelationships TransactionResourceRelationships
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionResourceRelationships(account TransactionResourceRelationshipsAccount, transferAccount TransactionResourceRelationshipsTransferAccount, category TransactionResourceRelationshipsCategory, parentCategory CategoryResourceRelationshipsParent, tags TransactionResourceRelationshipsTags) *TransactionResourceRelationships {
+func NewTransactionResourceRelationships(account TransactionResourceRelationshipsAccount, transferAccount TransactionResourceRelationshipsTransferAccount, category TransactionResourceRelationshipsCategory, parentCategory CategoryResourceRelationshipsParent, tags TransactionResourceRelationshipsTags, attachment NullableTransactionResourceRelationshipsAttachment) *TransactionResourceRelationships {
 	this := TransactionResourceRelationships{}
 	this.Account = account
 	this.TransferAccount = transferAccount
 	this.Category = category
 	this.ParentCategory = parentCategory
 	this.Tags = tags
+	this.Attachment = attachment
 	return &this
 }
 
@@ -172,6 +174,32 @@ func (o *TransactionResourceRelationships) SetTags(v TransactionResourceRelation
 	o.Tags = v
 }
 
+// GetAttachment returns the Attachment field value
+// If the value is explicit nil, the zero value for TransactionResourceRelationshipsAttachment will be returned
+func (o *TransactionResourceRelationships) GetAttachment() TransactionResourceRelationshipsAttachment {
+	if o == nil || o.Attachment.Get() == nil {
+		var ret TransactionResourceRelationshipsAttachment
+		return ret
+	}
+
+	return *o.Attachment.Get()
+}
+
+// GetAttachmentOk returns a tuple with the Attachment field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *TransactionResourceRelationships) GetAttachmentOk() (*TransactionResourceRelationshipsAttachment, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Attachment.Get(), o.Attachment.IsSet()
+}
+
+// SetAttachment sets field value
+func (o *TransactionResourceRelationships) SetAttachment(v TransactionResourceRelationshipsAttachment) {
+	o.Attachment.Set(&v)
+}
+
 func (o TransactionResourceRelationships) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -187,6 +215,7 @@ func (o TransactionResourceRelationships) ToMap() (map[string]interface{}, error
 	toSerialize["category"] = o.Category
 	toSerialize["parentCategory"] = o.ParentCategory
 	toSerialize["tags"] = o.Tags
+	toSerialize["attachment"] = o.Attachment.Get()
 	return toSerialize, nil
 }
 
@@ -200,6 +229,7 @@ func (o *TransactionResourceRelationships) UnmarshalJSON(data []byte) (err error
 		"category",
 		"parentCategory",
 		"tags",
+		"attachment",
 	}
 
 	allProperties := make(map[string]interface{})

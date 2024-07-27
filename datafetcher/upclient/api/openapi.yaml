@@ -1463,6 +1463,45 @@ components:
       - INDIVIDUAL
       - JOINT
       type: string
+    CardPurchaseMethodEnum:
+      enum:
+      - CONTACTLESS
+      - PLASTIC
+      - CARD_ON_FILE
+      - CARD_DETAILS
+      - OCR
+      - MAGNETIC_STRIPE
+      - ECOMMERCE
+      - CARD_PIN
+      - BAR_CODE
+      type: string
+    CardPurchaseMethodObject:
+      description: |
+        Provides information about the type of card
+      properties:
+        method:
+          allOf:
+          - $ref: '#/components/schemas/CardPurchaseMethodEnum'
+          description: |
+            The card method used for this purchase.
+        cardNumberSuffix:
+          description: |
+            The last four digits of the card used for this transaction.
+          nullable: true
+          type: string
+      required:
+      - cardNumberSuffix
+      - method
+      type: object
+    CustomerObject:
+      description: |
+        Information about the customer who performed the transaction.
+      properties:
+        displayName:
+          description: |
+            The customers Up Name.
+          type: string
+      type: object
     MoneyObject:
       description: |
         Provides information about a value of money.
@@ -1924,6 +1963,14 @@ components:
       - HELD
       - SETTLED
       type: string
+    NoteObject:
+      description: A customer provided note about the transaction. Can only be provided
+        by Up High subscribers.
+      properties:
+        text:
+          nullable: false
+          type: string
+      type: object
     HoldInfoObject:
       description: |
         Provides information about the amount at which a transaction was in the
@@ -1991,6 +2038,12 @@ components:
     TransactionResource:
       example:
         relationships:
+          attachment:
+            data:
+              id: id
+              type: type
+            links:
+              related: related
           transferAccount:
             data:
               id: id
@@ -2025,18 +2078,22 @@ components:
             links:
               self: self
         attributes:
-          holdInfo: ""
-          createdAt: 2000-01-23T04:56:07.000+00:00
+          performingCustomer: ""
+          note: ""
           amount: ""
-          rawText: rawText
           isCategorizable: true
-          settledAt: 2000-01-23T04:56:07.000+00:00
+          cardPurchaseMethod: ""
           description: description
           message: message
-          roundUp: ""
-          status: ""
           cashback: ""
           foreignAmount: ""
+          holdInfo: ""
+          transactionType: transactionType
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          rawText: rawText
+          settledAt: 2000-01-23T04:56:07.000+00:00
+          roundUp: ""
+          status: ""
         links:
           self: self
         id: id
@@ -2069,6 +2126,12 @@ components:
       example:
         data:
         - relationships:
+            attachment:
+              data:
+                id: id
+                type: type
+              links:
+                related: related
             transferAccount:
               data:
                 id: id
@@ -2103,23 +2166,33 @@ components:
               links:
                 self: self
           attributes:
-            holdInfo: ""
-            createdAt: 2000-01-23T04:56:07.000+00:00
+            performingCustomer: ""
+            note: ""
             amount: ""
-            rawText: rawText
             isCategorizable: true
-            settledAt: 2000-01-23T04:56:07.000+00:00
+            cardPurchaseMethod: ""
             description: description
             message: message
-            roundUp: ""
-            status: ""
             cashback: ""
             foreignAmount: ""
+            holdInfo: ""
+            transactionType: transactionType
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            rawText: rawText
+            settledAt: 2000-01-23T04:56:07.000+00:00
+            roundUp: ""
+            status: ""
           links:
             self: self
           id: id
           type: type
         - relationships:
+            attachment:
+              data:
+                id: id
+                type: type
+              links:
+                related: related
             transferAccount:
               data:
                 id: id
@@ -2154,18 +2227,22 @@ components:
               links:
                 self: self
           attributes:
-            holdInfo: ""
-            createdAt: 2000-01-23T04:56:07.000+00:00
+            performingCustomer: ""
+            note: ""
             amount: ""
-            rawText: rawText
             isCategorizable: true
-            settledAt: 2000-01-23T04:56:07.000+00:00
+            cardPurchaseMethod: ""
             description: description
             message: message
-            roundUp: ""
-            status: ""
             cashback: ""
             foreignAmount: ""
+            holdInfo: ""
+            transactionType: transactionType
+            createdAt: 2000-01-23T04:56:07.000+00:00
+            rawText: rawText
+            settledAt: 2000-01-23T04:56:07.000+00:00
+            roundUp: ""
+            status: ""
           links:
             self: self
           id: id
@@ -2738,18 +2815,22 @@ components:
       type: object
     TransactionResource_attributes:
       example:
-        holdInfo: ""
-        createdAt: 2000-01-23T04:56:07.000+00:00
+        performingCustomer: ""
+        note: ""
         amount: ""
-        rawText: rawText
         isCategorizable: true
-        settledAt: 2000-01-23T04:56:07.000+00:00
+        cardPurchaseMethod: ""
         description: description
         message: message
-        roundUp: ""
-        status: ""
         cashback: ""
         foreignAmount: ""
+        holdInfo: ""
+        transactionType: transactionType
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        rawText: rawText
+        settledAt: 2000-01-23T04:56:07.000+00:00
+        roundUp: ""
+        status: ""
       properties:
         status:
           allOf:
@@ -2832,6 +2913,29 @@ components:
             The date-time at which this transaction was first encountered.
           format: date-time
           type: string
+        cardPurchaseMethod:
+          allOf:
+          - $ref: '#/components/schemas/CardPurchaseMethodObject'
+          description: |
+            Information about the card used for this transaction, if applicable.
+          nullable: true
+        transactionType:
+          description: |
+            A description of the transaction method used e.g. Purchase, BPAY Payment.
+          nullable: true
+          type: string
+        note:
+          allOf:
+          - $ref: '#/components/schemas/NoteObject'
+          description: |
+            A customer provided note about the transaction. Can only be provided by Up High subscribers.
+          nullable: true
+        performingCustomer:
+          allOf:
+          - $ref: '#/components/schemas/CustomerObject'
+          description: |
+            The Up Name of the person who performed the transaction.
+          nullable: true
       required:
       - amount
       - cashback
@@ -2841,10 +2945,13 @@ components:
       - holdInfo
       - isCategorizable
       - message
+      - note
+      - performingCustomer
       - rawText
       - roundUp
       - settledAt
       - status
+      - trasactionType
       type: object
     TransactionResource_relationships_account_data:
       example:
@@ -2894,6 +3001,18 @@ components:
       - id
       - type
       type: object
+    TransactionResource_relationships_transferAccount_links:
+      example:
+        related: related
+      nullable: true
+      properties:
+        related:
+          description: |
+            The link to retrieve the related resource(s) in this relationship.
+          type: string
+      required:
+      - related
+      type: object
     TransactionResource_relationships_transferAccount:
       description: |
         If this transaction is a transfer between accounts, this relationship
@@ -2909,7 +3028,7 @@ components:
         data:
           $ref: '#/components/schemas/TransactionResource_relationships_transferAccount_data'
         links:
-          $ref: '#/components/schemas/AccountResource_relationships_transactions_links'
+          $ref: '#/components/schemas/TransactionResource_relationships_transferAccount_links'
       required:
       - data
       type: object
@@ -2993,8 +3112,45 @@ components:
       required:
       - data
       type: object
+    TransactionResource_relationships_attachment_data:
+      example:
+        id: id
+        type: type
+      nullable: true
+      properties:
+        type:
+          description: "The type of this resource: `attachments`"
+          type: string
+        id:
+          description: |
+            The unique identifier of the resource within its type.
+          type: string
+      required:
+      - id
+      - type
+      type: object
+    TransactionResource_relationships_attachment:
+      example:
+        data:
+          id: id
+          type: type
+        links:
+          related: related
+      nullable: true
+      properties:
+        data:
+          $ref: '#/components/schemas/TransactionResource_relationships_attachment_data'
+        links:
+          $ref: '#/components/schemas/AccountResource_relationships_transactions_links'
+      type: object
     TransactionResource_relationships:
       example:
+        attachment:
+          data:
+            id: id
+            type: type
+          links:
+            related: related
         transferAccount:
           data:
             id: id
@@ -3039,8 +3195,11 @@ components:
           $ref: '#/components/schemas/CategoryResource_relationships_parent'
         tags:
           $ref: '#/components/schemas/TransactionResource_relationships_tags'
+        attachment:
+          $ref: '#/components/schemas/TransactionResource_relationships_attachment'
       required:
       - account
+      - attachment
       - category
       - parentCategory
       - tags

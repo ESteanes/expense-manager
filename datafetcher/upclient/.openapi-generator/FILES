@@ -19,6 +19,8 @@ docs/AccountResourceRelationshipsTransactions.md
 docs/AccountResourceRelationshipsTransactionsLinks.md
 docs/AccountTypeEnum.md
 docs/AccountsAPI.md
+docs/CardPurchaseMethodEnum.md
+docs/CardPurchaseMethodObject.md
 docs/CashbackObject.md
 docs/CategoriesAPI.md
 docs/CategoryInputResourceIdentifier.md
@@ -31,6 +33,7 @@ docs/CategoryResourceRelationshipsParent.md
 docs/CategoryResourceRelationshipsParentData.md
 docs/CreateWebhookRequest.md
 docs/CreateWebhookResponse.md
+docs/CustomerObject.md
 docs/ErrorObject.md
 docs/ErrorObjectSource.md
 docs/ErrorResponse.md
@@ -47,6 +50,7 @@ docs/ListTransactionsResponse.md
 docs/ListWebhookDeliveryLogsResponse.md
 docs/ListWebhooksResponse.md
 docs/MoneyObject.md
+docs/NoteObject.md
 docs/OwnershipTypeEnum.md
 docs/PingResponse.md
 docs/PingResponseMeta.md
@@ -59,6 +63,8 @@ docs/TransactionResourceAttributes.md
 docs/TransactionResourceRelationships.md
 docs/TransactionResourceRelationshipsAccount.md
 docs/TransactionResourceRelationshipsAccountData.md
+docs/TransactionResourceRelationshipsAttachment.md
+docs/TransactionResourceRelationshipsAttachmentData.md
 docs/TransactionResourceRelationshipsCategory.md
 docs/TransactionResourceRelationshipsCategoryLinks.md
 docs/TransactionResourceRelationshipsTags.md
@@ -66,6 +72,7 @@ docs/TransactionResourceRelationshipsTagsDataInner.md
 docs/TransactionResourceRelationshipsTagsLinks.md
 docs/TransactionResourceRelationshipsTransferAccount.md
 docs/TransactionResourceRelationshipsTransferAccountData.md
+docs/TransactionResourceRelationshipsTransferAccountLinks.md
 docs/TransactionStatusEnum.md
 docs/TransactionsAPI.md
 docs/UpdateTransactionCategoryRequest.md
@@ -104,6 +111,8 @@ model_account_resource_relationships.go
 model_account_resource_relationships_transactions.go
 model_account_resource_relationships_transactions_links.go
 model_account_type_enum.go
+model_card_purchase_method_enum.go
+model_card_purchase_method_object.go
 model_cashback_object.go
 model_category_input_resource_identifier.go
 model_category_resource.go
@@ -115,6 +124,7 @@ model_category_resource_relationships_parent.go
 model_category_resource_relationships_parent_data.go
 model_create_webhook_request.go
 model_create_webhook_response.go
+model_customer_object.go
 model_error_object.go
 model_error_object_source.go
 model_error_response.go
@@ -131,6 +141,7 @@ model_list_transactions_response.go
 model_list_webhook_delivery_logs_response.go
 model_list_webhooks_response.go
 model_money_object.go
+model_note_object.go
 model_ownership_type_enum.go
 model_ping_response.go
 model_ping_response_meta.go
@@ -142,6 +153,8 @@ model_transaction_resource_attributes.go
 model_transaction_resource_relationships.go
 model_transaction_resource_relationships_account.go
 model_transaction_resource_relationships_account_data.go
+model_transaction_resource_relationships_attachment.go
+model_transaction_resource_relationships_attachment_data.go
 model_transaction_resource_relationships_category.go
 model_transaction_resource_relationships_category_links.go
 model_transaction_resource_relationships_tags.go
@@ -149,6 +162,7 @@ model_transaction_resource_relationships_tags_data_inner.go
 model_transaction_resource_relationships_tags_links.go
 model_transaction_resource_relationships_transfer_account.go
 model_transaction_resource_relationships_transfer_account_data.go
+model_transaction_resource_relationships_transfer_account_links.go
 model_transaction_status_enum.go
 model_update_transaction_category_request.go
 model_update_transaction_tags_request.go

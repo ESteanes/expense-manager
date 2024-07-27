@@ -36,6 +36,52 @@
         ],
         "description": "Specifies the structure under which a bank account is owned. Currently\nreturned values are `INDIVIDUAL` and `JOINT`.\n"
       },
+      "CardPurchaseMethodEnum": {
+        "enum": [
+          "CONTACTLESS",
+          "PLASTIC",
+          "CARD_ON_FILE",
+          "CARD_DETAILS",
+          "OCR",
+          "MAGNETIC_STRIPE",
+          "ECOMMERCE",
+          "CARD_PIN",
+          "BAR_CODE"
+        ]
+      },
+      "CardPurchaseMethodObject": {
+        "type": "object",
+        "description": "Provides information about the type of card\n",
+        "properties": {
+          "method": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CardPurchaseMethodEnum"
+              }
+            ],
+            "description": "The card method used for this purchase.\n"
+          },
+          "cardNumberSuffix": {
+            "type": "string",
+            "nullable": true,
+            "description": "The last four digits of the card used for this transaction.\n"
+          }
+        },
+        "required": [
+          "method",
+          "cardNumberSuffix"
+        ]
+      },
+      "CustomerObject": {
+        "type": "object",
+        "description": "Information about the customer who performed the transaction.\n",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "The customers Up Name.\n"
+          }
+        }
+      },
       "MoneyObject": {
         "type": "object",
         "description": "Provides information about a value of money.\n",
@@ -614,6 +660,16 @@
         ],
         "description": "Specifies which stage of processing a transaction is currently at.\nCurrently returned values are `HELD` and `SETTLED`. When a transaction is\nheld, its account’s `availableBalance` is affected. When a transaction is\nsettled, its account’s `currentBalance` is affected.\n"
       },
+      "NoteObject": {
+        "type": "object",
+        "description": "A customer provided note about the transaction. Can only be provided by Up High subscribers.",
+        "properties": {
+          "text": {
+            "nullable": false,
+            "type": "string"
+          }
+        }
+      },
       "HoldInfoObject": {
         "type": "object",
         "description": "Provides information about the amount at which a transaction was in the\n`HELD` status.\n",
@@ -784,6 +840,38 @@
                 "type": "string",
                 "format": "date-time",
                 "description": "The date-time at which this transaction was first encountered.\n"
+              },
+              "cardPurchaseMethod": {
+                "nullable": true,
+                "description": "Information about the card used for this transaction, if applicable.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CardPurchaseMethodObject"
+                  }
+                ]
+              },
+              "transactionType": {
+                "type": "string",
+                "nullable": true,
+                "description": "A description of the transaction method used e.g. Purchase, BPAY Payment.\n"
+              },
+              "note": {
+                "nullable": true,
+                "description": "A customer provided note about the transaction. Can only be provided by Up High subscribers.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/NoteObject"
+                  }
+                ]
+              },
+              "performingCustomer": {
+                "nullable": true,
+                "description": "The Up Name of the person who performed the transaction.\n",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CustomerObject"
+                  }
+                ]
               }
             },
             "required": [
@@ -798,7 +886,10 @@
               "amount",
               "foreignAmount",
               "settledAt",
-              "createdAt"
+              "createdAt",
+              "trasactionType",
+              "note",
+              "performingCustomer"
             ]
           },
           "relationships": {
@@ -864,6 +955,7 @@
                   },
                   "links": {
                     "type": "object",
+                    "nullable": true,
                     "properties": {
                       "related": {
                         "type": "string",
@@ -999,6 +1091,42 @@
                 "required": [
                   "data"
                 ]
+              },
+              "attachment": {
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "The type of this resource: `attachments`"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "The unique identifier of the resource within its type.\n"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ],
+                    "nullable": true
+                  },
+                  "links": {
+                    "type": "object",
+                    "properties": {
+                      "related": {
+                        "type": "string",
+                        "description": "The link to retrieve the related resource(s) in this relationship.\n"
+                      }
+                    },
+                    "required": [
+                      "related"
+                    ]
+                  }
+                }
               }
             },
             "required": [
@@ -1006,7 +1134,8 @@
               "transferAccount",
               "category",
               "parentCategory",
-              "tags"
+              "tags",
+              "attachment"
             ]
           },
           "links": {
