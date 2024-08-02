@@ -1,0 +1,33 @@
+package templates
+
+import "strings"
+
+import 	(
+    "github.com/esteanes/expense-manager/datafetcher/upclient"
+)
+
+templ Accounts(accounts []upclient.AccountResource){
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts</title>
+</head>
+<body>
+    <h1>Accounts</h1>
+        <ul>
+    for _, account := range accounts {
+    <div>
+        <h2>{account.Attributes.DisplayName}</h2>
+        <p>Account Type: {strings.ToTitle(string(account.Attributes.AccountType))}</p>
+        <p>Balance: {account.Attributes.Balance.CurrencyCode} {account.Attributes.Balance.Value}</p>
+        <p>Created At: {account.Attributes.CreatedAt.String()}</p>
+    </div>
+    <hr>
+    }
+    </ul>
+
+</body>
+</html>
+}
