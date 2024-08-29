@@ -88,10 +88,12 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 	// Creating individual handlers
 	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
 	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth)
+	transactionsCsvHandler := handlers.NewTransactionCsvHandler(log, apiClient, auth)
 	component := templates.Hello("its ya boi")
 	mux := http.NewServeMux()
 	mux.HandleFunc(accountHandler.Uri, accountHandler.ServeHTTP)
 	mux.HandleFunc(transactionsHandler.Uri, transactionsHandler.ServeHTTP)
+	mux.HandleFunc(transactionsCsvHandler.Uri, transactionsCsvHandler.ServeHTTP)
 
 	mux.HandleFunc("/", homePage)
 	mux.HandleFunc("/info", getInfo)

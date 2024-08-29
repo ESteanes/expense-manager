@@ -3,7 +3,7 @@ module github.com/esteanes/expense-manager
 go 1.21.5
 
 require (
-	github.com/a-h/templ v0.2.747
+	github.com/a-h/templ v0.2.771
 	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/stretchr/testify v1.9.0
 )
