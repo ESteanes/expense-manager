@@ -21,8 +21,8 @@ var _ MappedNullable = &TransactionResourceRelationshipsTransferAccount{}
 
 // TransactionResourceRelationshipsTransferAccount If this transaction is a transfer between accounts, this relationship will contain the account the transaction went to/came from. The `amount` field can be used to determine the direction of the transfer.
 type TransactionResourceRelationshipsTransferAccount struct {
-	Data  NullableTransactionResourceRelationshipsTransferAccountData  `json:"data"`
-	Links NullableTransactionResourceRelationshipsTransferAccountLinks `json:"links,omitempty"`
+	Data  NullableTransactionResourceRelationshipsTransferAccountData `json:"data"`
+	Links *AccountResourceRelationshipsTransactionsLinks              `json:"links,omitempty"`
 }
 
 type _TransactionResourceRelationshipsTransferAccount TransactionResourceRelationshipsTransferAccount
@@ -71,47 +71,36 @@ func (o *TransactionResourceRelationshipsTransferAccount) SetData(v TransactionR
 	o.Data.Set(&v)
 }
 
-// GetLinks returns the Links field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *TransactionResourceRelationshipsTransferAccount) GetLinks() TransactionResourceRelationshipsTransferAccountLinks {
-	if o == nil || IsNil(o.Links.Get()) {
-		var ret TransactionResourceRelationshipsTransferAccountLinks
+// GetLinks returns the Links field value if set, zero value otherwise.
+func (o *TransactionResourceRelationshipsTransferAccount) GetLinks() AccountResourceRelationshipsTransactionsLinks {
+	if o == nil || IsNil(o.Links) {
+		var ret AccountResourceRelationshipsTransactionsLinks
 		return ret
 	}
-	return *o.Links.Get()
+	return *o.Links
 }
 
 // GetLinksOk returns a tuple with the Links field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *TransactionResourceRelationshipsTransferAccount) GetLinksOk() (*TransactionResourceRelationshipsTransferAccountLinks, bool) {
-	if o == nil {
+func (o *TransactionResourceRelationshipsTransferAccount) GetLinksOk() (*AccountResourceRelationshipsTransactionsLinks, bool) {
+	if o == nil || IsNil(o.Links) {
 		return nil, false
 	}
-	return o.Links.Get(), o.Links.IsSet()
+	return o.Links, true
 }
 
 // HasLinks returns a boolean if a field has been set.
 func (o *TransactionResourceRelationshipsTransferAccount) HasLinks() bool {
-	if o != nil && o.Links.IsSet() {
+	if o != nil && !IsNil(o.Links) {
 		return true
 	}
 
 	return false
 }
 
-// SetLinks gets a reference to the given NullableTransactionResourceRelationshipsTransferAccountLinks and assigns it to the Links field.
-func (o *TransactionResourceRelationshipsTransferAccount) SetLinks(v TransactionResourceRelationshipsTransferAccountLinks) {
-	o.Links.Set(&v)
-}
-
-// SetLinksNil sets the value for Links to be an explicit nil
-func (o *TransactionResourceRelationshipsTransferAccount) SetLinksNil() {
-	o.Links.Set(nil)
-}
-
-// UnsetLinks ensures that no value is present for Links, not even an explicit nil
-func (o *TransactionResourceRelationshipsTransferAccount) UnsetLinks() {
-	o.Links.Unset()
+// SetLinks gets a reference to the given AccountResourceRelationshipsTransactionsLinks and assigns it to the Links field.
+func (o *TransactionResourceRelationshipsTransferAccount) SetLinks(v AccountResourceRelationshipsTransactionsLinks) {
+	o.Links = &v
 }
 
 func (o TransactionResourceRelationshipsTransferAccount) MarshalJSON() ([]byte, error) {
@@ -125,8 +114,8 @@ func (o TransactionResourceRelationshipsTransferAccount) MarshalJSON() ([]byte, 
 func (o TransactionResourceRelationshipsTransferAccount) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data.Get()
-	if o.Links.IsSet() {
-		toSerialize["links"] = o.Links.Get()
+	if !IsNil(o.Links) {
+		toSerialize["links"] = o.Links
 	}
 	return toSerialize, nil
 }

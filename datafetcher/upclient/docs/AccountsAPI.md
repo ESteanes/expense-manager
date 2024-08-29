@@ -100,7 +100,7 @@ import (
 )
 
 func main() {
-	id := "92b41408-6b7b-4fca-982b-3fb1fdd77220" // string | The unique identifier for the account. 
+	id := "7699cfe5-eabd-4855-bbe7-9dfe3f70cebf" // string | The unique identifier for the account. 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

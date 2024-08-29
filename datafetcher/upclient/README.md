@@ -85,6 +85,8 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AccountsAPI* | [**AccountsGet**](docs/AccountsAPI.md#accountsget) | **Get** /accounts | List accounts
 *AccountsAPI* | [**AccountsIdGet**](docs/AccountsAPI.md#accountsidget) | **Get** /accounts/{id} | Retrieve account
+*AttachmentsAPI* | [**AttachmentsGet**](docs/AttachmentsAPI.md#attachmentsget) | **Get** /attachments | List attachments
+*AttachmentsAPI* | [**AttachmentsIdGet**](docs/AttachmentsAPI.md#attachmentsidget) | **Get** /attachments/{id} | Retrieve attachment
 *CategoriesAPI* | [**CategoriesGet**](docs/CategoriesAPI.md#categoriesget) | **Get** /categories | List categories
 *CategoriesAPI* | [**CategoriesIdGet**](docs/CategoriesAPI.md#categoriesidget) | **Get** /categories/{id} | Retrieve category
 *CategoriesAPI* | [**TransactionsTransactionIdRelationshipsCategoryPatch**](docs/CategoriesAPI.md#transactionstransactionidrelationshipscategorypatch) | **Patch** /transactions/{transactionId}/relationships/category | Categorize transaction
@@ -112,6 +114,11 @@ Class | Method | HTTP request | Description
  - [AccountResourceRelationshipsTransactions](docs/AccountResourceRelationshipsTransactions.md)
  - [AccountResourceRelationshipsTransactionsLinks](docs/AccountResourceRelationshipsTransactionsLinks.md)
  - [AccountTypeEnum](docs/AccountTypeEnum.md)
+ - [AttachmentResource](docs/AttachmentResource.md)
+ - [AttachmentResourceAttributes](docs/AttachmentResourceAttributes.md)
+ - [AttachmentResourceRelationships](docs/AttachmentResourceRelationships.md)
+ - [AttachmentResourceRelationshipsTransaction](docs/AttachmentResourceRelationshipsTransaction.md)
+ - [AttachmentResourceRelationshipsTransactionData](docs/AttachmentResourceRelationshipsTransactionData.md)
  - [CardPurchaseMethodEnum](docs/CardPurchaseMethodEnum.md)
  - [CardPurchaseMethodObject](docs/CardPurchaseMethodObject.md)
  - [CashbackObject](docs/CashbackObject.md)
@@ -130,12 +137,14 @@ Class | Method | HTTP request | Description
  - [ErrorObjectSource](docs/ErrorObjectSource.md)
  - [ErrorResponse](docs/ErrorResponse.md)
  - [GetAccountResponse](docs/GetAccountResponse.md)
+ - [GetAttachmentResponse](docs/GetAttachmentResponse.md)
  - [GetCategoryResponse](docs/GetCategoryResponse.md)
  - [GetTransactionResponse](docs/GetTransactionResponse.md)
  - [GetWebhookResponse](docs/GetWebhookResponse.md)
  - [HoldInfoObject](docs/HoldInfoObject.md)
  - [ListAccountsResponse](docs/ListAccountsResponse.md)
  - [ListAccountsResponseLinks](docs/ListAccountsResponseLinks.md)
+ - [ListAttachmentsResponse](docs/ListAttachmentsResponse.md)
  - [ListCategoriesResponse](docs/ListCategoriesResponse.md)
  - [ListTagsResponse](docs/ListTagsResponse.md)
  - [ListTransactionsResponse](docs/ListTransactionsResponse.md)
@@ -163,7 +172,6 @@ Class | Method | HTTP request | Description
  - [TransactionResourceRelationshipsTagsLinks](docs/TransactionResourceRelationshipsTagsLinks.md)
  - [TransactionResourceRelationshipsTransferAccount](docs/TransactionResourceRelationshipsTransferAccount.md)
  - [TransactionResourceRelationshipsTransferAccountData](docs/TransactionResourceRelationshipsTransferAccountData.md)
- - [TransactionResourceRelationshipsTransferAccountLinks](docs/TransactionResourceRelationshipsTransferAccountLinks.md)
  - [TransactionStatusEnum](docs/TransactionStatusEnum.md)
  - [UpdateTransactionCategoryRequest](docs/UpdateTransactionCategoryRequest.md)
  - [UpdateTransactionTagsRequest](docs/UpdateTransactionTagsRequest.md)
@@ -179,8 +187,6 @@ Class | Method | HTTP request | Description
  - [WebhookEventResource](docs/WebhookEventResource.md)
  - [WebhookEventResourceAttributes](docs/WebhookEventResourceAttributes.md)
  - [WebhookEventResourceRelationships](docs/WebhookEventResourceRelationships.md)
- - [WebhookEventResourceRelationshipsTransaction](docs/WebhookEventResourceRelationshipsTransaction.md)
- - [WebhookEventResourceRelationshipsTransactionData](docs/WebhookEventResourceRelationshipsTransactionData.md)
  - [WebhookEventResourceRelationshipsWebhook](docs/WebhookEventResourceRelationshipsWebhook.md)
  - [WebhookEventResourceRelationshipsWebhookData](docs/WebhookEventResourceRelationshipsWebhookData.md)
  - [WebhookEventTypeEnum](docs/WebhookEventTypeEnum.md)

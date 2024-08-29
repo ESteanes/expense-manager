@@ -9,13 +9,13 @@ Name | Type | Description | Notes
 **Category** | [**TransactionResourceRelationshipsCategory**](TransactionResourceRelationshipsCategory.md) |  | 
 **ParentCategory** | [**CategoryResourceRelationshipsParent**](CategoryResourceRelationshipsParent.md) |  | 
 **Tags** | [**TransactionResourceRelationshipsTags**](TransactionResourceRelationshipsTags.md) |  | 
-**Attachment** | [**NullableTransactionResourceRelationshipsAttachment**](TransactionResourceRelationshipsAttachment.md) |  | 
+**Attachment** | [**TransactionResourceRelationshipsAttachment**](TransactionResourceRelationshipsAttachment.md) |  | 
 
 ## Methods
 
 ### NewTransactionResourceRelationships
 
-`func NewTransactionResourceRelationships(account TransactionResourceRelationshipsAccount, transferAccount TransactionResourceRelationshipsTransferAccount, category TransactionResourceRelationshipsCategory, parentCategory CategoryResourceRelationshipsParent, tags TransactionResourceRelationshipsTags, attachment NullableTransactionResourceRelationshipsAttachment, ) *TransactionResourceRelationships`
+`func NewTransactionResourceRelationships(account TransactionResourceRelationshipsAccount, transferAccount TransactionResourceRelationshipsTransferAccount, category TransactionResourceRelationshipsCategory, parentCategory CategoryResourceRelationshipsParent, tags TransactionResourceRelationshipsTags, attachment TransactionResourceRelationshipsAttachment, ) *TransactionResourceRelationships`
 
 NewTransactionResourceRelationships instantiates a new TransactionResourceRelationships object
 This constructor will assign default values to properties that have it defined,
@@ -150,16 +150,6 @@ and a boolean to check if the value has been set.
 SetAttachment sets Attachment field to given value.
 
 
-### SetAttachmentNil
-
-`func (o *TransactionResourceRelationships) SetAttachmentNil(b bool)`
-
- SetAttachmentNil sets the value for Attachment to be an explicit nil
-
-### UnsetAttachment
-`func (o *TransactionResourceRelationships) UnsetAttachment()`
-
-UnsetAttachment ensures that no value is present for Attachment, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

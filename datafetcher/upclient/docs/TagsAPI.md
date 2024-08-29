@@ -97,7 +97,7 @@ import (
 )
 
 func main() {
-	transactionId := "c3feb4ba-829c-4482-b882-1b9bd23da82d" // string | The unique identifier for the transaction. 
+	transactionId := "86aacb90-a718-43f2-bb06-c1e32542ab26" // string | The unique identifier for the transaction. 
 	updateTransactionTagsRequest := *openapiclient.NewUpdateTransactionTagsRequest([]openapiclient.TagInputResourceIdentifier{*openapiclient.NewTagInputResourceIdentifier("Type_example", "Id_example")}) // UpdateTransactionTagsRequest |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
@@ -167,7 +167,7 @@ import (
 )
 
 func main() {
-	transactionId := "acde4631-db56-49a6-aea3-4e2311ef1d6a" // string | The unique identifier for the transaction. 
+	transactionId := "6259eac2-feac-417d-893e-84876c575913" // string | The unique identifier for the transaction. 
 	updateTransactionTagsRequest := *openapiclient.NewUpdateTransactionTagsRequest([]openapiclient.TagInputResourceIdentifier{*openapiclient.NewTagInputResourceIdentifier("Type_example", "Id_example")}) // UpdateTransactionTagsRequest |  (optional)
 
 	configuration := openapiclient.NewConfiguration()

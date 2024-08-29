@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Webhook** | [**WebhookEventResourceRelationshipsWebhook**](WebhookEventResourceRelationshipsWebhook.md) |  | 
-**Transaction** | Pointer to [**WebhookEventResourceRelationshipsTransaction**](WebhookEventResourceRelationshipsTransaction.md) |  | [optional] 
+**Transaction** | Pointer to [**AttachmentResourceRelationshipsTransaction**](AttachmentResourceRelationshipsTransaction.md) |  | [optional] 
 
 ## Methods
 
@@ -48,20 +48,20 @@ SetWebhook sets Webhook field to given value.
 
 ### GetTransaction
 
-`func (o *WebhookEventResourceRelationships) GetTransaction() WebhookEventResourceRelationshipsTransaction`
+`func (o *WebhookEventResourceRelationships) GetTransaction() AttachmentResourceRelationshipsTransaction`
 
 GetTransaction returns the Transaction field if non-nil, zero value otherwise.
 
 ### GetTransactionOk
 
-`func (o *WebhookEventResourceRelationships) GetTransactionOk() (*WebhookEventResourceRelationshipsTransaction, bool)`
+`func (o *WebhookEventResourceRelationships) GetTransactionOk() (*AttachmentResourceRelationshipsTransaction, bool)`
 
 GetTransactionOk returns a tuple with the Transaction field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTransaction
 
-`func (o *WebhookEventResourceRelationships) SetTransaction(v WebhookEventResourceRelationshipsTransaction)`
+`func (o *WebhookEventResourceRelationships) SetTransaction(v AttachmentResourceRelationshipsTransaction)`
 
 SetTransaction sets Transaction field to given value.
 

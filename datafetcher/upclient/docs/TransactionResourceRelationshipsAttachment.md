@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**NullableTransactionResourceRelationshipsAttachmentData**](TransactionResourceRelationshipsAttachmentData.md) |  | [optional] 
+**Data** | [**NullableTransactionResourceRelationshipsAttachmentData**](TransactionResourceRelationshipsAttachmentData.md) |  | 
 **Links** | Pointer to [**AccountResourceRelationshipsTransactionsLinks**](AccountResourceRelationshipsTransactionsLinks.md) |  | [optional] 
 
 ## Methods
 
 ### NewTransactionResourceRelationshipsAttachment
 
-`func NewTransactionResourceRelationshipsAttachment() *TransactionResourceRelationshipsAttachment`
+`func NewTransactionResourceRelationshipsAttachment(data NullableTransactionResourceRelationshipsAttachmentData, ) *TransactionResourceRelationshipsAttachment`
 
 NewTransactionResourceRelationshipsAttachment instantiates a new TransactionResourceRelationshipsAttachment object
 This constructor will assign default values to properties that have it defined,
@@ -45,11 +45,6 @@ and a boolean to check if the value has been set.
 
 SetData sets Data field to given value.
 
-### HasData
-
-`func (o *TransactionResourceRelationshipsAttachment) HasData() bool`
-
-HasData returns a boolean if a field has been set.
 
 ### SetDataNil
 

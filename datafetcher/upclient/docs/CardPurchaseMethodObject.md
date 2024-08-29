@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Method** | [**CardPurchaseMethodEnum**](CardPurchaseMethodEnum.md) | The card method used for this purchase.  | 
-**CardNumberSuffix** | **NullableString** | The last four digits of the card used for this transaction.  | 
+**Method** | [**CardPurchaseMethodEnum**](CardPurchaseMethodEnum.md) | The type of card purchase.  | 
+**CardNumberSuffix** | **NullableString** | The last four digits of the card used for the purchase, if applicable.  | 
 
 ## Methods
 

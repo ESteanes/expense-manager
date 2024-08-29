@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	accountId := "b5544658-4bbd-4eb1-8f63-a9909e0f564b" // string | The unique identifier for the account. 
+	accountId := "689a08de-fa65-4f2d-8b58-e49b17117dc7" // string | The unique identifier for the account. 
 	pageSize := int32(30) // int32 | The number of records to return in each page.  (optional)
 	filterStatus := openapiclient.TransactionStatusEnum("HELD") // TransactionStatusEnum | The transaction status for which to return records. This can be used to filter `HELD` transactions from those that are `SETTLED`.  (optional)
 	filterSince := time.Now() // time.Time | The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  (optional)
@@ -191,7 +191,7 @@ import (
 )
 
 func main() {
-	id := "7a9d19f9-106c-4e29-8591-52fc5d8f09c5" // string | The unique identifier for the transaction. 
+	id := "57a749fd-4fc9-40da-a8d9-ec9cf1d8c9ff" // string | The unique identifier for the transaction. 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

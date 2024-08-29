@@ -11,7 +11,9 @@ API version: v1
 package upclient
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the TransactionResourceRelationshipsAttachment type satisfies the MappedNullable interface at compile time
@@ -19,16 +21,19 @@ var _ MappedNullable = &TransactionResourceRelationshipsAttachment{}
 
 // TransactionResourceRelationshipsAttachment struct for TransactionResourceRelationshipsAttachment
 type TransactionResourceRelationshipsAttachment struct {
-	Data  NullableTransactionResourceRelationshipsAttachmentData `json:"data,omitempty"`
+	Data  NullableTransactionResourceRelationshipsAttachmentData `json:"data"`
 	Links *AccountResourceRelationshipsTransactionsLinks         `json:"links,omitempty"`
 }
+
+type _TransactionResourceRelationshipsAttachment TransactionResourceRelationshipsAttachment
 
 // NewTransactionResourceRelationshipsAttachment instantiates a new TransactionResourceRelationshipsAttachment object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionResourceRelationshipsAttachment() *TransactionResourceRelationshipsAttachment {
+func NewTransactionResourceRelationshipsAttachment(data NullableTransactionResourceRelationshipsAttachmentData) *TransactionResourceRelationshipsAttachment {
 	this := TransactionResourceRelationshipsAttachment{}
+	this.Data = data
 	return &this
 }
 
@@ -40,16 +45,18 @@ func NewTransactionResourceRelationshipsAttachmentWithDefaults() *TransactionRes
 	return &this
 }
 
-// GetData returns the Data field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetData returns the Data field value
+// If the value is explicit nil, the zero value for TransactionResourceRelationshipsAttachmentData will be returned
 func (o *TransactionResourceRelationshipsAttachment) GetData() TransactionResourceRelationshipsAttachmentData {
-	if o == nil || IsNil(o.Data.Get()) {
+	if o == nil || o.Data.Get() == nil {
 		var ret TransactionResourceRelationshipsAttachmentData
 		return ret
 	}
+
 	return *o.Data.Get()
 }
 
-// GetDataOk returns a tuple with the Data field value if set, nil otherwise
+// GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TransactionResourceRelationshipsAttachment) GetDataOk() (*TransactionResourceRelationshipsAttachmentData, bool) {
@@ -59,28 +66,9 @@ func (o *TransactionResourceRelationshipsAttachment) GetDataOk() (*TransactionRe
 	return o.Data.Get(), o.Data.IsSet()
 }
 
-// HasData returns a boolean if a field has been set.
-func (o *TransactionResourceRelationshipsAttachment) HasData() bool {
-	if o != nil && o.Data.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetData gets a reference to the given NullableTransactionResourceRelationshipsAttachmentData and assigns it to the Data field.
+// SetData sets field value
 func (o *TransactionResourceRelationshipsAttachment) SetData(v TransactionResourceRelationshipsAttachmentData) {
 	o.Data.Set(&v)
-}
-
-// SetDataNil sets the value for Data to be an explicit nil
-func (o *TransactionResourceRelationshipsAttachment) SetDataNil() {
-	o.Data.Set(nil)
-}
-
-// UnsetData ensures that no value is present for Data, not even an explicit nil
-func (o *TransactionResourceRelationshipsAttachment) UnsetData() {
-	o.Data.Unset()
 }
 
 // GetLinks returns the Links field value if set, zero value otherwise.
@@ -125,13 +113,48 @@ func (o TransactionResourceRelationshipsAttachment) MarshalJSON() ([]byte, error
 
 func (o TransactionResourceRelationshipsAttachment) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Data.IsSet() {
-		toSerialize["data"] = o.Data.Get()
-	}
+	toSerialize["data"] = o.Data.Get()
 	if !IsNil(o.Links) {
 		toSerialize["links"] = o.Links
 	}
 	return toSerialize, nil
+}
+
+func (o *TransactionResourceRelationshipsAttachment) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"data",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err
+	}
+
+	for _, requiredProperty := range requiredProperties {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varTransactionResourceRelationshipsAttachment := _TransactionResourceRelationshipsAttachment{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varTransactionResourceRelationshipsAttachment)
+
+	if err != nil {
+		return err
+	}
+
+	*o = TransactionResourceRelationshipsAttachment(varTransactionResourceRelationshipsAttachment)
+
+	return err
 }
 
 type NullableTransactionResourceRelationshipsAttachment struct {

@@ -21,12 +21,12 @@ var _ MappedNullable = &TransactionResourceRelationships{}
 
 // TransactionResourceRelationships struct for TransactionResourceRelationships
 type TransactionResourceRelationships struct {
-	Account         TransactionResourceRelationshipsAccount            `json:"account"`
-	TransferAccount TransactionResourceRelationshipsTransferAccount    `json:"transferAccount"`
-	Category        TransactionResourceRelationshipsCategory           `json:"category"`
-	ParentCategory  CategoryResourceRelationshipsParent                `json:"parentCategory"`
-	Tags            TransactionResourceRelationshipsTags               `json:"tags"`
-	Attachment      NullableTransactionResourceRelationshipsAttachment `json:"attachment"`
+	Account         TransactionResourceRelationshipsAccount         `json:"account"`
+	TransferAccount TransactionResourceRelationshipsTransferAccount `json:"transferAccount"`
+	Category        TransactionResourceRelationshipsCategory        `json:"category"`
+	ParentCategory  CategoryResourceRelationshipsParent             `json:"parentCategory"`
+	Tags            TransactionResourceRelationshipsTags            `json:"tags"`
+	Attachment      TransactionResourceRelationshipsAttachment      `json:"attachment"`
 }
 
 type _TransactionResourceRelationships TransactionResourceRelationships
@@ -35,7 +35,7 @@ type _TransactionResourceRelationships TransactionResourceRelationships
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionResourceRelationships(account TransactionResourceRelationshipsAccount, transferAccount TransactionResourceRelationshipsTransferAccount, category TransactionResourceRelationshipsCategory, parentCategory CategoryResourceRelationshipsParent, tags TransactionResourceRelationshipsTags, attachment NullableTransactionResourceRelationshipsAttachment) *TransactionResourceRelationships {
+func NewTransactionResourceRelationships(account TransactionResourceRelationshipsAccount, transferAccount TransactionResourceRelationshipsTransferAccount, category TransactionResourceRelationshipsCategory, parentCategory CategoryResourceRelationshipsParent, tags TransactionResourceRelationshipsTags, attachment TransactionResourceRelationshipsAttachment) *TransactionResourceRelationships {
 	this := TransactionResourceRelationships{}
 	this.Account = account
 	this.TransferAccount = transferAccount
@@ -175,29 +175,27 @@ func (o *TransactionResourceRelationships) SetTags(v TransactionResourceRelation
 }
 
 // GetAttachment returns the Attachment field value
-// If the value is explicit nil, the zero value for TransactionResourceRelationshipsAttachment will be returned
 func (o *TransactionResourceRelationships) GetAttachment() TransactionResourceRelationshipsAttachment {
-	if o == nil || o.Attachment.Get() == nil {
+	if o == nil {
 		var ret TransactionResourceRelationshipsAttachment
 		return ret
 	}
 
-	return *o.Attachment.Get()
+	return o.Attachment
 }
 
 // GetAttachmentOk returns a tuple with the Attachment field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TransactionResourceRelationships) GetAttachmentOk() (*TransactionResourceRelationshipsAttachment, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Attachment.Get(), o.Attachment.IsSet()
+	return &o.Attachment, true
 }
 
 // SetAttachment sets field value
 func (o *TransactionResourceRelationships) SetAttachment(v TransactionResourceRelationshipsAttachment) {
-	o.Attachment.Set(&v)
+	o.Attachment = v
 }
 
 func (o TransactionResourceRelationships) MarshalJSON() ([]byte, error) {
@@ -215,7 +213,7 @@ func (o TransactionResourceRelationships) ToMap() (map[string]interface{}, error
 	toSerialize["category"] = o.Category
 	toSerialize["parentCategory"] = o.ParentCategory
 	toSerialize["tags"] = o.Tags
-	toSerialize["attachment"] = o.Attachment.Get()
+	toSerialize["attachment"] = o.Attachment
 	return toSerialize, nil
 }
 

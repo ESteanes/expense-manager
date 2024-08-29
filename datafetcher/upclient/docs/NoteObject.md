@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Text** | Pointer to **string** |  | [optional] 
+**Text** | **string** | A text note about the transaction.  | 
 
 ## Methods
 
 ### NewNoteObject
 
-`func NewNoteObject() *NoteObject`
+`func NewNoteObject(text string, ) *NoteObject`
 
 NewNoteObject instantiates a new NoteObject object
 This constructor will assign default values to properties that have it defined,
@@ -44,11 +44,6 @@ and a boolean to check if the value has been set.
 
 SetText sets Text field to given value.
 
-### HasText
-
-`func (o *NoteObject) HasText() bool`
-
-HasText returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
