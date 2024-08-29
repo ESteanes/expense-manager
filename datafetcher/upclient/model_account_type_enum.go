@@ -15,19 +15,21 @@ import (
 	"fmt"
 )
 
-// AccountTypeEnum Specifies the type of bank account. Currently returned values are `SAVER` and `TRANSACTIONAL`.
+// AccountTypeEnum Specifies the type of bank account. Currently returned values are `SAVER`, `TRANSACTIONAL` and `HOME_LOAN`.
 type AccountTypeEnum string
 
 // List of AccountTypeEnum
 const (
 	SAVER         AccountTypeEnum = "SAVER"
 	TRANSACTIONAL AccountTypeEnum = "TRANSACTIONAL"
+	HOME_LOAN     AccountTypeEnum = "HOME_LOAN"
 )
 
 // All allowed values of AccountTypeEnum enum
 var AllowedAccountTypeEnumEnumValues = []AccountTypeEnum{
 	"SAVER",
 	"TRANSACTIONAL",
+	"HOME_LOAN",
 }
 
 func (v *AccountTypeEnum) UnmarshalJSON(src []byte) error {

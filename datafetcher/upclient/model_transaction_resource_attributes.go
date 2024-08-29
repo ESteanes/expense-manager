@@ -42,17 +42,17 @@ type TransactionResourceAttributes struct {
 	Amount MoneyObject `json:"amount"`
 	// The foreign currency amount of this transaction. This field will be `null` for domestic transactions. The amount was converted to the AUD amount reflected in the `amount` of this transaction. Refer to the `holdInfo` field for the original `foreignAmount` the transaction was `HELD` at.
 	ForeignAmount NullableMoneyObject `json:"foreignAmount"`
+	// Information about the card used for this transaction, if applicable.
+	CardPurchaseMethod NullableCardPurchaseMethodObject `json:"cardPurchaseMethod"`
 	// The date-time at which this transaction settled. This field will be `null` for transactions that are currently in the `HELD` status.
 	SettledAt NullableTime `json:"settledAt"`
 	// The date-time at which this transaction was first encountered.
 	CreatedAt time.Time `json:"createdAt"`
-	// Information about the card used for this transaction, if applicable.
-	CardPurchaseMethod NullableCardPurchaseMethodObject `json:"cardPurchaseMethod,omitempty"`
 	// A description of the transaction method used e.g. Purchase, BPAY Payment.
-	TransactionType NullableString `json:"transactionType,omitempty"`
-	// A customer provided note about the transaction. Can only be provided by Up High subscribers.
+	TransactionType NullableString `json:"transactionType"`
+	// A customer provided note about the transaction.  Can only be provided by Up High subscribers.
 	Note NullableNoteObject `json:"note"`
-	// The Up Name of the person who performed the transaction.
+	// The customer who initated the transaction.  For 2Up accounts this could be the customer who's card was used.
 	PerformingCustomer NullableCustomerObject `json:"performingCustomer"`
 }
 
@@ -62,7 +62,7 @@ type _TransactionResourceAttributes TransactionResourceAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, settledAt NullableTime, createdAt time.Time, note NullableNoteObject, performingCustomer NullableCustomerObject) *TransactionResourceAttributes {
+func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, cardPurchaseMethod NullableCardPurchaseMethodObject, settledAt NullableTime, createdAt time.Time, transactionType NullableString, note NullableNoteObject, performingCustomer NullableCustomerObject) *TransactionResourceAttributes {
 	this := TransactionResourceAttributes{}
 	this.Status = status
 	this.RawText = rawText
@@ -74,8 +74,10 @@ func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText Null
 	this.Cashback = cashback
 	this.Amount = amount
 	this.ForeignAmount = foreignAmount
+	this.CardPurchaseMethod = cardPurchaseMethod
 	this.SettledAt = settledAt
 	this.CreatedAt = createdAt
+	this.TransactionType = transactionType
 	this.Note = note
 	this.PerformingCustomer = performingCustomer
 	return &this
@@ -341,6 +343,32 @@ func (o *TransactionResourceAttributes) SetForeignAmount(v MoneyObject) {
 	o.ForeignAmount.Set(&v)
 }
 
+// GetCardPurchaseMethod returns the CardPurchaseMethod field value
+// If the value is explicit nil, the zero value for CardPurchaseMethodObject will be returned
+func (o *TransactionResourceAttributes) GetCardPurchaseMethod() CardPurchaseMethodObject {
+	if o == nil || o.CardPurchaseMethod.Get() == nil {
+		var ret CardPurchaseMethodObject
+		return ret
+	}
+
+	return *o.CardPurchaseMethod.Get()
+}
+
+// GetCardPurchaseMethodOk returns a tuple with the CardPurchaseMethod field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *TransactionResourceAttributes) GetCardPurchaseMethodOk() (*CardPurchaseMethodObject, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.CardPurchaseMethod.Get(), o.CardPurchaseMethod.IsSet()
+}
+
+// SetCardPurchaseMethod sets field value
+func (o *TransactionResourceAttributes) SetCardPurchaseMethod(v CardPurchaseMethodObject) {
+	o.CardPurchaseMethod.Set(&v)
+}
+
 // GetSettledAt returns the SettledAt field value
 // If the value is explicit nil, the zero value for time.Time will be returned
 func (o *TransactionResourceAttributes) GetSettledAt() time.Time {
@@ -391,59 +419,18 @@ func (o *TransactionResourceAttributes) SetCreatedAt(v time.Time) {
 	o.CreatedAt = v
 }
 
-// GetCardPurchaseMethod returns the CardPurchaseMethod field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *TransactionResourceAttributes) GetCardPurchaseMethod() CardPurchaseMethodObject {
-	if o == nil || IsNil(o.CardPurchaseMethod.Get()) {
-		var ret CardPurchaseMethodObject
-		return ret
-	}
-	return *o.CardPurchaseMethod.Get()
-}
-
-// GetCardPurchaseMethodOk returns a tuple with the CardPurchaseMethod field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *TransactionResourceAttributes) GetCardPurchaseMethodOk() (*CardPurchaseMethodObject, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.CardPurchaseMethod.Get(), o.CardPurchaseMethod.IsSet()
-}
-
-// HasCardPurchaseMethod returns a boolean if a field has been set.
-func (o *TransactionResourceAttributes) HasCardPurchaseMethod() bool {
-	if o != nil && o.CardPurchaseMethod.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetCardPurchaseMethod gets a reference to the given NullableCardPurchaseMethodObject and assigns it to the CardPurchaseMethod field.
-func (o *TransactionResourceAttributes) SetCardPurchaseMethod(v CardPurchaseMethodObject) {
-	o.CardPurchaseMethod.Set(&v)
-}
-
-// SetCardPurchaseMethodNil sets the value for CardPurchaseMethod to be an explicit nil
-func (o *TransactionResourceAttributes) SetCardPurchaseMethodNil() {
-	o.CardPurchaseMethod.Set(nil)
-}
-
-// UnsetCardPurchaseMethod ensures that no value is present for CardPurchaseMethod, not even an explicit nil
-func (o *TransactionResourceAttributes) UnsetCardPurchaseMethod() {
-	o.CardPurchaseMethod.Unset()
-}
-
-// GetTransactionType returns the TransactionType field value if set, zero value otherwise (both if not set or set to explicit null).
+// GetTransactionType returns the TransactionType field value
+// If the value is explicit nil, the zero value for string will be returned
 func (o *TransactionResourceAttributes) GetTransactionType() string {
-	if o == nil || IsNil(o.TransactionType.Get()) {
+	if o == nil || o.TransactionType.Get() == nil {
 		var ret string
 		return ret
 	}
+
 	return *o.TransactionType.Get()
 }
 
-// GetTransactionTypeOk returns a tuple with the TransactionType field value if set, nil otherwise
+// GetTransactionTypeOk returns a tuple with the TransactionType field value
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TransactionResourceAttributes) GetTransactionTypeOk() (*string, bool) {
@@ -453,28 +440,9 @@ func (o *TransactionResourceAttributes) GetTransactionTypeOk() (*string, bool) {
 	return o.TransactionType.Get(), o.TransactionType.IsSet()
 }
 
-// HasTransactionType returns a boolean if a field has been set.
-func (o *TransactionResourceAttributes) HasTransactionType() bool {
-	if o != nil && o.TransactionType.IsSet() {
-		return true
-	}
-
-	return false
-}
-
-// SetTransactionType gets a reference to the given NullableString and assigns it to the TransactionType field.
+// SetTransactionType sets field value
 func (o *TransactionResourceAttributes) SetTransactionType(v string) {
 	o.TransactionType.Set(&v)
-}
-
-// SetTransactionTypeNil sets the value for TransactionType to be an explicit nil
-func (o *TransactionResourceAttributes) SetTransactionTypeNil() {
-	o.TransactionType.Set(nil)
-}
-
-// UnsetTransactionType ensures that no value is present for TransactionType, not even an explicit nil
-func (o *TransactionResourceAttributes) UnsetTransactionType() {
-	o.TransactionType.Unset()
 }
 
 // GetNote returns the Note field value
@@ -549,14 +517,10 @@ func (o TransactionResourceAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize["cashback"] = o.Cashback.Get()
 	toSerialize["amount"] = o.Amount
 	toSerialize["foreignAmount"] = o.ForeignAmount.Get()
+	toSerialize["cardPurchaseMethod"] = o.CardPurchaseMethod.Get()
 	toSerialize["settledAt"] = o.SettledAt.Get()
 	toSerialize["createdAt"] = o.CreatedAt
-	if o.CardPurchaseMethod.IsSet() {
-		toSerialize["cardPurchaseMethod"] = o.CardPurchaseMethod.Get()
-	}
-	if o.TransactionType.IsSet() {
-		toSerialize["transactionType"] = o.TransactionType.Get()
-	}
+	toSerialize["transactionType"] = o.TransactionType.Get()
 	toSerialize["note"] = o.Note.Get()
 	toSerialize["performingCustomer"] = o.PerformingCustomer.Get()
 	return toSerialize, nil
@@ -577,8 +541,10 @@ func (o *TransactionResourceAttributes) UnmarshalJSON(data []byte) (err error) {
 		"cashback",
 		"amount",
 		"foreignAmount",
+		"cardPurchaseMethod",
 		"settledAt",
 		"createdAt",
+		"transactionType",
 		"note",
 		"performingCustomer",
 	}

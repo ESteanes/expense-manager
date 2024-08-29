@@ -19,11 +19,11 @@ import (
 // checks if the CardPurchaseMethodObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CardPurchaseMethodObject{}
 
-// CardPurchaseMethodObject Provides information about the type of card
+// CardPurchaseMethodObject Provides information about the card used for a transaction.
 type CardPurchaseMethodObject struct {
-	// The card method used for this purchase.
+	// The type of card purchase.
 	Method CardPurchaseMethodEnum `json:"method"`
-	// The last four digits of the card used for this transaction.
+	// The last four digits of the card used for the purchase, if applicable.
 	CardNumberSuffix NullableString `json:"cardNumberSuffix"`
 }
 

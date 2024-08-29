@@ -14,18 +14,18 @@ Name | Type | Description | Notes
 **Cashback** | [**NullableCashbackObject**](CashbackObject.md) | If all or part of this transaction was instantly reimbursed in the form of cashback, details of the reimbursement.  | 
 **Amount** | [**MoneyObject**](MoneyObject.md) | The amount of this transaction in Australian dollars. For transactions that were once &#x60;HELD&#x60; but are now &#x60;SETTLED&#x60;, refer to the &#x60;holdInfo&#x60; field for the original &#x60;amount&#x60; the transaction was &#x60;HELD&#x60; at.  | 
 **ForeignAmount** | [**NullableMoneyObject**](MoneyObject.md) | The foreign currency amount of this transaction. This field will be &#x60;null&#x60; for domestic transactions. The amount was converted to the AUD amount reflected in the &#x60;amount&#x60; of this transaction. Refer to the &#x60;holdInfo&#x60; field for the original &#x60;foreignAmount&#x60; the transaction was &#x60;HELD&#x60; at.  | 
+**CardPurchaseMethod** | [**NullableCardPurchaseMethodObject**](CardPurchaseMethodObject.md) | Information about the card used for this transaction, if applicable.  | 
 **SettledAt** | **NullableTime** | The date-time at which this transaction settled. This field will be &#x60;null&#x60; for transactions that are currently in the &#x60;HELD&#x60; status.  | 
 **CreatedAt** | **time.Time** | The date-time at which this transaction was first encountered.  | 
-**CardPurchaseMethod** | Pointer to [**NullableCardPurchaseMethodObject**](CardPurchaseMethodObject.md) | Information about the card used for this transaction, if applicable.  | [optional] 
-**TransactionType** | Pointer to **NullableString** | A description of the transaction method used e.g. Purchase, BPAY Payment.  | [optional] 
-**Note** | [**NullableNoteObject**](NoteObject.md) | A customer provided note about the transaction. Can only be provided by Up High subscribers.  | 
-**PerformingCustomer** | [**NullableCustomerObject**](CustomerObject.md) | The Up Name of the person who performed the transaction.  | 
+**TransactionType** | **NullableString** | A description of the transaction method used e.g. Purchase, BPAY Payment.  | 
+**Note** | [**NullableNoteObject**](NoteObject.md) | A customer provided note about the transaction.  Can only be provided by Up High subscribers.  | 
+**PerformingCustomer** | [**NullableCustomerObject**](CustomerObject.md) | The customer who initated the transaction.  For 2Up accounts this could be the customer who&#39;s card was used.  | 
 
 ## Methods
 
 ### NewTransactionResourceAttributes
 
-`func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, settledAt NullableTime, createdAt time.Time, note NullableNoteObject, performingCustomer NullableCustomerObject, ) *TransactionResourceAttributes`
+`func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, cardPurchaseMethod NullableCardPurchaseMethodObject, settledAt NullableTime, createdAt time.Time, transactionType NullableString, note NullableNoteObject, performingCustomer NullableCustomerObject, ) *TransactionResourceAttributes`
 
 NewTransactionResourceAttributes instantiates a new TransactionResourceAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -300,6 +300,36 @@ SetForeignAmount sets ForeignAmount field to given value.
 `func (o *TransactionResourceAttributes) UnsetForeignAmount()`
 
 UnsetForeignAmount ensures that no value is present for ForeignAmount, not even an explicit nil
+### GetCardPurchaseMethod
+
+`func (o *TransactionResourceAttributes) GetCardPurchaseMethod() CardPurchaseMethodObject`
+
+GetCardPurchaseMethod returns the CardPurchaseMethod field if non-nil, zero value otherwise.
+
+### GetCardPurchaseMethodOk
+
+`func (o *TransactionResourceAttributes) GetCardPurchaseMethodOk() (*CardPurchaseMethodObject, bool)`
+
+GetCardPurchaseMethodOk returns a tuple with the CardPurchaseMethod field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCardPurchaseMethod
+
+`func (o *TransactionResourceAttributes) SetCardPurchaseMethod(v CardPurchaseMethodObject)`
+
+SetCardPurchaseMethod sets CardPurchaseMethod field to given value.
+
+
+### SetCardPurchaseMethodNil
+
+`func (o *TransactionResourceAttributes) SetCardPurchaseMethodNil(b bool)`
+
+ SetCardPurchaseMethodNil sets the value for CardPurchaseMethod to be an explicit nil
+
+### UnsetCardPurchaseMethod
+`func (o *TransactionResourceAttributes) UnsetCardPurchaseMethod()`
+
+UnsetCardPurchaseMethod ensures that no value is present for CardPurchaseMethod, not even an explicit nil
 ### GetSettledAt
 
 `func (o *TransactionResourceAttributes) GetSettledAt() time.Time`
@@ -350,41 +380,6 @@ and a boolean to check if the value has been set.
 SetCreatedAt sets CreatedAt field to given value.
 
 
-### GetCardPurchaseMethod
-
-`func (o *TransactionResourceAttributes) GetCardPurchaseMethod() CardPurchaseMethodObject`
-
-GetCardPurchaseMethod returns the CardPurchaseMethod field if non-nil, zero value otherwise.
-
-### GetCardPurchaseMethodOk
-
-`func (o *TransactionResourceAttributes) GetCardPurchaseMethodOk() (*CardPurchaseMethodObject, bool)`
-
-GetCardPurchaseMethodOk returns a tuple with the CardPurchaseMethod field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetCardPurchaseMethod
-
-`func (o *TransactionResourceAttributes) SetCardPurchaseMethod(v CardPurchaseMethodObject)`
-
-SetCardPurchaseMethod sets CardPurchaseMethod field to given value.
-
-### HasCardPurchaseMethod
-
-`func (o *TransactionResourceAttributes) HasCardPurchaseMethod() bool`
-
-HasCardPurchaseMethod returns a boolean if a field has been set.
-
-### SetCardPurchaseMethodNil
-
-`func (o *TransactionResourceAttributes) SetCardPurchaseMethodNil(b bool)`
-
- SetCardPurchaseMethodNil sets the value for CardPurchaseMethod to be an explicit nil
-
-### UnsetCardPurchaseMethod
-`func (o *TransactionResourceAttributes) UnsetCardPurchaseMethod()`
-
-UnsetCardPurchaseMethod ensures that no value is present for CardPurchaseMethod, not even an explicit nil
 ### GetTransactionType
 
 `func (o *TransactionResourceAttributes) GetTransactionType() string`
@@ -404,11 +399,6 @@ and a boolean to check if the value has been set.
 
 SetTransactionType sets TransactionType field to given value.
 
-### HasTransactionType
-
-`func (o *TransactionResourceAttributes) HasTransactionType() bool`
-
-HasTransactionType returns a boolean if a field has been set.
 
 ### SetTransactionTypeNil
 

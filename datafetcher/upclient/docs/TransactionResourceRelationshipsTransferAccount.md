@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Data** | [**NullableTransactionResourceRelationshipsTransferAccountData**](TransactionResourceRelationshipsTransferAccountData.md) |  | 
-**Links** | Pointer to [**NullableTransactionResourceRelationshipsTransferAccountLinks**](TransactionResourceRelationshipsTransferAccountLinks.md) |  | [optional] 
+**Links** | Pointer to [**AccountResourceRelationshipsTransactionsLinks**](AccountResourceRelationshipsTransactionsLinks.md) |  | [optional] 
 
 ## Methods
 
@@ -58,20 +58,20 @@ SetData sets Data field to given value.
 UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetLinks
 
-`func (o *TransactionResourceRelationshipsTransferAccount) GetLinks() TransactionResourceRelationshipsTransferAccountLinks`
+`func (o *TransactionResourceRelationshipsTransferAccount) GetLinks() AccountResourceRelationshipsTransactionsLinks`
 
 GetLinks returns the Links field if non-nil, zero value otherwise.
 
 ### GetLinksOk
 
-`func (o *TransactionResourceRelationshipsTransferAccount) GetLinksOk() (*TransactionResourceRelationshipsTransferAccountLinks, bool)`
+`func (o *TransactionResourceRelationshipsTransferAccount) GetLinksOk() (*AccountResourceRelationshipsTransactionsLinks, bool)`
 
 GetLinksOk returns a tuple with the Links field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLinks
 
-`func (o *TransactionResourceRelationshipsTransferAccount) SetLinks(v TransactionResourceRelationshipsTransferAccountLinks)`
+`func (o *TransactionResourceRelationshipsTransferAccount) SetLinks(v AccountResourceRelationshipsTransactionsLinks)`
 
 SetLinks sets Links field to given value.
 
@@ -81,16 +81,6 @@ SetLinks sets Links field to given value.
 
 HasLinks returns a boolean if a field has been set.
 
-### SetLinksNil
-
-`func (o *TransactionResourceRelationshipsTransferAccount) SetLinksNil(b bool)`
-
- SetLinksNil sets the value for Links to be an explicit nil
-
-### UnsetLinks
-`func (o *TransactionResourceRelationshipsTransferAccount) UnsetLinks()`
-
-UnsetLinks ensures that no value is present for Links, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

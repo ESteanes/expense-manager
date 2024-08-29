@@ -21,8 +21,8 @@ var _ MappedNullable = &WebhookEventResourceRelationships{}
 
 // WebhookEventResourceRelationships struct for WebhookEventResourceRelationships
 type WebhookEventResourceRelationships struct {
-	Webhook     WebhookEventResourceRelationshipsWebhook      `json:"webhook"`
-	Transaction *WebhookEventResourceRelationshipsTransaction `json:"transaction,omitempty"`
+	Webhook     WebhookEventResourceRelationshipsWebhook    `json:"webhook"`
+	Transaction *AttachmentResourceRelationshipsTransaction `json:"transaction,omitempty"`
 }
 
 type _WebhookEventResourceRelationships WebhookEventResourceRelationships
@@ -70,9 +70,9 @@ func (o *WebhookEventResourceRelationships) SetWebhook(v WebhookEventResourceRel
 }
 
 // GetTransaction returns the Transaction field value if set, zero value otherwise.
-func (o *WebhookEventResourceRelationships) GetTransaction() WebhookEventResourceRelationshipsTransaction {
+func (o *WebhookEventResourceRelationships) GetTransaction() AttachmentResourceRelationshipsTransaction {
 	if o == nil || IsNil(o.Transaction) {
-		var ret WebhookEventResourceRelationshipsTransaction
+		var ret AttachmentResourceRelationshipsTransaction
 		return ret
 	}
 	return *o.Transaction
@@ -80,7 +80,7 @@ func (o *WebhookEventResourceRelationships) GetTransaction() WebhookEventResourc
 
 // GetTransactionOk returns a tuple with the Transaction field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *WebhookEventResourceRelationships) GetTransactionOk() (*WebhookEventResourceRelationshipsTransaction, bool) {
+func (o *WebhookEventResourceRelationships) GetTransactionOk() (*AttachmentResourceRelationshipsTransaction, bool) {
 	if o == nil || IsNil(o.Transaction) {
 		return nil, false
 	}
@@ -96,8 +96,8 @@ func (o *WebhookEventResourceRelationships) HasTransaction() bool {
 	return false
 }
 
-// SetTransaction gets a reference to the given WebhookEventResourceRelationshipsTransaction and assigns it to the Transaction field.
-func (o *WebhookEventResourceRelationships) SetTransaction(v WebhookEventResourceRelationshipsTransaction) {
+// SetTransaction gets a reference to the given AttachmentResourceRelationshipsTransaction and assigns it to the Transaction field.
+func (o *WebhookEventResourceRelationships) SetTransaction(v AttachmentResourceRelationshipsTransaction) {
 	o.Transaction = &v
 }
 

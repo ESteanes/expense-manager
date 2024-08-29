@@ -11,23 +11,29 @@ API version: v1
 package upclient
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the NoteObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &NoteObject{}
 
-// NoteObject A customer provided note about the transaction. Can only be provided by Up High subscribers.
+// NoteObject Provides information about the note and attachement.
 type NoteObject struct {
-	Text *string `json:"text,omitempty"`
+	// A text note about the transaction.
+	Text string `json:"text"`
 }
+
+type _NoteObject NoteObject
 
 // NewNoteObject instantiates a new NoteObject object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewNoteObject() *NoteObject {
+func NewNoteObject(text string) *NoteObject {
 	this := NoteObject{}
+	this.Text = text
 	return &this
 }
 
@@ -39,36 +45,28 @@ func NewNoteObjectWithDefaults() *NoteObject {
 	return &this
 }
 
-// GetText returns the Text field value if set, zero value otherwise.
+// GetText returns the Text field value
 func (o *NoteObject) GetText() string {
-	if o == nil || IsNil(o.Text) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Text
+
+	return o.Text
 }
 
-// GetTextOk returns a tuple with the Text field value if set, nil otherwise
+// GetTextOk returns a tuple with the Text field value
 // and a boolean to check if the value has been set.
 func (o *NoteObject) GetTextOk() (*string, bool) {
-	if o == nil || IsNil(o.Text) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Text, true
+	return &o.Text, true
 }
 
-// HasText returns a boolean if a field has been set.
-func (o *NoteObject) HasText() bool {
-	if o != nil && !IsNil(o.Text) {
-		return true
-	}
-
-	return false
-}
-
-// SetText gets a reference to the given string and assigns it to the Text field.
+// SetText sets field value
 func (o *NoteObject) SetText(v string) {
-	o.Text = &v
+	o.Text = v
 }
 
 func (o NoteObject) MarshalJSON() ([]byte, error) {
@@ -81,10 +79,45 @@ func (o NoteObject) MarshalJSON() ([]byte, error) {
 
 func (o NoteObject) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Text) {
-		toSerialize["text"] = o.Text
-	}
+	toSerialize["text"] = o.Text
 	return toSerialize, nil
+}
+
+func (o *NoteObject) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"text",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err
+	}
+
+	for _, requiredProperty := range requiredProperties {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varNoteObject := _NoteObject{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varNoteObject)
+
+	if err != nil {
+		return err
+	}
+
+	*o = NoteObject(varNoteObject)
+
+	return err
 }
 
 type NullableNoteObject struct {

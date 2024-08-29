@@ -15,33 +15,31 @@ import (
 	"fmt"
 )
 
-// CardPurchaseMethodEnum the model 'CardPurchaseMethodEnum'
+// CardPurchaseMethodEnum Specifies the type of card charge.
 type CardPurchaseMethodEnum string
 
 // List of CardPurchaseMethodEnum
 const (
-	CONTACTLESS     CardPurchaseMethodEnum = "CONTACTLESS"
-	PLASTIC         CardPurchaseMethodEnum = "PLASTIC"
-	CARD_ON_FILE    CardPurchaseMethodEnum = "CARD_ON_FILE"
-	CARD_DETAILS    CardPurchaseMethodEnum = "CARD_DETAILS"
-	OCR             CardPurchaseMethodEnum = "OCR"
-	MAGNETIC_STRIPE CardPurchaseMethodEnum = "MAGNETIC_STRIPE"
-	ECOMMERCE       CardPurchaseMethodEnum = "ECOMMERCE"
-	CARD_PIN        CardPurchaseMethodEnum = "CARD_PIN"
 	BAR_CODE        CardPurchaseMethodEnum = "BAR_CODE"
+	OCR             CardPurchaseMethodEnum = "OCR"
+	CARD_PIN        CardPurchaseMethodEnum = "CARD_PIN"
+	CARD_DETAILS    CardPurchaseMethodEnum = "CARD_DETAILS"
+	CARD_ON_FILE    CardPurchaseMethodEnum = "CARD_ON_FILE"
+	ECOMMERCE       CardPurchaseMethodEnum = "ECOMMERCE"
+	MAGNETIC_STRIPE CardPurchaseMethodEnum = "MAGNETIC_STRIPE"
+	CONTACTLESS     CardPurchaseMethodEnum = "CONTACTLESS"
 )
 
 // All allowed values of CardPurchaseMethodEnum enum
 var AllowedCardPurchaseMethodEnumEnumValues = []CardPurchaseMethodEnum{
-	"CONTACTLESS",
-	"PLASTIC",
-	"CARD_ON_FILE",
-	"CARD_DETAILS",
-	"OCR",
-	"MAGNETIC_STRIPE",
-	"ECOMMERCE",
-	"CARD_PIN",
 	"BAR_CODE",
+	"OCR",
+	"CARD_PIN",
+	"CARD_DETAILS",
+	"CARD_ON_FILE",
+	"ECOMMERCE",
+	"MAGNETIC_STRIPE",
+	"CONTACTLESS",
 }
 
 func (v *CardPurchaseMethodEnum) UnmarshalJSON(src []byte) error {

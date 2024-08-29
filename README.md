@@ -68,6 +68,10 @@ This will stop the generator from generating those files (which will mess up the
 5. Fix up any import changes
 `go mod tidy`
 
+6. Make sure that you've set your up bank token in the environment variables in your `.bashrc` or `.zshrc` file - typically located at `~/.<editor>rc`
+```
+export UP_BANK_TOKEN='<your token here>' 
+```
 6. Build an executable
 ```
 go build -o expense-manager.exe #windows

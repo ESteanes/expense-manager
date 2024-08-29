@@ -11,24 +11,29 @@ API version: v1
 package upclient
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 )
 
 // checks if the CustomerObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CustomerObject{}
 
-// CustomerObject Information about the customer who performed the transaction.
+// CustomerObject Provides information about the customer who initiated a transaction
 type CustomerObject struct {
-	// The customers Up Name.
-	DisplayName *string `json:"displayName,omitempty"`
+	// The Upname or preferred name of the customer
+	DisplayName string `json:"displayName"`
 }
+
+type _CustomerObject CustomerObject
 
 // NewCustomerObject instantiates a new CustomerObject object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCustomerObject() *CustomerObject {
+func NewCustomerObject(displayName string) *CustomerObject {
 	this := CustomerObject{}
+	this.DisplayName = displayName
 	return &this
 }
 
@@ -40,36 +45,28 @@ func NewCustomerObjectWithDefaults() *CustomerObject {
 	return &this
 }
 
-// GetDisplayName returns the DisplayName field value if set, zero value otherwise.
+// GetDisplayName returns the DisplayName field value
 func (o *CustomerObject) GetDisplayName() string {
-	if o == nil || IsNil(o.DisplayName) {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.DisplayName
+
+	return o.DisplayName
 }
 
-// GetDisplayNameOk returns a tuple with the DisplayName field value if set, nil otherwise
+// GetDisplayNameOk returns a tuple with the DisplayName field value
 // and a boolean to check if the value has been set.
 func (o *CustomerObject) GetDisplayNameOk() (*string, bool) {
-	if o == nil || IsNil(o.DisplayName) {
+	if o == nil {
 		return nil, false
 	}
-	return o.DisplayName, true
+	return &o.DisplayName, true
 }
 
-// HasDisplayName returns a boolean if a field has been set.
-func (o *CustomerObject) HasDisplayName() bool {
-	if o != nil && !IsNil(o.DisplayName) {
-		return true
-	}
-
-	return false
-}
-
-// SetDisplayName gets a reference to the given string and assigns it to the DisplayName field.
+// SetDisplayName sets field value
 func (o *CustomerObject) SetDisplayName(v string) {
-	o.DisplayName = &v
+	o.DisplayName = v
 }
 
 func (o CustomerObject) MarshalJSON() ([]byte, error) {
@@ -82,10 +79,45 @@ func (o CustomerObject) MarshalJSON() ([]byte, error) {
 
 func (o CustomerObject) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.DisplayName) {
-		toSerialize["displayName"] = o.DisplayName
-	}
+	toSerialize["displayName"] = o.DisplayName
 	return toSerialize, nil
+}
+
+func (o *CustomerObject) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"displayName",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err
+	}
+
+	for _, requiredProperty := range requiredProperties {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varCustomerObject := _CustomerObject{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varCustomerObject)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CustomerObject(varCustomerObject)
+
+	return err
 }
 
 type NullableCustomerObject struct {
