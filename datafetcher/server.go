@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/a-h/templ"
 	"github.com/esteanes/expense-manager/datafetcher/handlers"
-	templates "github.com/esteanes/expense-manager/datafetcher/templ"
+	"github.com/esteanes/expense-manager/datafetcher/templates"
 	"github.com/esteanes/expense-manager/datafetcher/upclient"
 
 	"github.com/alexedwards/scs/v2"
@@ -89,7 +88,6 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
 	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth)
 	transactionsCsvHandler := handlers.NewTransactionCsvHandler(log, apiClient, auth)
-	component := templates.Hello("its ya boi")
 	mux := http.NewServeMux()
 	mux.HandleFunc(accountHandler.Uri, accountHandler.ServeHTTP)
 	mux.HandleFunc(transactionsHandler.Uri, transactionsHandler.ServeHTTP)
@@ -98,7 +96,6 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 	mux.HandleFunc("/", homePage)
 	mux.HandleFunc("/info", getInfo)
 	mux.Handle("/time", NewNowHandler(time.Now))
-	mux.Handle("/hello", templ.Handler(component))
 	mux.HandleFunc("/counter", handleInfo)
 	log.Println("Serving request at localhost:8080")
 	muxWithSessionMiddleware := sessionManager.LoadAndSave(mux)
