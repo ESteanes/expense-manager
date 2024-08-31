@@ -1,47 +1,43 @@
 package templates
 
-import (
-    "github.com/esteanes/expense-manager/datafetcher/upclient"
-    )
-
+import "github.com/esteanes/expense-manager/datafetcher/upclient"
 
 func getMessage(transaction upclient.TransactionResource) string {
-    maybeString := transaction.Attributes.Message.Get()
-    if maybeString == nil {
+	maybeString := transaction.Attributes.Message.Get()
+	if maybeString == nil {
 		return ""
 	}
-    return *maybeString
+	return *maybeString
 }
 
 func getCardPurchase(transaction upclient.TransactionResource) string {
-    maybeCardPurchase := transaction.Attributes.CardPurchaseMethod.Get()
-    if maybeCardPurchase == nil {
-        return ""
-    }
-    return string(maybeCardPurchase.Method)
+	maybeCardPurchase := transaction.Attributes.CardPurchaseMethod.Get()
+	if maybeCardPurchase == nil {
+		return ""
+	}
+	return string(maybeCardPurchase.Method)
 }
 
 func getCardPurchaseNumber(transaction upclient.TransactionResource) string {
-    maybeCardPurchase := transaction.Attributes.CardPurchaseMethod.Get()
-    if maybeCardPurchase == nil {
-        return ""
-    }
-    maybePurchaseNumber := maybeCardPurchase.CardNumberSuffix.Get()
-    if maybePurchaseNumber == nil {
-        return ""
-    }
-    return *maybePurchaseNumber
+	maybeCardPurchase := transaction.Attributes.CardPurchaseMethod.Get()
+	if maybeCardPurchase == nil {
+		return ""
+	}
+	maybePurchaseNumber := maybeCardPurchase.CardNumberSuffix.Get()
+	if maybePurchaseNumber == nil {
+		return ""
+	}
+	return *maybePurchaseNumber
 }
 
-
-templ Transactions(transactions []upclient.TransactionResource){
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transactions</title>
-    <style>
+templ Transactions(transactions []upclient.TransactionResource) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Transactions</title>
+			<style>
         table {
             width: 100%;
             border-collapse: collapse;
@@ -55,37 +51,35 @@ templ Transactions(transactions []upclient.TransactionResource){
             background-color: #f2f2f2;
         }
     </style>
-</head>
-<body>
-    <h1>Transactions</h1>
- <table>
-        <thead>
-            <tr>
-                <th>Transaction Amount</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Time</th>
-                <th>Message</th>
-                <th>Purchase Method</th>
-                <th>Card Number</th>
-            </tr>
-        </thead>
-        <tbody>
-            for _, transaction := range(transactions) {
-            <tr>
-                <td>{transaction.Attributes.Amount.Value}</td>
-                <td>{transaction.Attributes.Description}</td>
-                <td>{string(transaction.Attributes.Status)}</td>
-                <td>{transaction.Attributes.CreatedAt.String()}</td>
-                <td>{getMessage(transaction)}</td>
-                <td>{getCardPurchase(transaction)}</td>
-                <td>{getCardPurchaseNumber(transaction)}</td>
-
-            </tr>
-            }
-        </tbody>
-    </table>
-</body>
-</html>
+		</head>
+		<body>
+			<h1>Transactions</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Transaction Amount</th>
+						<th>Description</th>
+						<th>Status</th>
+						<th>Time</th>
+						<th>Message</th>
+						<th>Purchase Method</th>
+						<th>Card Number</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, transaction := range(transactions) {
+						<tr>
+							<td>{ transaction.Attributes.Amount.Value }</td>
+							<td>{ transaction.Attributes.Description }</td>
+							<td>{ string(transaction.Attributes.Status) }</td>
+							<td>{ transaction.Attributes.CreatedAt.String() }</td>
+							<td>{ getMessage(transaction) }</td>
+							<td>{ getCardPurchase(transaction) }</td>
+							<td>{ getCardPurchaseNumber(transaction) }</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</body>
+	</html>
 }
-
