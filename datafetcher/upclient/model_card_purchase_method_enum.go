@@ -15,7 +15,7 @@ import (
 	"fmt"
 )
 
-// CardPurchaseMethodEnum Detail of what kind of transaction occurred.
+// CardPurchaseMethodEnum Specifies the type of card charge.
 type CardPurchaseMethodEnum string
 
 // List of CardPurchaseMethodEnum

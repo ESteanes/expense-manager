@@ -1590,46 +1590,6 @@ components:
       - INDIVIDUAL
       - JOINT
       type: string
-    CardPurchaseMethodEnum:
-      description: Detail of what kind of transaction occurred.
-      enum:
-      - CONTACTLESS
-      - PLASTIC
-      - CARD_ON_FILE
-      - CARD_DETAILS
-      - OCR
-      - MAGNETIC_STRIPE
-      - ECOMMERCE
-      - CARD_PIN
-      - BAR_CODE
-      type: string
-    CardPurchaseMethodObject:
-      description: |
-        Provides information about the type of card
-      properties:
-        method:
-          allOf:
-          - $ref: '#/components/schemas/CardPurchaseMethodEnum'
-          description: |
-            The card method used for this purchase.
-        cardNumberSuffix:
-          description: |
-            The last four digits of the card used for this transaction.
-          nullable: true
-          type: string
-      required:
-      - cardNumberSuffix
-      - method
-      type: object
-    CustomerObject:
-      description: |
-        Information about the customer who performed the transaction.
-      properties:
-        displayName:
-          description: |
-            The customers Up Name.
-          type: string
-      type: object
     MoneyObject:
       description: |
         Provides information about a value of money.

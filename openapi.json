@@ -30,53 +30,6 @@
         "enum": ["INDIVIDUAL", "JOINT"],
         "description": "Specifies the structure under which a bank account is owned. Currently\nreturned values are `INDIVIDUAL` and `JOINT`.\n"
       },
-      "CardPurchaseMethodEnum": {
-        "enum": [
-          "CONTACTLESS",
-          "PLASTIC",
-          "CARD_ON_FILE",
-          "CARD_DETAILS",
-          "OCR",
-          "MAGNETIC_STRIPE",
-          "ECOMMERCE",
-          "CARD_PIN",
-          "BAR_CODE"
-        ],
-        "description": "Detail of what kind of transaction occurred."
-      },
-      "CardPurchaseMethodObject": {
-        "type": "object",
-        "description": "Provides information about the type of card\n",
-        "properties": {
-          "method": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CardPurchaseMethodEnum"
-              }
-            ],
-            "description": "The card method used for this purchase.\n"
-          },
-          "cardNumberSuffix": {
-            "type": "string",
-            "nullable": true,
-            "description": "The last four digits of the card used for this transaction.\n"
-          }
-        },
-        "required": [
-          "method",
-          "cardNumberSuffix"
-        ]
-      },
-      "CustomerObject": {
-        "type": "object",
-        "description": "Information about the customer who performed the transaction.\n",
-        "properties": {
-          "displayName": {
-            "type": "string",
-            "description": "The customers Up Name.\n"
-          }
-        }
-      },
       "MoneyObject": {
         "type": "object",
         "description": "Provides information about a value of money.\n",
