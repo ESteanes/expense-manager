@@ -86,7 +86,7 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 
 	// Creating individual handlers
 	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
-	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth)
+	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth, accountHandler)
 	transactionsCsvHandler := handlers.NewTransactionCsvHandler(log, apiClient, auth)
 	mux := http.NewServeMux()
 	mux.HandleFunc(accountHandler.Uri, accountHandler.ServeHTTP)

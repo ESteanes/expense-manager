@@ -30,7 +30,50 @@ func getCardPurchaseNumber(transaction upclient.TransactionResource) string {
 	return *maybePurchaseNumber
 }
 
-templ Transactions(transactions []upclient.TransactionResource) {
+func getCategory(transaction upclient.TransactionResource) string {
+	maybeCategory := transaction.GetRelationships().Category.Data.Get()
+	if maybeCategory == nil {
+		return ""
+	}
+	return maybeCategory.Id
+
+}
+
+templ TransactionsTable(transactions chan upclient.TransactionResource) {
+	<h1>Transactions</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Transaction Amount</th>
+				<th>Description</th>
+				<th>Status</th>
+				<th>Time</th>
+				<th>Message</th>
+				<th>Category</th>
+				<th>Purchase Method</th>
+				<th>Card Number</th>
+			</tr>
+		</thead>
+		<tbody>
+			for transaction := range(transactions) {
+				@templ.Flush() {
+					<tr>
+						<td>{ transaction.Attributes.Amount.Value }</td>
+						<td>{ transaction.Attributes.Description }</td>
+						<td>{ string(transaction.Attributes.Status) }</td>
+						<td>{ transaction.Attributes.CreatedAt.String() }</td>
+						<td>{ getMessage(transaction) }</td>
+						<td>{ getCategory(transaction) }</td>
+						<td>{ getCardPurchase(transaction) }</td>
+						<td>{ getCardPurchaseNumber(transaction) }</td>
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+}
+
+templ Transactions(transactions chan upclient.TransactionResource, accounts chan upclient.AccountResource) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -53,33 +96,8 @@ templ Transactions(transactions []upclient.TransactionResource) {
     </style>
 		</head>
 		<body>
-			<h1>Transactions</h1>
-			<table>
-				<thead>
-					<tr>
-						<th>Transaction Amount</th>
-						<th>Description</th>
-						<th>Status</th>
-						<th>Time</th>
-						<th>Message</th>
-						<th>Purchase Method</th>
-						<th>Card Number</th>
-					</tr>
-				</thead>
-				<tbody>
-					for _, transaction := range(transactions) {
-						<tr>
-							<td>{ transaction.Attributes.Amount.Value }</td>
-							<td>{ transaction.Attributes.Description }</td>
-							<td>{ string(transaction.Attributes.Status) }</td>
-							<td>{ transaction.Attributes.CreatedAt.String() }</td>
-							<td>{ getMessage(transaction) }</td>
-							<td>{ getCardPurchase(transaction) }</td>
-							<td>{ getCardPurchaseNumber(transaction) }</td>
-						</tr>
-					}
-				</tbody>
-			</table>
+			@AccountButtons(accounts)
+			@TransactionsTable(transactions)
 		</body>
 	</html>
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -14,14 +15,16 @@ type Handler interface {
 }
 
 type BaseHandler struct {
-	Uri      string
-	Log      *log.Logger
-	UpClient *upclient.APIClient
-	UpAuth   context.Context
-	Handler  Handler // Embed the Handler interface
+	Uri         string
+	Log         *log.Logger
+	UpClient    *upclient.APIClient
+	UpAuth      context.Context
+	Handler     Handler // Embed the Handler interface
+	MaxPageSize int32
 }
 
 func (h *BaseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.Log.Println(fmt.Sprintf("%s %s params: %s", r.Method, h.Uri, r.URL.Query()))
 	switch r.Method {
 	case http.MethodPost:
 		h.Handler.Post(w, r)

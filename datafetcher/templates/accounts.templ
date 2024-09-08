@@ -5,7 +5,36 @@ import (
 	"strings"
 )
 
-templ Accounts(accounts []upclient.AccountResource) {
+templ AccountDetails(accounts <-chan upclient.AccountResource) {
+	<h1>Accounts</h1>
+	<ul>
+		for account := range accounts {
+			@templ.Flush() {
+				<div>
+					<h2>{ account.Attributes.DisplayName }</h2>
+					<p>Account Type: { strings.ToTitle(string(account.Attributes.AccountType)) }</p>
+					<p>Balance: { account.Attributes.Balance.CurrencyCode } { account.Attributes.Balance.Value }</p>
+					<p>Created At: { account.Attributes.CreatedAt.String() }</p>
+					<p>Id: { account.Id }</p>
+				</div>
+				<hr/>
+			}
+		}
+	</ul>
+}
+
+templ AccountButtons(accounts <-chan upclient.AccountResource) {
+	<h1>Accounts</h1>
+	<ul>
+		for account := range accounts {
+			@templ.Flush() {
+				<button value={ account.Id }>{ account.Attributes.DisplayName } { account.Attributes.Balance.Value } { account.Attributes.Balance.CurrencyCode }</button>
+			}
+		}
+	</ul>
+}
+
+templ Accounts(accounts1 <-chan upclient.AccountResource, accounts2 <-chan upclient.AccountResource) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -14,18 +43,8 @@ templ Accounts(accounts []upclient.AccountResource) {
 			<title>Accounts</title>
 		</head>
 		<body>
-			<h1>Accounts</h1>
-			<ul>
-				for _, account := range accounts {
-					<div>
-						<h2>{ account.Attributes.DisplayName }</h2>
-						<p>Account Type: { strings.ToTitle(string(account.Attributes.AccountType)) }</p>
-						<p>Balance: { account.Attributes.Balance.CurrencyCode } { account.Attributes.Balance.Value }</p>
-						<p>Created At: { account.Attributes.CreatedAt.String() }</p>
-					</div>
-					<hr/>
-				}
-			</ul>
+			@AccountButtons(accounts2)
+			@AccountDetails(accounts1)
 		</body>
 	</html>
 }

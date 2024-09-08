@@ -28,6 +28,8 @@ type ApiAccountsAccountIdTransactionsGetRequest struct {
 	ApiService     *TransactionsAPIService
 	accountId      string
 	pageSize       *int32
+	pageBefore     *string
+	pageAfter      *string
 	filterStatus   *TransactionStatusEnum
 	filterSince    *time.Time
 	filterUntil    *time.Time
@@ -38,6 +40,18 @@ type ApiAccountsAccountIdTransactionsGetRequest struct {
 // The number of records to return in each page.
 func (r ApiAccountsAccountIdTransactionsGetRequest) PageSize(pageSize int32) ApiAccountsAccountIdTransactionsGetRequest {
 	r.pageSize = &pageSize
+	return r
+}
+
+// To view a page before a specific transaction.
+func (r ApiAccountsAccountIdTransactionsGetRequest) PageBefore(pageBefore string) ApiAccountsAccountIdTransactionsGetRequest {
+	r.pageBefore = &pageBefore
+	return r
+}
+
+// Where to continue paginating across
+func (r ApiAccountsAccountIdTransactionsGetRequest) PageAfter(pageAfter string) ApiAccountsAccountIdTransactionsGetRequest {
+	r.pageAfter = &pageAfter
 	return r
 }
 
@@ -124,6 +138,12 @@ func (a *TransactionsAPIService) AccountsAccountIdTransactionsGetExecute(r ApiAc
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
 	}
+	if r.pageBefore != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[before]", r.pageBefore, "")
+	}
+	if r.pageAfter != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[after]", r.pageAfter, "")
+	}
 	if r.filterStatus != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[status]", r.filterStatus, "")
 	}
@@ -197,6 +217,8 @@ type ApiTransactionsGetRequest struct {
 	ctx            context.Context
 	ApiService     *TransactionsAPIService
 	pageSize       *int32
+	pageBefore     *string
+	pageAfter      *string
 	filterStatus   *TransactionStatusEnum
 	filterSince    *time.Time
 	filterUntil    *time.Time
@@ -207,6 +229,18 @@ type ApiTransactionsGetRequest struct {
 // The number of records to return in each page.
 func (r ApiTransactionsGetRequest) PageSize(pageSize int32) ApiTransactionsGetRequest {
 	r.pageSize = &pageSize
+	return r
+}
+
+// To view a page before a specific transaction.
+func (r ApiTransactionsGetRequest) PageBefore(pageBefore string) ApiTransactionsGetRequest {
+	r.pageBefore = &pageBefore
+	return r
+}
+
+// Where to continue paginating across
+func (r ApiTransactionsGetRequest) PageAfter(pageAfter string) ApiTransactionsGetRequest {
+	r.pageAfter = &pageAfter
 	return r
 }
 
@@ -289,6 +323,12 @@ func (a *TransactionsAPIService) TransactionsGetExecute(r ApiTransactionsGetRequ
 
 	if r.pageSize != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
+	}
+	if r.pageBefore != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[before]", r.pageBefore, "")
+	}
+	if r.pageAfter != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[after]", r.pageAfter, "")
 	}
 	if r.filterStatus != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[status]", r.filterStatus, "")
