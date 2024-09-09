@@ -683,6 +683,26 @@ paths:
           type: integer
         style: form
       - description: |
+          To view a page before a specific transaction.
+        example: WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D
+        explode: true
+        in: query
+        name: "page[before]"
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          Where to continue paginating across
+        example: WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D
+        explode: true
+        in: query
+        name: "page[after]"
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
           The transaction status for which to return records. This
           can be used to filter `HELD` transactions from those
           that are `SETTLED`.
@@ -920,6 +940,26 @@ paths:
         required: false
         schema:
           type: integer
+        style: form
+      - description: |
+          To view a page before a specific transaction.
+        example: WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D
+        explode: true
+        in: query
+        name: "page[before]"
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          Where to continue paginating across
+        example: WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D
+        explode: true
+        in: query
+        name: "page[after]"
+        required: false
+        schema:
+          type: string
         style: form
       - description: |
           The transaction status for which to return records. This

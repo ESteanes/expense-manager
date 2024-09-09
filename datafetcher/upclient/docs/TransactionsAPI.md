@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## AccountsAccountIdTransactionsGet
 
-> ListTransactionsResponse AccountsAccountIdTransactionsGet(ctx, accountId).PageSize(pageSize).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
+> ListTransactionsResponse AccountsAccountIdTransactionsGet(ctx, accountId).PageSize(pageSize).PageBefore(pageBefore).PageAfter(pageAfter).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
 
 List transactions by account
 
@@ -34,6 +34,8 @@ import (
 func main() {
 	accountId := "689a08de-fa65-4f2d-8b58-e49b17117dc7" // string | The unique identifier for the account. 
 	pageSize := int32(30) // int32 | The number of records to return in each page.  (optional)
+	pageBefore := "WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D" // string | To view a page before a specific transaction.  (optional)
+	pageAfter := "WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D" // string | Where to continue paginating across  (optional)
 	filterStatus := openapiclient.TransactionStatusEnum("HELD") // TransactionStatusEnum | The transaction status for which to return records. This can be used to filter `HELD` transactions from those that are `SETTLED`.  (optional)
 	filterSince := time.Now() // time.Time | The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  (optional)
 	filterUntil := time.Now() // time.Time | The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  (optional)
@@ -42,7 +44,7 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TransactionsAPI.AccountsAccountIdTransactionsGet(context.Background(), accountId).PageSize(pageSize).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
+	resp, r, err := apiClient.TransactionsAPI.AccountsAccountIdTransactionsGet(context.Background(), accountId).PageSize(pageSize).PageBefore(pageBefore).PageAfter(pageAfter).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TransactionsAPI.AccountsAccountIdTransactionsGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -69,6 +71,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **pageSize** | **int32** | The number of records to return in each page.  | 
+ **pageBefore** | **string** | To view a page before a specific transaction.  | 
+ **pageAfter** | **string** | Where to continue paginating across  | 
  **filterStatus** | [**TransactionStatusEnum**](TransactionStatusEnum.md) | The transaction status for which to return records. This can be used to filter &#x60;HELD&#x60; transactions from those that are &#x60;SETTLED&#x60;.  | 
  **filterSince** | **time.Time** | The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  | 
  **filterUntil** | **time.Time** | The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  | 
@@ -95,7 +99,7 @@ Name | Type | Description  | Notes
 
 ## TransactionsGet
 
-> ListTransactionsResponse TransactionsGet(ctx).PageSize(pageSize).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
+> ListTransactionsResponse TransactionsGet(ctx).PageSize(pageSize).PageBefore(pageBefore).PageAfter(pageAfter).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
 
 List transactions
 
@@ -116,6 +120,8 @@ import (
 
 func main() {
 	pageSize := int32(30) // int32 | The number of records to return in each page.  (optional)
+	pageBefore := "WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D" // string | To view a page before a specific transaction.  (optional)
+	pageAfter := "WyIyMDI0LTA5LTA2VDEwOjEyOjA2Ljg2MDQ2MzAwMFoiLCJjYjc1ZjI5ZS1lY2M1LTQ5NzYtYWEyOC0KJlkjsdfkA5ZDIiXQ%3D%3D" // string | Where to continue paginating across  (optional)
 	filterStatus := openapiclient.TransactionStatusEnum("HELD") // TransactionStatusEnum | The transaction status for which to return records. This can be used to filter `HELD` transactions from those that are `SETTLED`.  (optional)
 	filterSince := time.Now() // time.Time | The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  (optional)
 	filterUntil := time.Now() // time.Time | The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  (optional)
@@ -124,7 +130,7 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TransactionsAPI.TransactionsGet(context.Background()).PageSize(pageSize).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
+	resp, r, err := apiClient.TransactionsAPI.TransactionsGet(context.Background()).PageSize(pageSize).PageBefore(pageBefore).PageAfter(pageAfter).FilterStatus(filterStatus).FilterSince(filterSince).FilterUntil(filterUntil).FilterCategory(filterCategory).FilterTag(filterTag).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TransactionsAPI.TransactionsGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -146,6 +152,8 @@ Other parameters are passed through a pointer to a apiTransactionsGetRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **pageSize** | **int32** | The number of records to return in each page.  | 
+ **pageBefore** | **string** | To view a page before a specific transaction.  | 
+ **pageAfter** | **string** | Where to continue paginating across  | 
  **filterStatus** | [**TransactionStatusEnum**](TransactionStatusEnum.md) | The transaction status for which to return records. This can be used to filter &#x60;HELD&#x60; transactions from those that are &#x60;SETTLED&#x60;.  | 
  **filterSince** | **time.Time** | The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  | 
  **filterUntil** | **time.Time** | The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.  | 
