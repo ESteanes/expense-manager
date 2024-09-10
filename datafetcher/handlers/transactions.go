@@ -39,25 +39,31 @@ func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		numTransactions = int64(10)
 	}
-	accountId := queryParams.Get("accountId")
 	transactionsChannel := make(chan upclient.TransactionResource, numTransactions)
-	go h.getTransactions(transactionsChannel, int32(numTransactions), accountId)
+	accountId := queryParams.Get("accountId")
+	if accountId == "" {
+		go h.getTransactionsForAllAccounts(transactionsChannel, int32(numTransactions))
+	} else {
+		go h.getTransactionsForSpecifiedAccount(transactionsChannel, int32(numTransactions), accountId)
+	}
 	accountsChannel := make(chan upclient.AccountResource)
 	go h.AccountHandler.GetAccounts(accountsChannel, upclient.OwnershipTypeEnum("INDIVIDUAL"))
 	templ.Handler(templates.Transactions(transactionsChannel, accountsChannel), templ.WithStreaming()).ServeHTTP(w, r)
 
 }
-func (h *TransactionsHandler) getTransactions(transactionsChannel chan upclient.TransactionResource, numTransactions int32, accountId string) {
+func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel chan upclient.TransactionResource, numTransactions int32) {
 	defer close(transactionsChannel)
-	getRequest := h.UpClient.TransactionsAPI.AccountsAccountIdTransactionsGet(h.UpAuth, accountId).PageSize(h.MaxPageSize)
+	getRequest := h.UpClient.TransactionsAPI.TransactionsGet(h.UpAuth).PageSize(h.MaxPageSize)
 	var pageAfter *string
 	pageAfter = nil
 	countTransactions := int32(0)
 	for countTransactions < numTransactions {
 		if pageAfter != nil {
-			pageKeyParsed, _ := ExtractPageAfter(*pageAfter)
+			pageKeyParsed, err := ExtractPageAfter(*pageAfter)
+			if err != nil {
+				h.Log.Panicln(fmt.Sprintf("There was an error parsing the pageKey %s", err))
+			}
 			getRequest = getRequest.PageAfter(pageKeyParsed)
-			h.Log.Println(fmt.Sprintf("setting pageAfter to %s", pageKeyParsed))
 		}
 		h.Log.Println(fmt.Sprintf("request struct is %+v", getRequest))
 		resp, r2, err := getRequest.Execute()
@@ -67,9 +73,7 @@ func (h *TransactionsHandler) getTransactions(transactionsChannel chan upclient.
 			h.Log.Println(r2.Body)
 			return
 		}
-		// h.Log.Println(fmt.Sprintf("resp object is %#v", resp))
 		pageAfter = resp.Links.Next.Get()
-		h.Log.Println(fmt.Sprintf("pageAfter is %p", pageAfter))
 		if pageAfter != nil {
 			h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
 		}
@@ -79,6 +83,47 @@ func (h *TransactionsHandler) getTransactions(transactionsChannel chan upclient.
 				countTransactions++
 			}
 		}
+	}
+	if pageAfter == nil {
+		h.Log.Println("You have reached the end of all transactions")
+	}
+}
+
+func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsChannel chan upclient.TransactionResource, numTransactions int32, accountId string) {
+	defer close(transactionsChannel)
+	getRequest := h.UpClient.TransactionsAPI.AccountsAccountIdTransactionsGet(h.UpAuth, accountId).PageSize(h.MaxPageSize)
+	var pageAfter *string
+	pageAfter = nil
+	countTransactions := int32(0)
+	for countTransactions < numTransactions {
+		if pageAfter != nil {
+			pageKeyParsed, err := ExtractPageAfter(*pageAfter)
+			if err != nil {
+				h.Log.Panicln(fmt.Sprintf("There was an error parsing the pageKey %s", err))
+			}
+			getRequest = getRequest.PageAfter(pageKeyParsed)
+		}
+		h.Log.Println(fmt.Sprintf("request struct is %+v", getRequest))
+		resp, r2, err := getRequest.Execute()
+		if err != nil {
+			h.Log.Println(fmt.Sprintf("Error when calling `TransactionsAPI.TransactionsGet``: %s\n", err))
+			h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			h.Log.Println(r2.Body)
+			return
+		}
+		pageAfter = resp.Links.Next.Get()
+		if pageAfter != nil {
+			h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
+		}
+		for _, transaction := range resp.Data {
+			if countTransactions < numTransactions {
+				transactionsChannel <- transaction
+				countTransactions++
+			}
+		}
+	}
+	if pageAfter == nil {
+		h.Log.Println("You have reached the end of all transactions")
 	}
 }
 
