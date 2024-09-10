@@ -83,3 +83,10 @@ go build -o expense-manager #linux
 .\expense-manager.exe #windows
 ./expense-manager #linux
 ```
+
+## Helpful Commands
+Add to your `.bashrc` file.
+```
+alias expenseManagerBuild="templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager"
+alias expenseManagerBuildRun="templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager && ./expense-manager"
+```
