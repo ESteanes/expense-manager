@@ -40,6 +40,11 @@ type GlobalState struct {
 	Count int
 }
 
+const (
+	AccountIdQueryParam      = "accountId"
+	TransactionNumQueryParam = "numTransaction"
+)
+
 var global GlobalState
 var sessionManager *scs.SessionManager
 
