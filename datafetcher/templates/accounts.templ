@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"github.com/esteanes/expense-manager/datafetcher/functions"
 	"github.com/esteanes/expense-manager/datafetcher/upclient"
 	"strings"
 )
@@ -26,9 +27,14 @@ templ AccountDetails(accounts <-chan upclient.AccountResource) {
 templ AccountButtons(accounts <-chan upclient.AccountResource) {
 	<h1>Accounts</h1>
 	<ul>
+		<form action="/transactions" method="GET">
+			<button type="submit">All accounts</button>
+		</form>
 		for account := range accounts {
 			@templ.Flush() {
-				<button value={ account.Id }>{ account.Attributes.DisplayName } { account.Attributes.Balance.Value } { account.Attributes.Balance.CurrencyCode }</button>
+				<form action="/transactions" method="GET">
+					<button type="submit" name={ functions.AccountIdQueryParam } value={ account.Id }>{ account.Attributes.DisplayName } { account.Attributes.Balance.Value } { account.Attributes.Balance.CurrencyCode }</button>
+				</form>
 			}
 		}
 	</ul>

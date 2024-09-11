@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/a-h/templ"
+	"github.com/esteanes/expense-manager/datafetcher/functions"
 	"github.com/esteanes/expense-manager/datafetcher/templates"
 	"github.com/esteanes/expense-manager/datafetcher/upclient"
 )
@@ -35,12 +36,12 @@ func NewTransactionHandler(log *log.Logger, upclient *upclient.APIClient, auth c
 func (h *TransactionsHandler) Post(w http.ResponseWriter, r *http.Request) {}
 func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	queryParams := r.URL.Query()
-	numTransactions, err := strconv.ParseInt(queryParams.Get("numTransactions"), 10, 32)
+	numTransactions, err := strconv.ParseInt(queryParams.Get(functions.TransactionNumQueryParam), 10, 32)
 	if err != nil {
 		numTransactions = int64(10)
 	}
 	transactionsChannel := make(chan upclient.TransactionResource, numTransactions)
-	accountId := queryParams.Get("accountId")
+	accountId := queryParams.Get(functions.AccountIdQueryParam)
 	if accountId == "" {
 		go h.getTransactionsForAllAccounts(transactionsChannel, int32(numTransactions))
 	} else {
