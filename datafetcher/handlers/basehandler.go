@@ -24,7 +24,7 @@ type BaseHandler struct {
 }
 
 func (h *BaseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.Log.Println(fmt.Sprintf("%s %s params: %s", r.Method, h.Uri, r.URL.Query()))
+	h.Log.Println(fmt.Sprintf("%s %s params: %s", r.Method, r.RequestURI, r.URL.Query()))
 	switch r.Method {
 	case http.MethodPost:
 		h.Handler.Post(w, r)

@@ -2,7 +2,6 @@ package datafetcher
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -13,12 +12,6 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 )
-
-// homePage function to handle requests to the root URL
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the HomePage!")
-	fmt.Println("Endpoint Hit: homePage")
-}
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
 
@@ -39,11 +32,6 @@ func (nh NowHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type GlobalState struct {
 	Count int
 }
-
-const (
-	AccountIdQueryParam      = "accountId"
-	TransactionNumQueryParam = "numTransaction"
-)
 
 var global GlobalState
 var sessionManager *scs.SessionManager
@@ -93,12 +81,12 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
 	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth, accountHandler)
 	transactionsCsvHandler := handlers.NewTransactionCsvHandler(log, apiClient, auth)
+	staticFileHandler := handlers.NewStaticFileHandler(log)
 	mux := http.NewServeMux()
 	mux.HandleFunc(accountHandler.Uri, accountHandler.ServeHTTP)
 	mux.HandleFunc(transactionsHandler.Uri, transactionsHandler.ServeHTTP)
 	mux.HandleFunc(transactionsCsvHandler.Uri, transactionsCsvHandler.ServeHTTP)
-
-	mux.HandleFunc("/", homePage)
+	mux.HandleFunc(staticFileHandler.Uri, staticFileHandler.ServeHTTP)
 	mux.HandleFunc("/info", getInfo)
 	mux.Handle("/time", NewNowHandler(time.Now))
 	mux.HandleFunc("/counter", handleInfo)
