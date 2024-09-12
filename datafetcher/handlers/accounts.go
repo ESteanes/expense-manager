@@ -30,6 +30,7 @@ func NewAccountHandler(log *log.Logger, upclient *upclient.APIClient, auth conte
 
 func (h *AccountHandler) Post(w http.ResponseWriter, r *http.Request) {}
 func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html charset=utf-8")
 	filterOwnershipType := upclient.OwnershipTypeEnum("INDIVIDUAL")
 	accountChannel := make(chan upclient.AccountResource, 10)
 	clonedChannels := Clone(accountChannel, 2)

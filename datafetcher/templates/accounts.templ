@@ -7,12 +7,12 @@ import (
 )
 
 templ AccountDetails(accounts <-chan upclient.AccountResource) {
-	<h1>Accounts</h1>
+	<h1 class="text-4xl">Accounts - Details</h1>
 	<ul>
 		for account := range accounts {
 			@templ.Flush() {
 				<div>
-					<h2>{ account.Attributes.DisplayName }</h2>
+					<h2 class="text-xl font-bold">{ account.Attributes.DisplayName }</h2>
 					<p>Account Type: { strings.ToTitle(string(account.Attributes.AccountType)) }</p>
 					<p>Balance: { account.Attributes.Balance.CurrencyCode } { account.Attributes.Balance.Value }</p>
 					<p>Created At: { account.Attributes.CreatedAt.String() }</p>
@@ -25,7 +25,7 @@ templ AccountDetails(accounts <-chan upclient.AccountResource) {
 }
 
 templ AccountButtons(accounts <-chan upclient.AccountResource) {
-	<h1>Accounts</h1>
+	<h1 class="text-4xl">Accounts</h1>
 	<ul>
 		<form action="/transactions" method="GET">
 			<button type="submit">All accounts</button>
@@ -46,6 +46,8 @@ templ Accounts(accounts1 <-chan upclient.AccountResource, accounts2 <-chan upcli
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<script src="https://unpkg.com/htmx.org@1.9.11"></script>
+			<link rel="stylesheet" href="/static/css/output.css"/>
 			<title>Accounts</title>
 		</head>
 		<body>

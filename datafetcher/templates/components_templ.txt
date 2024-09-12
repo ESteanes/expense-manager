@@ -1,0 +1,7 @@
+<div>
+</div>
+<div>404 - Not found</div>
+<div>Global: 
+</div><div>User: 
+</div>
+<form action=\"/counter\" method=\"POST\"><div><button type=\"submit\" name=\"global\" value=\"global\">Global</button></div><div><button type=\"submit\" name=\"user\" value=\"user\">User</button></div></form>

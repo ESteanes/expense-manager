@@ -21,8 +21,7 @@ func NewTransactionCsvHandler(log *log.Logger, upclient *upclient.APIClient, aut
 		Log:      log,
 		UpClient: upclient,
 		UpAuth:   auth,
-		Handler:  handler, // Set the Handler interface to the specific handler
-	}
+		Handler:  handler}
 	return handler
 }
 
