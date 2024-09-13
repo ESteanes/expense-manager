@@ -89,24 +89,24 @@ LICENSE
 ```
 This will stop the generator from generating those files (which will mess up the Go compilation)
 
-1. Generate the TEMPL components
+2. Generate the TEMPL components
 `templ generate`
 
     * Note if you're finding it hard to run `templ`, it might be because `$GOPATH` is not on your `$PATH` so your computer can't find the executable. In that case either update your path or run `./$GOPATH/templ`
 
-1. Format code
+3. Format code
 `gofmt -s -w .`
 
-1. Fix up any import changes
+4. Fix up any import changes
 `go mod tidy`
 
 
-1. Build an executable
+5. Build an executable
 ```
 go build -o expense-manager
 ```
 
-1. Run the executable
+6. Run the executable
 ```
 ./expense-manager
 ```
