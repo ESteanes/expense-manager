@@ -75,7 +75,7 @@ make build
 ```
 
 ### Manually
-3. Generate the REST client code
+1. Generate the REST client code
 ```
 openapi-generator-cli generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/upclient
 ```
@@ -89,25 +89,25 @@ LICENSE
 ```
 This will stop the generator from generating those files (which will mess up the Go compilation)
 
-4. Generate the TEMPL components
+1. Generate the TEMPL components
 `templ generate`
 
     * Note if you're finding it hard to run `templ`, it might be because `$GOPATH` is not on your `$PATH` so your computer can't find the executable. In that case either update your path or run `./$GOPATH/templ`
 
-4. Format code
+1. Format code
 `gofmt -s -w .`
 
-5. Fix up any import changes
+1. Fix up any import changes
 `go mod tidy`
 
 
-6. Build an executable
+1. Build an executable
 ```
 go build -o expense-manager.exe #windows
 go build -o expense-manager #linux
 ```
 
-7. Run the executable
+1. Run the executable
 ```
 .\expense-manager.exe #windows
 ./expense-manager #linux
