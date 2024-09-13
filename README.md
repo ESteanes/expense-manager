@@ -103,14 +103,12 @@ This will stop the generator from generating those files (which will mess up the
 
 1. Build an executable
 ```
-go build -o expense-manager.exe #windows
-go build -o expense-manager #linux
+go build -o expense-manager
 ```
 
 1. Run the executable
 ```
-.\expense-manager.exe #windows
-./expense-manager #linux
+./expense-manager
 ```
 
 ## Helpful Commands
