@@ -39,6 +39,26 @@ endpoitns to drive the UI
 
 ## How to develop
 
+### Automatically
+Most of the comands have been simplified down to a really simple make file
+
+Doing active development, run:
+```bash
+make watch  
+```
+as this will create a hot-reloading environment which will automatically update CSS, Templ generated HTML and Go logic while editing.
+
+If you need to regenerate the upbank API client run:
+```
+make upclient-generate
+```
+
+If you want to generate a hard executable file then run:
+```
+make build
+```
+
+### Manually
 1. Install the OpenAPI generator
 `brew install openapi-generator`
 2. Fetch the open-api definition JSON file

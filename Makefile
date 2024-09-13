@@ -10,6 +10,11 @@ templ-watch:
 air:
 	air 
 
-all:
+watch:
 	${MAKE} -j3 tailwind-watch templ-watch air 
 
+upclient-generate:
+	openapi-generator-cli generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/upclient
+
+build:
+	templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager
