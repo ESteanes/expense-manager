@@ -23,3 +23,7 @@ go.work
 # esteanes 20240929 - expense manager executable
 expense-manager
 
+# node related files and directories
+node_modules/
+package-lock.json
+package.json
