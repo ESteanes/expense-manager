@@ -39,11 +39,43 @@ endpoitns to drive the UI
 
 ## How to develop
 
+### Dependencies
 1. Install the OpenAPI generator
-`brew install openapi-generator`
-2. Fetch the open-api definition JSON file
+`sudo npm install openapi-generator`
+2. Install Templ and air
+* [Air](https://github.com/air-verse/air?tab=readme-ov-file#installation)
+* [Templ](https://templ.guide/quick-start/installation)
+3. Install Tailwind CSS
+Install using npm as we're already using NPM for the API client generation.
+[Tailwind Installation](https://tailwindcss.com/docs/installation)
+4. Fetch the open-api definition JSON file
 `curl https://raw.githubusercontent.com/up-banking/api/master/v1/openapi.json`
-3. Generate the REST client code
+5. Make sure that you've set your up bank token in the environment variables in your `.bashrc` or `.zshrc` file - typically located at `~/.<editor>rc`
+[Get your token from Up Bank](https://api.up.com.au/getting_started)
+```
+export UP_BANK_TOKEN='<your token here>' 
+```
+### Automatically
+Most of the comands have been simplified down to a really simple make file
+
+Doing active development, run:
+```bash
+make watch  
+```
+as this will create a hot-reloading environment which will automatically update CSS, Templ generated HTML and Go logic while editing.
+
+If you need to regenerate the upbank API client run:
+```
+make upclient-generate
+```
+
+If you want to generate a hard executable file then run:
+```
+make build
+```
+
+### Manually
+1. Generate the REST client code
 ```
 openapi-generator-cli generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/upclient
 ```
@@ -57,31 +89,26 @@ LICENSE
 ```
 This will stop the generator from generating those files (which will mess up the Go compilation)
 
-4. Generate the TEMPL components
+2. Generate the TEMPL components
 `templ generate`
 
     * Note if you're finding it hard to run `templ`, it might be because `$GOPATH` is not on your `$PATH` so your computer can't find the executable. In that case either update your path or run `./$GOPATH/templ`
 
-4. Format code
+3. Format code
 `gofmt -s -w .`
 
-5. Fix up any import changes
+4. Fix up any import changes
 `go mod tidy`
 
-6. Make sure that you've set your up bank token in the environment variables in your `.bashrc` or `.zshrc` file - typically located at `~/.<editor>rc`
+
+5. Build an executable
 ```
-export UP_BANK_TOKEN='<your token here>' 
-```
-6. Build an executable
-```
-go build -o expense-manager.exe #windows
-go build -o expense-manager #linux
+go build -o expense-manager
 ```
 
-7. Run the executable
+6. Run the executable
 ```
-.\expense-manager.exe #windows
-./expense-manager #linux
+./expense-manager
 ```
 
 ## Helpful Commands
