@@ -33,12 +33,12 @@ func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html charset=utf-8")
 	filterOwnershipType := upclient.OwnershipTypeEnum("INDIVIDUAL")
 	accountChannel := make(chan upclient.AccountResource, 10)
-	clonedChannels := Clone(accountChannel, 2)
-	accountChannel1 := <-clonedChannels
-	accountChannel2 := <-clonedChannels
+	// clonedChannels := Clone(accountChannel, 2)
+	// accountChannel1 := <-clonedChannels
+	// accountChannel2 := <-clonedChannels
 	go h.GetAccounts(accountChannel, filterOwnershipType)
 
-	templ.Handler(templates.Accounts(accountChannel1, accountChannel2), templ.WithStreaming()).ServeHTTP(w, r)
+	templ.Handler(templates.Accounts("Account Information", accountChannel, true), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
 func (h *AccountHandler) GetAccounts(accountChannel chan upclient.AccountResource, ownershipType upclient.OwnershipTypeEnum) {

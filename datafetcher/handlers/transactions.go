@@ -49,7 +49,7 @@ func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 	accountsChannel := make(chan upclient.AccountResource)
 	go h.AccountHandler.GetAccounts(accountsChannel, upclient.OwnershipTypeEnum("INDIVIDUAL"))
-	templ.Handler(templates.Transactions(transactionsChannel, accountsChannel), templ.WithStreaming()).ServeHTTP(w, r)
+	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, strconv.Itoa(int(numTransactions))), templ.WithStreaming()).ServeHTTP(w, r)
 
 }
 func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel chan upclient.TransactionResource, numTransactions int32) {

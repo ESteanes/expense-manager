@@ -27,3 +27,6 @@ expense-manager
 node_modules/
 package-lock.json
 package.json
+
+# temporary directory which air uses
+tmp/
