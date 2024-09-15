@@ -70,7 +70,9 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 		resp, r2, err := getRequest.Execute()
 		if err != nil {
 			h.Log.Println(fmt.Sprintf("Error when calling `TransactionsAPI.TransactionsGet``: %s\n", err))
-			h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			if r2 != nil {
+				h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			}
 			h.Log.Println(r2.Body)
 			return
 		}
@@ -108,7 +110,9 @@ func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsCha
 		resp, r2, err := getRequest.Execute()
 		if err != nil {
 			h.Log.Println(fmt.Sprintf("Error when calling `TransactionsAPI.TransactionsGet``: %s\n", err))
-			h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			if r2 != nil {
+				h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			}
 			h.Log.Println(r2.Body)
 			return
 		}
