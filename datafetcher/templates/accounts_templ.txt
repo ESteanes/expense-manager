@@ -1,19 +1,13 @@
-<h1 class=\"text-4xl\">Accounts - Details</h1><ul>
-<div><h2 class=\"text-xl font-bold\">
-</h2><p>Account Type: 
-</p><p>Balance: 
- 
-</p><p>Created At: 
-</p><p>Id: 
-</p></div><hr>
-</ul>
-<h1 class=\"text-4xl\">Accounts</h1><ul><form action=\"/transactions\" method=\"GET\"><button type=\"submit\">All accounts</button></form>
-<form action=\"/transactions\" method=\"GET\"><button type=\"submit\" name=\"
+<form action=\"/transactions\" method=\"GET\" class=\"h-full w-full\"><input type=\"hidden\" name=\"
 \" value=\"
-\">
+\"><div class=\"p-6 border border-gray-300 rounded-lg bg-gray-50 hover:bg-yellow-400 cursor-pointer\" onclick=\"this.closest(&#39;form&#39;).submit()\"><h2 class=\"text-xl text-center font-bold mb-4\">
+</h2><p><span class=\"font-bold\">Account Type:</span> 
+</p><p><span class=\"font-bold\">Balance:</span> 
  
- 
-</button></form>
-</ul>
-<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://unpkg.com/htmx.org@1.9.11\"></script><link rel=\"stylesheet\" href=\"/static/css/output.css\"><title>Accounts</title></head><body>
-</body></html>
+</p>
+<p><span class=\"font-bold\">Id:</span> 
+</p><p><span class=\"font-bold\">Created At:</span> 
+</p>
+</div></form>
+<div class=\"flex items-center justify-center min-h-screen bg-gray-100\"><div class=\"container mx-auto p-8 bg-gradient-to-r from-orange-50 to-orange-200 shadow-lg rounded-lg\"><h1 class=\"text-4xl font-bold text-center mb-8\">Accounts - Details</h1>
+</div></div>

@@ -6,53 +6,38 @@ import (
 	"strings"
 )
 
-templ AccountDetails(accounts <-chan upclient.AccountResource) {
-	<h1 class="text-4xl">Accounts - Details</h1>
-	<ul>
-		for account := range accounts {
-			@templ.Flush() {
-				<div>
-					<h2 class="text-xl font-bold">{ account.Attributes.DisplayName }</h2>
-					<p>Account Type: { strings.ToTitle(string(account.Attributes.AccountType)) }</p>
-					<p>Balance: { account.Attributes.Balance.CurrencyCode } { account.Attributes.Balance.Value }</p>
-					<p>Created At: { account.Attributes.CreatedAt.String() }</p>
-					<p>Id: { account.Id }</p>
+templ AccountButtons(accounts <-chan upclient.AccountResource, isExtendedInfo bool) {
+	for account := range accounts {
+		@templ.Flush() {
+			<form action="/transactions" method="GET" class="h-full w-full">
+				<input type="hidden" name={ functions.AccountIdQueryParam } value={ account.Id }/>
+				<div class="p-6 border border-gray-300 rounded-lg bg-gray-50 hover:bg-yellow-400 cursor-pointer" onclick="this.closest('form').submit()">
+					<h2 class="text-xl text-center font-bold mb-4">{ account.Attributes.DisplayName }</h2>
+					<p><span class="font-bold">Account Type:</span> { strings.ToTitle(string(account.Attributes.AccountType)) }</p>
+					<p><span class="font-bold">Balance:</span> { account.Attributes.Balance.CurrencyCode } { account.Attributes.Balance.Value }</p>
+					if isExtendedInfo {
+						<p><span class="font-bold">Id:</span> { account.Id }</p>
+						<p><span class="font-bold">Created At:</span> { account.Attributes.CreatedAt.String() }</p>
+					}
 				</div>
-				<hr/>
-			}
+			</form>
 		}
-	</ul>
+	}
 }
 
-templ AccountButtons(accounts <-chan upclient.AccountResource) {
-	<h1 class="text-4xl">Accounts</h1>
-	<ul>
-		<form action="/transactions" method="GET">
-			<button type="submit">All accounts</button>
-		</form>
-		for account := range accounts {
-			@templ.Flush() {
-				<form action="/transactions" method="GET">
-					<button type="submit" name={ functions.AccountIdQueryParam } value={ account.Id }>{ account.Attributes.DisplayName } { account.Attributes.Balance.Value } { account.Attributes.Balance.CurrencyCode }</button>
-				</form>
+templ AccountDetails(accounts <-chan upclient.AccountResource, isExtendedInfo bool) {
+	<div class="flex items-center justify-center min-h-screen bg-gray-100">
+		<div class="container mx-auto p-8 bg-gradient-to-r from-orange-50 to-orange-200 shadow-lg rounded-lg">
+			<h1 class="text-4xl font-bold text-center mb-8">Accounts - Details</h1>
+			@GridOrganiser() {
+				@AccountButtons(accounts, isExtendedInfo)
 			}
-		}
-	</ul>
+		</div>
+	</div>
 }
 
-templ Accounts(accounts1 <-chan upclient.AccountResource, accounts2 <-chan upclient.AccountResource) {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<script src="https://unpkg.com/htmx.org@1.9.11"></script>
-			<link rel="stylesheet" href="/static/css/output.css"/>
-			<title>Accounts</title>
-		</head>
-		<body>
-			@AccountButtons(accounts2)
-			@AccountDetails(accounts1)
-		</body>
-	</html>
+templ Accounts(title string, accounts <-chan upclient.AccountResource, isExtendedInfo bool) {
+	@Base(title) {
+		@AccountDetails(accounts, isExtendedInfo)
+	}
 }

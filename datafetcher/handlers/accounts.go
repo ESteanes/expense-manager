@@ -33,12 +33,9 @@ func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html charset=utf-8")
 	filterOwnershipType := upclient.OwnershipTypeEnum("INDIVIDUAL")
 	accountChannel := make(chan upclient.AccountResource, 10)
-	clonedChannels := Clone(accountChannel, 2)
-	accountChannel1 := <-clonedChannels
-	accountChannel2 := <-clonedChannels
 	go h.GetAccounts(accountChannel, filterOwnershipType)
 
-	templ.Handler(templates.Accounts(accountChannel1, accountChannel2), templ.WithStreaming()).ServeHTTP(w, r)
+	templ.Handler(templates.Accounts("Account Information", accountChannel, true), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
 func (h *AccountHandler) GetAccounts(accountChannel chan upclient.AccountResource, ownershipType upclient.OwnershipTypeEnum) {
@@ -46,7 +43,9 @@ func (h *AccountHandler) GetAccounts(accountChannel chan upclient.AccountResourc
 	resp, r2, err := h.UpClient.AccountsAPI.AccountsGet(h.UpAuth).PageSize(h.MaxPageSize).FilterOwnershipType(ownershipType).Execute()
 	if err != nil {
 		h.Log.Println(fmt.Sprintf("Error when calling `AccountsAPI.AccountsGet`: %s\n", err))
-		h.Log.Println(fmt.Sprintf("Full HTTP response: %v\n", r2))
+		if r2 != nil {
+			h.Log.Println(fmt.Sprintf("Full HTTP response: %v\n", r2))
+		}
 		h.Log.Println("Unable to get account information")
 	}
 

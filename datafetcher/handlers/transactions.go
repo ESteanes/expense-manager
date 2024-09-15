@@ -49,7 +49,7 @@ func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 	accountsChannel := make(chan upclient.AccountResource)
 	go h.AccountHandler.GetAccounts(accountsChannel, upclient.OwnershipTypeEnum("INDIVIDUAL"))
-	templ.Handler(templates.Transactions(transactionsChannel, accountsChannel), templ.WithStreaming()).ServeHTTP(w, r)
+	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, strconv.Itoa(int(numTransactions))), templ.WithStreaming()).ServeHTTP(w, r)
 
 }
 func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel chan upclient.TransactionResource, numTransactions int32) {
@@ -70,8 +70,9 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 		resp, r2, err := getRequest.Execute()
 		if err != nil {
 			h.Log.Println(fmt.Sprintf("Error when calling `TransactionsAPI.TransactionsGet``: %s\n", err))
-			h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
-			h.Log.Println(r2.Body)
+			if r2 != nil {
+				h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			}
 			return
 		}
 		pageAfter = resp.Links.Next.Get()
@@ -108,8 +109,9 @@ func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsCha
 		resp, r2, err := getRequest.Execute()
 		if err != nil {
 			h.Log.Println(fmt.Sprintf("Error when calling `TransactionsAPI.TransactionsGet``: %s\n", err))
-			h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
-			h.Log.Println(r2.Body)
+			if r2 != nil {
+				h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
+			}
 			return
 		}
 		pageAfter = resp.Links.Next.Get()
