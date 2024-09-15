@@ -73,7 +73,6 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 			if r2 != nil {
 				h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
 			}
-			h.Log.Println(r2.Body)
 			return
 		}
 		pageAfter = resp.Links.Next.Get()
@@ -113,7 +112,6 @@ func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsCha
 			if r2 != nil {
 				h.Log.Println(fmt.Sprintf("Full HTTP response: %s\n", r2.Body))
 			}
-			h.Log.Println(r2.Body)
 			return
 		}
 		pageAfter = resp.Links.Next.Get()
