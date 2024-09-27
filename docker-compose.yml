@@ -1,0 +1,11 @@
+services:
+  app:
+    image: expense-manager:latest
+    ports:
+      - "8080:8080"
+    environment:
+      UP_BANK_TOKEN: ${UP_BANK_TOKEN}
+
+secrets:
+  UP_BANK_TOKEN:
+    environment: ${UP_BANK_TOKEN:?error}

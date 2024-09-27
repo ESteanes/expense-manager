@@ -92,7 +92,7 @@ func HandleRequests(upBankToken string, log *log.Logger) {
 	mux.HandleFunc("/counter", handleInfo)
 	log.Println("Serving request at localhost:8080")
 	muxWithSessionMiddleware := sessionManager.LoadAndSave(mux)
-	if err := http.ListenAndServe("localhost:8080", muxWithSessionMiddleware); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:8080", muxWithSessionMiddleware); err != nil {
 		log.Printf("error listening: %v", err)
 	}
 }

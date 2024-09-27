@@ -15,3 +15,6 @@ upclient-generate:
 
 build:
 	templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager
+
+docker:
+	docker build -t expense-manager:latest -f Dockerfile.multistage .
