@@ -11,5 +11,9 @@ import (
 func main() {
 	fmt.Println("Starting server on port 8080...")
 	logger := log.New(os.Stdout, "datafetcher:", log.Default().Flags())
-	datafetcher.HandleRequests(os.Getenv("UP_BANK_TOKEN"), logger)
+	bearerToken := os.Getenv("UP_BANK_TOKEN")
+	if bearerToken == "" {
+		logger.Fatalln("No bearer token was detected with the key UP_BANK_TOKEN")
+	}
+	datafetcher.HandleRequests(bearerToken, logger)
 }
