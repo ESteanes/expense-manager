@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -15,7 +15,7 @@ import (
 	"fmt"
 )
 
-// WebhookEventTypeEnum Specifies the type of a webhook event. This can be used to determine what action to take in response to the event, such as which relationships to expect. 
+// WebhookEventTypeEnum Specifies the type of a webhook event. This can be used to determine what action to take in response to the event, such as which relationships to expect.
 type WebhookEventTypeEnum string
 
 // List of WebhookEventTypeEnum
@@ -23,7 +23,7 @@ const (
 	TRANSACTION_CREATED WebhookEventTypeEnum = "TRANSACTION_CREATED"
 	TRANSACTION_SETTLED WebhookEventTypeEnum = "TRANSACTION_SETTLED"
 	TRANSACTION_DELETED WebhookEventTypeEnum = "TRANSACTION_DELETED"
-	PING WebhookEventTypeEnum = "PING"
+	PING                WebhookEventTypeEnum = "PING"
 )
 
 // All allowed values of WebhookEventTypeEnum enum
@@ -112,4 +112,3 @@ func (v *NullableWebhookEventTypeEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

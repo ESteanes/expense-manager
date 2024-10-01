@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,18 +11,18 @@ API version: v1
 package upclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the ListTagsResponse type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListTagsResponse{}
 
-// ListTagsResponse Successful response to get all tags. This returns a paginated list of tags, which can be scrolled by following the `prev` and `next` links if present. 
+// ListTagsResponse Successful response to get all tags. This returns a paginated list of tags, which can be scrolled by following the `prev` and `next` links if present.
 type ListTagsResponse struct {
-	// The list of tags returned in this response. 
-	Data []TagResource `json:"data"`
+	// The list of tags returned in this response.
+	Data  []TagResource             `json:"data"`
 	Links ListAccountsResponseLinks `json:"links"`
 }
 
@@ -96,7 +96,7 @@ func (o *ListTagsResponse) SetLinks(v ListAccountsResponseLinks) {
 }
 
 func (o ListTagsResponse) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -124,10 +124,10 @@ func (o *ListTagsResponse) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -183,5 +183,3 @@ func (v *NullableListTagsResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

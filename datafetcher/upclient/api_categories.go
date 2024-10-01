@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -19,17 +19,16 @@ import (
 	"strings"
 )
 
-
 // CategoriesAPIService CategoriesAPI service
 type CategoriesAPIService service
 
 type ApiCategoriesGetRequest struct {
-	ctx context.Context
-	ApiService *CategoriesAPIService
+	ctx          context.Context
+	ApiService   *CategoriesAPIService
 	filterParent *string
 }
 
-// The unique identifier of a parent category for which to return only its children. Providing an invalid category identifier results in a &#x60;404&#x60; response. 
+// The unique identifier of a parent category for which to return only its children. Providing an invalid category identifier results in a &#x60;404&#x60; response.
 func (r ApiCategoriesGetRequest) FilterParent(filterParent string) ApiCategoriesGetRequest {
 	r.filterParent = &filterParent
 	return r
@@ -45,25 +44,25 @@ CategoriesGet List categories
 Retrieve a list of all categories and their ancestry. The returned list
 is not paginated.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCategoriesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCategoriesGetRequest
 */
 func (a *CategoriesAPIService) CategoriesGet(ctx context.Context) ApiCategoriesGetRequest {
 	return ApiCategoriesGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ListCategoriesResponse
+//
+//	@return ListCategoriesResponse
 func (a *CategoriesAPIService) CategoriesGetExecute(r ApiCategoriesGetRequest) (*ListCategoriesResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ListCategoriesResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ListCategoriesResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesAPIService.CategoriesGet")
@@ -135,9 +134,9 @@ func (a *CategoriesAPIService) CategoriesGetExecute(r ApiCategoriesGetRequest) (
 }
 
 type ApiCategoriesIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *CategoriesAPIService
-	id string
+	id         string
 }
 
 func (r ApiCategoriesIdGetRequest) Execute() (*GetCategoryResponse, *http.Response, error) {
@@ -149,27 +148,27 @@ CategoriesIdGet Retrieve category
 
 Retrieve a specific category by providing its unique identifier.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The unique identifier for the category. 
- @return ApiCategoriesIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The unique identifier for the category.
+	@return ApiCategoriesIdGetRequest
 */
 func (a *CategoriesAPIService) CategoriesIdGet(ctx context.Context, id string) ApiCategoriesIdGetRequest {
 	return ApiCategoriesIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return GetCategoryResponse
+//
+//	@return GetCategoryResponse
 func (a *CategoriesAPIService) CategoriesIdGetExecute(r ApiCategoriesIdGetRequest) (*GetCategoryResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GetCategoryResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetCategoryResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesAPIService.CategoriesIdGet")
@@ -239,9 +238,9 @@ func (a *CategoriesAPIService) CategoriesIdGetExecute(r ApiCategoriesIdGetReques
 }
 
 type ApiTransactionsTransactionIdRelationshipsCategoryPatchRequest struct {
-	ctx context.Context
-	ApiService *CategoriesAPIService
-	transactionId string
+	ctx                              context.Context
+	ApiService                       *CategoriesAPIService
+	transactionId                    string
 	updateTransactionCategoryRequest *UpdateTransactionCategoryRequest
 }
 
@@ -266,15 +265,14 @@ The associated category, along with its request URL is also exposed via
 the `category` relationship on the transaction resource returned from
 `/transactions/{id}`.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param transactionId The unique identifier for the transaction. 
- @return ApiTransactionsTransactionIdRelationshipsCategoryPatchRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param transactionId The unique identifier for the transaction.
+	@return ApiTransactionsTransactionIdRelationshipsCategoryPatchRequest
 */
 func (a *CategoriesAPIService) TransactionsTransactionIdRelationshipsCategoryPatch(ctx context.Context, transactionId string) ApiTransactionsTransactionIdRelationshipsCategoryPatchRequest {
 	return ApiTransactionsTransactionIdRelationshipsCategoryPatchRequest{
-		ApiService: a,
-		ctx: ctx,
+		ApiService:    a,
+		ctx:           ctx,
 		transactionId: transactionId,
 	}
 }
@@ -282,9 +280,9 @@ func (a *CategoriesAPIService) TransactionsTransactionIdRelationshipsCategoryPat
 // Execute executes the request
 func (a *CategoriesAPIService) TransactionsTransactionIdRelationshipsCategoryPatchExecute(r ApiTransactionsTransactionIdRelationshipsCategoryPatchRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
+		localVarHTTPMethod = http.MethodPatch
+		localVarPostBody   interface{}
+		formFiles          []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoriesAPIService.TransactionsTransactionIdRelationshipsCategoryPatch")

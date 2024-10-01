@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,19 +11,19 @@ API version: v1
 package upclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the HoldInfoObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &HoldInfoObject{}
 
-// HoldInfoObject Provides information about the amount at which a transaction was in the `HELD` status. 
+// HoldInfoObject Provides information about the amount at which a transaction was in the `HELD` status.
 type HoldInfoObject struct {
-	// The amount of this transaction while in the `HELD` status, in Australian dollars. 
+	// The amount of this transaction while in the `HELD` status, in Australian dollars.
 	Amount MoneyObject `json:"amount"`
-	// The foreign currency amount of this transaction while in the `HELD` status. This field will be `null` for domestic transactions. The amount was converted to the AUD amount reflected in the `amount` field. 
+	// The foreign currency amount of this transaction while in the `HELD` status. This field will be `null` for domestic transactions. The amount was converted to the AUD amount reflected in the `amount` field.
 	ForeignAmount NullableMoneyObject `json:"foreignAmount"`
 }
 
@@ -99,7 +99,7 @@ func (o *HoldInfoObject) SetForeignAmount(v MoneyObject) {
 }
 
 func (o HoldInfoObject) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -127,10 +127,10 @@ func (o *HoldInfoObject) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -186,5 +186,3 @@ func (v *NullableHoldInfoObject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
