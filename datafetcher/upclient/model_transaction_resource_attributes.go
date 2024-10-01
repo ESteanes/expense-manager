@@ -54,6 +54,8 @@ type TransactionResourceAttributes struct {
 	Note NullableNoteObject `json:"note"`
 	// The customer who initated the transaction.  For 2Up accounts this could be the customer who's card was used.
 	PerformingCustomer NullableCustomerObject `json:"performingCustomer"`
+	// A deep link to the transaction receipt screen in-app.
+	DeepLinkURL string `json:"deepLinkURL"`
 }
 
 type _TransactionResourceAttributes TransactionResourceAttributes
@@ -62,7 +64,7 @@ type _TransactionResourceAttributes TransactionResourceAttributes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, cardPurchaseMethod NullableCardPurchaseMethodObject, settledAt NullableTime, createdAt time.Time, transactionType NullableString, note NullableNoteObject, performingCustomer NullableCustomerObject) *TransactionResourceAttributes {
+func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, cardPurchaseMethod NullableCardPurchaseMethodObject, settledAt NullableTime, createdAt time.Time, transactionType NullableString, note NullableNoteObject, performingCustomer NullableCustomerObject, deepLinkURL string) *TransactionResourceAttributes {
 	this := TransactionResourceAttributes{}
 	this.Status = status
 	this.RawText = rawText
@@ -80,6 +82,7 @@ func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText Null
 	this.TransactionType = transactionType
 	this.Note = note
 	this.PerformingCustomer = performingCustomer
+	this.DeepLinkURL = deepLinkURL
 	return &this
 }
 
@@ -497,6 +500,30 @@ func (o *TransactionResourceAttributes) SetPerformingCustomer(v CustomerObject) 
 	o.PerformingCustomer.Set(&v)
 }
 
+// GetDeepLinkURL returns the DeepLinkURL field value
+func (o *TransactionResourceAttributes) GetDeepLinkURL() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DeepLinkURL
+}
+
+// GetDeepLinkURLOk returns a tuple with the DeepLinkURL field value
+// and a boolean to check if the value has been set.
+func (o *TransactionResourceAttributes) GetDeepLinkURLOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DeepLinkURL, true
+}
+
+// SetDeepLinkURL sets field value
+func (o *TransactionResourceAttributes) SetDeepLinkURL(v string) {
+	o.DeepLinkURL = v
+}
+
 func (o TransactionResourceAttributes) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -523,6 +550,7 @@ func (o TransactionResourceAttributes) ToMap() (map[string]interface{}, error) {
 	toSerialize["transactionType"] = o.TransactionType.Get()
 	toSerialize["note"] = o.Note.Get()
 	toSerialize["performingCustomer"] = o.PerformingCustomer.Get()
+	toSerialize["deepLinkURL"] = o.DeepLinkURL
 	return toSerialize, nil
 }
 
@@ -547,6 +575,7 @@ func (o *TransactionResourceAttributes) UnmarshalJSON(data []byte) (err error) {
 		"transactionType",
 		"note",
 		"performingCustomer",
+		"deepLinkURL",
 	}
 
 	allProperties := make(map[string]interface{})

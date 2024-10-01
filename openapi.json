@@ -908,7 +908,11 @@
                     "$ref": "#/components/schemas/CustomerObject"
                   }
                 ]
-              }
+              },
+              "deepLinkURL": {
+                "type": "string",
+                "description": "A deep link to the transaction receipt screen in-app."
+            }
             },
             "required": [
               "status",
@@ -926,7 +930,8 @@
               "createdAt",
               "transactionType",
               "note",
-              "performingCustomer"
+              "performingCustomer",
+              "deepLinkURL"
             ]
           },
           "relationships": {
