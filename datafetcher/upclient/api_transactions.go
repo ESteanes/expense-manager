@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -20,67 +20,66 @@ import (
 	"time"
 )
 
-
 // TransactionsAPIService TransactionsAPI service
 type TransactionsAPIService service
 
 type ApiAccountsAccountIdTransactionsGetRequest struct {
-	ctx context.Context
-	ApiService *TransactionsAPIService
-	accountId string
-	pageSize *int32
-	pageBefore *string
-	pageAfter *string
-	filterStatus *TransactionStatusEnum
-	filterSince *time.Time
-	filterUntil *time.Time
+	ctx            context.Context
+	ApiService     *TransactionsAPIService
+	accountId      string
+	pageSize       *int32
+	pageBefore     *string
+	pageAfter      *string
+	filterStatus   *TransactionStatusEnum
+	filterSince    *time.Time
+	filterUntil    *time.Time
 	filterCategory *string
-	filterTag *string
+	filterTag      *string
 }
 
-// The number of records to return in each page. 
+// The number of records to return in each page.
 func (r ApiAccountsAccountIdTransactionsGetRequest) PageSize(pageSize int32) ApiAccountsAccountIdTransactionsGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-// To view a page before a specific transaction. 
+// To view a page before a specific transaction.
 func (r ApiAccountsAccountIdTransactionsGetRequest) PageBefore(pageBefore string) ApiAccountsAccountIdTransactionsGetRequest {
 	r.pageBefore = &pageBefore
 	return r
 }
 
-// Where to continue paginating across 
+// Where to continue paginating across
 func (r ApiAccountsAccountIdTransactionsGetRequest) PageAfter(pageAfter string) ApiAccountsAccountIdTransactionsGetRequest {
 	r.pageAfter = &pageAfter
 	return r
 }
 
-// The transaction status for which to return records. This can be used to filter &#x60;HELD&#x60; transactions from those that are &#x60;SETTLED&#x60;. 
+// The transaction status for which to return records. This can be used to filter &#x60;HELD&#x60; transactions from those that are &#x60;SETTLED&#x60;.
 func (r ApiAccountsAccountIdTransactionsGetRequest) FilterStatus(filterStatus TransactionStatusEnum) ApiAccountsAccountIdTransactionsGetRequest {
 	r.filterStatus = &filterStatus
 	return r
 }
 
-// The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes. 
+// The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.
 func (r ApiAccountsAccountIdTransactionsGetRequest) FilterSince(filterSince time.Time) ApiAccountsAccountIdTransactionsGetRequest {
 	r.filterSince = &filterSince
 	return r
 }
 
-// The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes. 
+// The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.
 func (r ApiAccountsAccountIdTransactionsGetRequest) FilterUntil(filterUntil time.Time) ApiAccountsAccountIdTransactionsGetRequest {
 	r.filterUntil = &filterUntil
 	return r
 }
 
-// The category identifier for which to filter transactions. Both parent and child categories can be filtered through this parameter. Providing an invalid category identifier results in a &#x60;404&#x60; response. 
+// The category identifier for which to filter transactions. Both parent and child categories can be filtered through this parameter. Providing an invalid category identifier results in a &#x60;404&#x60; response.
 func (r ApiAccountsAccountIdTransactionsGetRequest) FilterCategory(filterCategory string) ApiAccountsAccountIdTransactionsGetRequest {
 	r.filterCategory = &filterCategory
 	return r
 }
 
-// A transaction tag to filter for which to return records. If the tag does not exist, zero records are returned and a success response is given. 
+// A transaction tag to filter for which to return records. If the tag does not exist, zero records are returned and a success response is given.
 func (r ApiAccountsAccountIdTransactionsGetRequest) FilterTag(filterTag string) ApiAccountsAccountIdTransactionsGetRequest {
 	r.filterTag = &filterTag
 	return r
@@ -101,27 +100,27 @@ specific date range pass one or both of `filter[since]` and
 **should not** be used for pagination. Results are ordered newest first
 to oldest last.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param accountId The unique identifier for the account. 
- @return ApiAccountsAccountIdTransactionsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param accountId The unique identifier for the account.
+	@return ApiAccountsAccountIdTransactionsGetRequest
 */
 func (a *TransactionsAPIService) AccountsAccountIdTransactionsGet(ctx context.Context, accountId string) ApiAccountsAccountIdTransactionsGetRequest {
 	return ApiAccountsAccountIdTransactionsGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		accountId: accountId,
+		ctx:        ctx,
+		accountId:  accountId,
 	}
 }
 
 // Execute executes the request
-//  @return ListTransactionsResponse
+//
+//	@return ListTransactionsResponse
 func (a *TransactionsAPIService) AccountsAccountIdTransactionsGetExecute(r ApiAccountsAccountIdTransactionsGetRequest) (*ListTransactionsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ListTransactionsResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ListTransactionsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsAPIService.AccountsAccountIdTransactionsGet")
@@ -215,61 +214,61 @@ func (a *TransactionsAPIService) AccountsAccountIdTransactionsGetExecute(r ApiAc
 }
 
 type ApiTransactionsGetRequest struct {
-	ctx context.Context
-	ApiService *TransactionsAPIService
-	pageSize *int32
-	pageBefore *string
-	pageAfter *string
-	filterStatus *TransactionStatusEnum
-	filterSince *time.Time
-	filterUntil *time.Time
+	ctx            context.Context
+	ApiService     *TransactionsAPIService
+	pageSize       *int32
+	pageBefore     *string
+	pageAfter      *string
+	filterStatus   *TransactionStatusEnum
+	filterSince    *time.Time
+	filterUntil    *time.Time
 	filterCategory *string
-	filterTag *string
+	filterTag      *string
 }
 
-// The number of records to return in each page. 
+// The number of records to return in each page.
 func (r ApiTransactionsGetRequest) PageSize(pageSize int32) ApiTransactionsGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-// To view a page before a specific transaction. 
+// To view a page before a specific transaction.
 func (r ApiTransactionsGetRequest) PageBefore(pageBefore string) ApiTransactionsGetRequest {
 	r.pageBefore = &pageBefore
 	return r
 }
 
-// Where to continue paginating across 
+// Where to continue paginating across
 func (r ApiTransactionsGetRequest) PageAfter(pageAfter string) ApiTransactionsGetRequest {
 	r.pageAfter = &pageAfter
 	return r
 }
 
-// The transaction status for which to return records. This can be used to filter &#x60;HELD&#x60; transactions from those that are &#x60;SETTLED&#x60;. 
+// The transaction status for which to return records. This can be used to filter &#x60;HELD&#x60; transactions from those that are &#x60;SETTLED&#x60;.
 func (r ApiTransactionsGetRequest) FilterStatus(filterStatus TransactionStatusEnum) ApiTransactionsGetRequest {
 	r.filterStatus = &filterStatus
 	return r
 }
 
-// The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes. 
+// The start date-time from which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.
 func (r ApiTransactionsGetRequest) FilterSince(filterSince time.Time) ApiTransactionsGetRequest {
 	r.filterSince = &filterSince
 	return r
 }
 
-// The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes. 
+// The end date-time up to which to return records, formatted according to rfc-3339. Not to be used for pagination purposes.
 func (r ApiTransactionsGetRequest) FilterUntil(filterUntil time.Time) ApiTransactionsGetRequest {
 	r.filterUntil = &filterUntil
 	return r
 }
 
-// The category identifier for which to filter transactions. Both parent and child categories can be filtered through this parameter. Providing an invalid category identifier results in a &#x60;404&#x60; response. 
+// The category identifier for which to filter transactions. Both parent and child categories can be filtered through this parameter. Providing an invalid category identifier results in a &#x60;404&#x60; response.
 func (r ApiTransactionsGetRequest) FilterCategory(filterCategory string) ApiTransactionsGetRequest {
 	r.filterCategory = &filterCategory
 	return r
 }
 
-// A transaction tag to filter for which to return records. If the tag does not exist, zero records are returned and a success response is given. 
+// A transaction tag to filter for which to return records. If the tag does not exist, zero records are returned and a success response is given.
 func (r ApiTransactionsGetRequest) FilterTag(filterTag string) ApiTransactionsGetRequest {
 	r.filterTag = &filterTag
 	return r
@@ -290,25 +289,25 @@ narrow the results to a specific date range pass one or both of
 parameters **should not** be used for pagination. Results are ordered
 newest first to oldest last.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTransactionsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTransactionsGetRequest
 */
 func (a *TransactionsAPIService) TransactionsGet(ctx context.Context) ApiTransactionsGetRequest {
 	return ApiTransactionsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ListTransactionsResponse
+//
+//	@return ListTransactionsResponse
 func (a *TransactionsAPIService) TransactionsGetExecute(r ApiTransactionsGetRequest) (*ListTransactionsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ListTransactionsResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ListTransactionsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsAPIService.TransactionsGet")
@@ -401,9 +400,9 @@ func (a *TransactionsAPIService) TransactionsGetExecute(r ApiTransactionsGetRequ
 }
 
 type ApiTransactionsIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TransactionsAPIService
-	id string
+	id         string
 }
 
 func (r ApiTransactionsIdGetRequest) Execute() (*GetTransactionResponse, *http.Response, error) {
@@ -415,27 +414,27 @@ TransactionsIdGet Retrieve transaction
 
 Retrieve a specific transaction by providing its unique identifier.
 
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The unique identifier for the transaction. 
- @return ApiTransactionsIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The unique identifier for the transaction.
+	@return ApiTransactionsIdGetRequest
 */
 func (a *TransactionsAPIService) TransactionsIdGet(ctx context.Context, id string) ApiTransactionsIdGetRequest {
 	return ApiTransactionsIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return GetTransactionResponse
+//
+//	@return GetTransactionResponse
 func (a *TransactionsAPIService) TransactionsIdGetExecute(r ApiTransactionsIdGetRequest) (*GetTransactionResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *GetTransactionResponse
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *GetTransactionResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TransactionsAPIService.TransactionsIdGet")

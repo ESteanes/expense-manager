@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,10 +11,10 @@ API version: v1
 package upclient
 
 import (
-	"encoding/json"
-	"time"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // checks if the TransactionResourceAttributes type satisfies the MappedNullable interface at compile time
@@ -22,37 +22,37 @@ var _ MappedNullable = &TransactionResourceAttributes{}
 
 // TransactionResourceAttributes struct for TransactionResourceAttributes
 type TransactionResourceAttributes struct {
-	// The current processing status of this transaction, according to whether or not this transaction has settled or is still held. 
+	// The current processing status of this transaction, according to whether or not this transaction has settled or is still held.
 	Status TransactionStatusEnum `json:"status"`
-	// The original, unprocessed text of the transaction. This is often not a perfect indicator of the actual merchant, but it is useful for reconciliation purposes in some cases. 
+	// The original, unprocessed text of the transaction. This is often not a perfect indicator of the actual merchant, but it is useful for reconciliation purposes in some cases.
 	RawText NullableString `json:"rawText"`
-	// A short description for this transaction. Usually the merchant name for purchases. 
+	// A short description for this transaction. Usually the merchant name for purchases.
 	Description string `json:"description"`
-	// Attached message for this transaction, such as a payment message, or a transfer note. 
+	// Attached message for this transaction, such as a payment message, or a transfer note.
 	Message NullableString `json:"message"`
-	// Boolean flag set to true on transactions that support the use of categories. 
+	// Boolean flag set to true on transactions that support the use of categories.
 	IsCategorizable bool `json:"isCategorizable"`
-	// If this transaction is currently in the `HELD` status, or was ever in the `HELD` status, the `amount` and `foreignAmount` of the transaction while `HELD`. 
+	// If this transaction is currently in the `HELD` status, or was ever in the `HELD` status, the `amount` and `foreignAmount` of the transaction while `HELD`.
 	HoldInfo NullableHoldInfoObject `json:"holdInfo"`
-	// Details of how this transaction was rounded-up. If no Round Up was applied this field will be `null`. 
+	// Details of how this transaction was rounded-up. If no Round Up was applied this field will be `null`.
 	RoundUp NullableRoundUpObject `json:"roundUp"`
-	// If all or part of this transaction was instantly reimbursed in the form of cashback, details of the reimbursement. 
+	// If all or part of this transaction was instantly reimbursed in the form of cashback, details of the reimbursement.
 	Cashback NullableCashbackObject `json:"cashback"`
-	// The amount of this transaction in Australian dollars. For transactions that were once `HELD` but are now `SETTLED`, refer to the `holdInfo` field for the original `amount` the transaction was `HELD` at. 
+	// The amount of this transaction in Australian dollars. For transactions that were once `HELD` but are now `SETTLED`, refer to the `holdInfo` field for the original `amount` the transaction was `HELD` at.
 	Amount MoneyObject `json:"amount"`
-	// The foreign currency amount of this transaction. This field will be `null` for domestic transactions. The amount was converted to the AUD amount reflected in the `amount` of this transaction. Refer to the `holdInfo` field for the original `foreignAmount` the transaction was `HELD` at. 
+	// The foreign currency amount of this transaction. This field will be `null` for domestic transactions. The amount was converted to the AUD amount reflected in the `amount` of this transaction. Refer to the `holdInfo` field for the original `foreignAmount` the transaction was `HELD` at.
 	ForeignAmount NullableMoneyObject `json:"foreignAmount"`
-	// Information about the card used for this transaction, if applicable. 
+	// Information about the card used for this transaction, if applicable.
 	CardPurchaseMethod NullableCardPurchaseMethodObject `json:"cardPurchaseMethod"`
-	// The date-time at which this transaction settled. This field will be `null` for transactions that are currently in the `HELD` status. 
+	// The date-time at which this transaction settled. This field will be `null` for transactions that are currently in the `HELD` status.
 	SettledAt NullableTime `json:"settledAt"`
-	// The date-time at which this transaction was first encountered. 
+	// The date-time at which this transaction was first encountered.
 	CreatedAt time.Time `json:"createdAt"`
-	// A description of the transaction method used e.g. Purchase, BPAY Payment. 
+	// A description of the transaction method used e.g. Purchase, BPAY Payment.
 	TransactionType NullableString `json:"transactionType"`
-	// A customer provided note about the transaction.  Can only be provided by Up High subscribers. 
+	// A customer provided note about the transaction.  Can only be provided by Up High subscribers.
 	Note NullableNoteObject `json:"note"`
-	// The customer who initated the transaction.  For 2Up accounts this could be the customer who's card was used. 
+	// The customer who initated the transaction.  For 2Up accounts this could be the customer who's card was used.
 	PerformingCustomer NullableCustomerObject `json:"performingCustomer"`
 	// A deep link to the transaction receipt screen in-app.
 	DeepLinkURL string `json:"deepLinkURL"`
@@ -525,7 +525,7 @@ func (o *TransactionResourceAttributes) SetDeepLinkURL(v string) {
 }
 
 func (o TransactionResourceAttributes) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -583,10 +583,10 @@ func (o *TransactionResourceAttributes) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -642,5 +642,3 @@ func (v *NullableTransactionResourceAttributes) UnmarshalJSON(src []byte) error 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
 
 API version: v1
 */
@@ -11,18 +11,18 @@ API version: v1
 package upclient
 
 import (
-	"encoding/json"
 	"bytes"
+	"encoding/json"
 	"fmt"
 )
 
 // checks if the TransactionResourceRelationshipsTransferAccount type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &TransactionResourceRelationshipsTransferAccount{}
 
-// TransactionResourceRelationshipsTransferAccount If this transaction is a transfer between accounts, this relationship will contain the account the transaction went to/came from. The `amount` field can be used to determine the direction of the transfer. 
+// TransactionResourceRelationshipsTransferAccount If this transaction is a transfer between accounts, this relationship will contain the account the transaction went to/came from. The `amount` field can be used to determine the direction of the transfer.
 type TransactionResourceRelationshipsTransferAccount struct {
-	Data NullableTransactionResourceRelationshipsTransferAccountData `json:"data"`
-	Links *AccountResourceRelationshipsTransactionsLinks `json:"links,omitempty"`
+	Data  NullableTransactionResourceRelationshipsTransferAccountData `json:"data"`
+	Links *AccountResourceRelationshipsTransactionsLinks              `json:"links,omitempty"`
 }
 
 type _TransactionResourceRelationshipsTransferAccount TransactionResourceRelationshipsTransferAccount
@@ -104,7 +104,7 @@ func (o *TransactionResourceRelationshipsTransferAccount) SetLinks(v AccountReso
 }
 
 func (o TransactionResourceRelationshipsTransferAccount) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -133,10 +133,10 @@ func (o *TransactionResourceRelationshipsTransferAccount) UnmarshalJSON(data []b
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -192,5 +192,3 @@ func (v *NullableTransactionResourceRelationshipsTransferAccount) UnmarshalJSON(
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
