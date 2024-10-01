@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -19,11 +19,12 @@ import (
 	"strings"
 )
 
+
 // AttachmentsAPIService AttachmentsAPI service
 type AttachmentsAPIService service
 
 type ApiAttachmentsGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *AttachmentsAPIService
 }
 
@@ -37,25 +38,25 @@ AttachmentsGet List attachments
 Retrieve a list of all attachments. The returned list is [paginated](#pagination) and can
 be scrolled by following the `next` and `prev` links where present.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAttachmentsGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiAttachmentsGetRequest
 */
 func (a *AttachmentsAPIService) AttachmentsGet(ctx context.Context) ApiAttachmentsGetRequest {
 	return ApiAttachmentsGetRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ListAttachmentsResponse
+//  @return ListAttachmentsResponse
 func (a *AttachmentsAPIService) AttachmentsGetExecute(r ApiAttachmentsGetRequest) (*ListAttachmentsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ListAttachmentsResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListAttachmentsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AttachmentsAPIService.AttachmentsGet")
@@ -124,9 +125,9 @@ func (a *AttachmentsAPIService) AttachmentsGetExecute(r ApiAttachmentsGetRequest
 }
 
 type ApiAttachmentsIdGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *AttachmentsAPIService
-	id         string
+	id string
 }
 
 func (r ApiAttachmentsIdGetRequest) Execute() (*GetAttachmentResponse, *http.Response, error) {
@@ -138,27 +139,27 @@ AttachmentsIdGet Retrieve attachment
 
 Retrieve a specific attachment by providing its unique identifier.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The unique identifier for the attachment.
-	@return ApiAttachmentsIdGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id The unique identifier for the attachment. 
+ @return ApiAttachmentsIdGetRequest
 */
 func (a *AttachmentsAPIService) AttachmentsIdGet(ctx context.Context, id string) ApiAttachmentsIdGetRequest {
 	return ApiAttachmentsIdGetRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GetAttachmentResponse
+//  @return GetAttachmentResponse
 func (a *AttachmentsAPIService) AttachmentsIdGetExecute(r ApiAttachmentsIdGetRequest) (*GetAttachmentResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GetAttachmentResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GetAttachmentResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AttachmentsAPIService.AttachmentsIdGet")

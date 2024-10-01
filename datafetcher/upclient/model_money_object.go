@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,21 +11,21 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
 // checks if the MoneyObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &MoneyObject{}
 
-// MoneyObject Provides information about a value of money.
+// MoneyObject Provides information about a value of money. 
 type MoneyObject struct {
-	// The ISO 4217 currency code.
+	// The ISO 4217 currency code. 
 	CurrencyCode string `json:"currencyCode"`
-	// The amount of money, formatted as a string in the relevant currency. For example, for an Australian dollar value of $10.56, this field will be `\"10.56\"`. The currency symbol is not included in the string.
+	// The amount of money, formatted as a string in the relevant currency. For example, for an Australian dollar value of $10.56, this field will be `\"10.56\"`. The currency symbol is not included in the string. 
 	Value string `json:"value"`
-	// The amount of money in the smallest denomination for the currency, as a 64-bit integer.  For example, for an Australian dollar value of $10.56, this field will be `1056`.
+	// The amount of money in the smallest denomination for the currency, as a 64-bit integer.  For example, for an Australian dollar value of $10.56, this field will be `1056`. 
 	ValueInBaseUnits int32 `json:"valueInBaseUnits"`
 }
 
@@ -124,7 +124,7 @@ func (o *MoneyObject) SetValueInBaseUnits(v int32) {
 }
 
 func (o MoneyObject) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -154,10 +154,10 @@ func (o *MoneyObject) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -213,3 +213,5 @@ func (v *NullableMoneyObject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -15,12 +15,12 @@ import (
 	"fmt"
 )
 
-// TransactionStatusEnum Specifies which stage of processing a transaction is currently at. Currently returned values are `HELD` and `SETTLED`. When a transaction is held, its account’s `availableBalance` is affected. When a transaction is settled, its account’s `currentBalance` is affected.
+// TransactionStatusEnum Specifies which stage of processing a transaction is currently at. Currently returned values are `HELD` and `SETTLED`. When a transaction is held, its account’s `availableBalance` is affected. When a transaction is settled, its account’s `currentBalance` is affected. 
 type TransactionStatusEnum string
 
 // List of TransactionStatusEnum
 const (
-	HELD    TransactionStatusEnum = "HELD"
+	HELD TransactionStatusEnum = "HELD"
 	SETTLED TransactionStatusEnum = "SETTLED"
 )
 
@@ -108,3 +108,4 @@ func (v *NullableTransactionStatusEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

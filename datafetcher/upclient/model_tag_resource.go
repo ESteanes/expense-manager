@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,20 +11,20 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
 // checks if the TagResource type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &TagResource{}
 
-// TagResource Provides information about a tag.
+// TagResource Provides information about a tag. 
 type TagResource struct {
 	// The type of this resource: `tags`
 	Type string `json:"type"`
-	// The label of the tag, which also acts as the tag’s unique identifier.
-	Id            string                       `json:"id"`
+	// The label of the tag, which also acts as the tag’s unique identifier. 
+	Id string `json:"id"`
 	Relationships AccountResourceRelationships `json:"relationships"`
 }
 
@@ -123,7 +123,7 @@ func (o *TagResource) SetRelationships(v AccountResourceRelationships) {
 }
 
 func (o TagResource) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -153,10 +153,10 @@ func (o *TagResource) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -212,3 +212,5 @@ func (v *NullableTagResource) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

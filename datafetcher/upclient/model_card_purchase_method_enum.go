@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -15,19 +15,19 @@ import (
 	"fmt"
 )
 
-// CardPurchaseMethodEnum Specifies the type of card charge.
+// CardPurchaseMethodEnum Specifies the type of card charge. 
 type CardPurchaseMethodEnum string
 
 // List of CardPurchaseMethodEnum
 const (
-	BAR_CODE        CardPurchaseMethodEnum = "BAR_CODE"
-	OCR             CardPurchaseMethodEnum = "OCR"
-	CARD_PIN        CardPurchaseMethodEnum = "CARD_PIN"
-	CARD_DETAILS    CardPurchaseMethodEnum = "CARD_DETAILS"
-	CARD_ON_FILE    CardPurchaseMethodEnum = "CARD_ON_FILE"
-	ECOMMERCE       CardPurchaseMethodEnum = "ECOMMERCE"
+	BAR_CODE CardPurchaseMethodEnum = "BAR_CODE"
+	OCR CardPurchaseMethodEnum = "OCR"
+	CARD_PIN CardPurchaseMethodEnum = "CARD_PIN"
+	CARD_DETAILS CardPurchaseMethodEnum = "CARD_DETAILS"
+	CARD_ON_FILE CardPurchaseMethodEnum = "CARD_ON_FILE"
+	ECOMMERCE CardPurchaseMethodEnum = "ECOMMERCE"
 	MAGNETIC_STRIPE CardPurchaseMethodEnum = "MAGNETIC_STRIPE"
-	CONTACTLESS     CardPurchaseMethodEnum = "CONTACTLESS"
+	CONTACTLESS CardPurchaseMethodEnum = "CONTACTLESS"
 )
 
 // All allowed values of CardPurchaseMethodEnum enum
@@ -120,3 +120,4 @@ func (v *NullableCardPurchaseMethodEnum) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+

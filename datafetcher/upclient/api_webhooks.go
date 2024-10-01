@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -19,16 +19,17 @@ import (
 	"strings"
 )
 
+
 // WebhooksAPIService WebhooksAPI service
 type WebhooksAPIService service
 
 type ApiWebhooksGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *WebhooksAPIService
-	pageSize   *int32
+	pageSize *int32
 }
 
-// The number of records to return in each page.
+// The number of records to return in each page. 
 func (r ApiWebhooksGetRequest) PageSize(pageSize int32) ApiWebhooksGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -46,25 +47,25 @@ Retrieve a list of configured webhooks. The returned list is
 and `prev` links where present. Results are ordered oldest first to
 newest last.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiWebhooksGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiWebhooksGetRequest
 */
 func (a *WebhooksAPIService) WebhooksGet(ctx context.Context) ApiWebhooksGetRequest {
 	return ApiWebhooksGetRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ListWebhooksResponse
+//  @return ListWebhooksResponse
 func (a *WebhooksAPIService) WebhooksGetExecute(r ApiWebhooksGetRequest) (*ListWebhooksResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ListWebhooksResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListWebhooksResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksAPIService.WebhooksGet")
@@ -136,9 +137,9 @@ func (a *WebhooksAPIService) WebhooksGetExecute(r ApiWebhooksGetRequest) (*ListW
 }
 
 type ApiWebhooksIdDeleteRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *WebhooksAPIService
-	id         string
+	id string
 }
 
 func (r ApiWebhooksIdDeleteRequest) Execute() (*http.Response, error) {
@@ -151,24 +152,25 @@ WebhooksIdDelete Delete webhook
 Delete a specific webhook by providing its unique identifier. Once
 deleted, webhook events will no longer be sent to the configured URL.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The unique identifier for the webhook.
-	@return ApiWebhooksIdDeleteRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id The unique identifier for the webhook. 
+ @return ApiWebhooksIdDeleteRequest
 */
 func (a *WebhooksAPIService) WebhooksIdDelete(ctx context.Context, id string) ApiWebhooksIdDeleteRequest {
 	return ApiWebhooksIdDeleteRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
 func (a *WebhooksAPIService) WebhooksIdDeleteExecute(r ApiWebhooksIdDeleteRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksAPIService.WebhooksIdDelete")
@@ -229,9 +231,9 @@ func (a *WebhooksAPIService) WebhooksIdDeleteExecute(r ApiWebhooksIdDeleteReques
 }
 
 type ApiWebhooksIdGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *WebhooksAPIService
-	id         string
+	id string
 }
 
 func (r ApiWebhooksIdGetRequest) Execute() (*GetWebhookResponse, *http.Response, error) {
@@ -243,27 +245,27 @@ WebhooksIdGet Retrieve webhook
 
 Retrieve a specific webhook by providing its unique identifier.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The unique identifier for the webhook.
-	@return ApiWebhooksIdGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id The unique identifier for the webhook. 
+ @return ApiWebhooksIdGetRequest
 */
 func (a *WebhooksAPIService) WebhooksIdGet(ctx context.Context, id string) ApiWebhooksIdGetRequest {
 	return ApiWebhooksIdGetRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GetWebhookResponse
+//  @return GetWebhookResponse
 func (a *WebhooksAPIService) WebhooksIdGetExecute(r ApiWebhooksIdGetRequest) (*GetWebhookResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GetWebhookResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GetWebhookResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksAPIService.WebhooksIdGet")
@@ -333,8 +335,8 @@ func (a *WebhooksAPIService) WebhooksIdGetExecute(r ApiWebhooksIdGetRequest) (*G
 }
 
 type ApiWebhooksPostRequest struct {
-	ctx                  context.Context
-	ApiService           *WebhooksAPIService
+	ctx context.Context
+	ApiService *WebhooksAPIService
 	createWebhookRequest *CreateWebhookRequest
 }
 
@@ -371,25 +373,25 @@ It is probably a good idea to test the webhook by
 [sending it a `PING` event](#post_webhooks_webhookId_ping) after creating
 it.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiWebhooksPostRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiWebhooksPostRequest
 */
 func (a *WebhooksAPIService) WebhooksPost(ctx context.Context) ApiWebhooksPostRequest {
 	return ApiWebhooksPostRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return CreateWebhookResponse
+//  @return CreateWebhookResponse
 func (a *WebhooksAPIService) WebhooksPostExecute(r ApiWebhooksPostRequest) (*CreateWebhookResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *CreateWebhookResponse
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CreateWebhookResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksAPIService.WebhooksPost")
@@ -460,13 +462,13 @@ func (a *WebhooksAPIService) WebhooksPostExecute(r ApiWebhooksPostRequest) (*Cre
 }
 
 type ApiWebhooksWebhookIdLogsGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *WebhooksAPIService
-	webhookId  string
-	pageSize   *int32
+	webhookId string
+	pageSize *int32
 }
 
-// The number of records to return in each page.
+// The number of records to return in each page. 
 func (r ApiWebhooksWebhookIdLogsGetRequest) PageSize(pageSize int32) ApiWebhooksWebhookIdLogsGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -486,27 +488,27 @@ following the `next` and `prev` links where present. Results are ordered
 newest first to oldest last. Logs may be automatically purged after a
 period of time.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param webhookId The unique identifier for the webhook.
-	@return ApiWebhooksWebhookIdLogsGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param webhookId The unique identifier for the webhook. 
+ @return ApiWebhooksWebhookIdLogsGetRequest
 */
 func (a *WebhooksAPIService) WebhooksWebhookIdLogsGet(ctx context.Context, webhookId string) ApiWebhooksWebhookIdLogsGetRequest {
 	return ApiWebhooksWebhookIdLogsGetRequest{
 		ApiService: a,
-		ctx:        ctx,
-		webhookId:  webhookId,
+		ctx: ctx,
+		webhookId: webhookId,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ListWebhookDeliveryLogsResponse
+//  @return ListWebhookDeliveryLogsResponse
 func (a *WebhooksAPIService) WebhooksWebhookIdLogsGetExecute(r ApiWebhooksWebhookIdLogsGetRequest) (*ListWebhookDeliveryLogsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ListWebhookDeliveryLogsResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListWebhookDeliveryLogsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksAPIService.WebhooksWebhookIdLogsGet")
@@ -579,9 +581,9 @@ func (a *WebhooksAPIService) WebhooksWebhookIdLogsGetExecute(r ApiWebhooksWebhoo
 }
 
 type ApiWebhooksWebhookIdPingPostRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *WebhooksAPIService
-	webhookId  string
+	webhookId string
 }
 
 func (r ApiWebhooksWebhookIdPingPostRequest) Execute() (*WebhookEventCallback, *http.Response, error) {
@@ -595,27 +597,27 @@ Send a `PING` event to a webhook by providing its unique identifier.
 This is useful for testing and debugging purposes. The event is delivered
 asynchronously and its data is returned in the response to this request.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param webhookId The unique identifier for the webhook.
-	@return ApiWebhooksWebhookIdPingPostRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param webhookId The unique identifier for the webhook. 
+ @return ApiWebhooksWebhookIdPingPostRequest
 */
 func (a *WebhooksAPIService) WebhooksWebhookIdPingPost(ctx context.Context, webhookId string) ApiWebhooksWebhookIdPingPostRequest {
 	return ApiWebhooksWebhookIdPingPostRequest{
 		ApiService: a,
-		ctx:        ctx,
-		webhookId:  webhookId,
+		ctx: ctx,
+		webhookId: webhookId,
 	}
 }
 
 // Execute executes the request
-//
-//	@return WebhookEventCallback
+//  @return WebhookEventCallback
 func (a *WebhooksAPIService) WebhooksWebhookIdPingPostExecute(r ApiWebhooksWebhookIdPingPostRequest) (*WebhookEventCallback, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodPost
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *WebhookEventCallback
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *WebhookEventCallback
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebhooksAPIService.WebhooksWebhookIdPingPost")

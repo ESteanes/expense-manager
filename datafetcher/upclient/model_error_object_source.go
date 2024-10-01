@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -17,11 +17,11 @@ import (
 // checks if the ErrorObjectSource type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ErrorObjectSource{}
 
-// ErrorObjectSource If applicable, location in the request that this error relates to. This may be a parameter in the query string, or a an attribute in the request body.
+// ErrorObjectSource If applicable, location in the request that this error relates to. This may be a parameter in the query string, or a an attribute in the request body. 
 type ErrorObjectSource struct {
-	// If this error relates to a query parameter, the name of the parameter.
+	// If this error relates to a query parameter, the name of the parameter. 
 	Parameter *string `json:"parameter,omitempty"`
-	// If this error relates to an attribute in the request body, a rfc-6901 JSON pointer to the attribute.
+	// If this error relates to an attribute in the request body, a rfc-6901 JSON pointer to the attribute. 
 	Pointer *string `json:"pointer,omitempty"`
 }
 
@@ -107,7 +107,7 @@ func (o *ErrorObjectSource) SetPointer(v string) {
 }
 
 func (o ErrorObjectSource) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -160,3 +160,5 @@ func (v *NullableErrorObjectSource) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

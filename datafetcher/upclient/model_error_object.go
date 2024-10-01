@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,22 +11,22 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
 // checks if the ErrorObject type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ErrorObject{}
 
-// ErrorObject Provides information about an error processing a request.
+// ErrorObject Provides information about an error processing a request. 
 type ErrorObject struct {
-	// The HTTP status code associated with this error. This can also be obtained from the response headers. The status indicates the broad type of error according to HTTP semantics.
+	// The HTTP status code associated with this error. This can also be obtained from the response headers. The status indicates the broad type of error according to HTTP semantics. 
 	Status string `json:"status"`
-	// A short description of this error. This should be stable across multiple occurrences of this type of error and typically expands on the reason for the status code.
+	// A short description of this error. This should be stable across multiple occurrences of this type of error and typically expands on the reason for the status code. 
 	Title string `json:"title"`
-	// A detailed description of this error. This should be considered unique to individual occurrences of an error and subject to change. It is useful for debugging purposes.
-	Detail string             `json:"detail"`
+	// A detailed description of this error. This should be considered unique to individual occurrences of an error and subject to change. It is useful for debugging purposes. 
+	Detail string `json:"detail"`
 	Source *ErrorObjectSource `json:"source,omitempty"`
 }
 
@@ -157,7 +157,7 @@ func (o *ErrorObject) SetSource(v ErrorObjectSource) {
 }
 
 func (o ErrorObject) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -190,10 +190,10 @@ func (o *ErrorObject) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -249,3 +249,5 @@ func (v *NullableErrorObject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

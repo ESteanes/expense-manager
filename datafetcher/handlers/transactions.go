@@ -86,6 +86,7 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 			}
 		}
 	}
+	h.Log.Println(fmt.Sprintf("Total number of transactions is: %v", countTransactions))
 	if pageAfter == nil {
 		h.Log.Println("You have reached the end of all transactions")
 	}
