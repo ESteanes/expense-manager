@@ -20,13 +20,13 @@ Name | Type | Description | Notes
 **TransactionType** | **NullableString** | A description of the transaction method used e.g. Purchase, BPAY Payment.  | 
 **Note** | [**NullableNoteObject**](NoteObject.md) | A customer provided note about the transaction.  Can only be provided by Up High subscribers.  | 
 **PerformingCustomer** | [**NullableCustomerObject**](CustomerObject.md) | The customer who initated the transaction.  For 2Up accounts this could be the customer who&#39;s card was used.  | 
-**DeepLinkURL** | **NullableString** | A deep link to the transaction receipt screen in-app. | 
+**DeepLinkURL** | **string** | A deep link to the transaction receipt screen in-app. | 
 
 ## Methods
 
 ### NewTransactionResourceAttributes
 
-`func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, cardPurchaseMethod NullableCardPurchaseMethodObject, settledAt NullableTime, createdAt time.Time, transactionType NullableString, note NullableNoteObject, performingCustomer NullableCustomerObject, deepLinkURL NullableString, ) *TransactionResourceAttributes`
+`func NewTransactionResourceAttributes(status TransactionStatusEnum, rawText NullableString, description string, message NullableString, isCategorizable bool, holdInfo NullableHoldInfoObject, roundUp NullableRoundUpObject, cashback NullableCashbackObject, amount MoneyObject, foreignAmount NullableMoneyObject, cardPurchaseMethod NullableCardPurchaseMethodObject, settledAt NullableTime, createdAt time.Time, transactionType NullableString, note NullableNoteObject, performingCustomer NullableCustomerObject, deepLinkURL string, ) *TransactionResourceAttributes`
 
 NewTransactionResourceAttributes instantiates a new TransactionResourceAttributes object
 This constructor will assign default values to properties that have it defined,
@@ -491,16 +491,6 @@ and a boolean to check if the value has been set.
 SetDeepLinkURL sets DeepLinkURL field to given value.
 
 
-### SetDeepLinkURLNil
-
-`func (o *TransactionResourceAttributes) SetDeepLinkURLNil(b bool)`
-
- SetDeepLinkURLNil sets the value for DeepLinkURL to be an explicit nil
-
-### UnsetDeepLinkURL
-`func (o *TransactionResourceAttributes) UnsetDeepLinkURL()`
-
-UnsetDeepLinkURL ensures that no value is present for DeepLinkURL, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,8 +11,8 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
@@ -21,8 +21,8 @@ var _ MappedNullable = &CategoryResourceRelationshipsParent{}
 
 // CategoryResourceRelationshipsParent struct for CategoryResourceRelationshipsParent
 type CategoryResourceRelationshipsParent struct {
-	Data  NullableCategoryResourceRelationshipsParentData `json:"data"`
-	Links *AccountResourceRelationshipsTransactionsLinks  `json:"links,omitempty"`
+	Data NullableCategoryResourceRelationshipsParentData `json:"data"`
+	Links *AccountResourceRelationshipsTransactionsLinks `json:"links,omitempty"`
 }
 
 type _CategoryResourceRelationshipsParent CategoryResourceRelationshipsParent
@@ -104,7 +104,7 @@ func (o *CategoryResourceRelationshipsParent) SetLinks(v AccountResourceRelation
 }
 
 func (o CategoryResourceRelationshipsParent) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -133,10 +133,10 @@ func (o *CategoryResourceRelationshipsParent) UnmarshalJSON(data []byte) (err er
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -192,3 +192,5 @@ func (v *NullableCategoryResourceRelationshipsParent) UnmarshalJSON(src []byte) 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

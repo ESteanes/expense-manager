@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,10 +11,10 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
 	"time"
+	"bytes"
+	"fmt"
 )
 
 // checks if the WebhookEventResourceAttributes type satisfies the MappedNullable interface at compile time
@@ -22,9 +22,9 @@ var _ MappedNullable = &WebhookEventResourceAttributes{}
 
 // WebhookEventResourceAttributes struct for WebhookEventResourceAttributes
 type WebhookEventResourceAttributes struct {
-	// The type of this event. This can be used to determine what action to take in response to the event.
+	// The type of this event. This can be used to determine what action to take in response to the event. 
 	EventType WebhookEventTypeEnum `json:"eventType"`
-	// The date-time at which this event was generated.
+	// The date-time at which this event was generated. 
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -98,7 +98,7 @@ func (o *WebhookEventResourceAttributes) SetCreatedAt(v time.Time) {
 }
 
 func (o WebhookEventResourceAttributes) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -126,10 +126,10 @@ func (o *WebhookEventResourceAttributes) UnmarshalJSON(data []byte) (err error) 
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -185,3 +185,5 @@ func (v *NullableWebhookEventResourceAttributes) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

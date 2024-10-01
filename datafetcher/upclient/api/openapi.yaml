@@ -3311,7 +3311,6 @@ components:
           nullable: true
         deepLinkURL:
           description: A deep link to the transaction receipt screen in-app.
-          nullable: true
           type: string
       required:
       - amount

@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,8 +11,8 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
@@ -21,9 +21,9 @@ var _ MappedNullable = &WebhookInputResourceAttributes{}
 
 // WebhookInputResourceAttributes struct for WebhookInputResourceAttributes
 type WebhookInputResourceAttributes struct {
-	// The URL that this webhook should post events to. This must be a valid HTTP or HTTPS URL that does not exceed 300 characters in length.
+	// The URL that this webhook should post events to. This must be a valid HTTP or HTTPS URL that does not exceed 300 characters in length. 
 	Url string `json:"url"`
-	// An optional description for this webhook, up to 64 characters in length.
+	// An optional description for this webhook, up to 64 characters in length. 
 	Description NullableString `json:"description,omitempty"`
 }
 
@@ -103,7 +103,6 @@ func (o *WebhookInputResourceAttributes) HasDescription() bool {
 func (o *WebhookInputResourceAttributes) SetDescription(v string) {
 	o.Description.Set(&v)
 }
-
 // SetDescriptionNil sets the value for Description to be an explicit nil
 func (o *WebhookInputResourceAttributes) SetDescriptionNil() {
 	o.Description.Set(nil)
@@ -115,7 +114,7 @@ func (o *WebhookInputResourceAttributes) UnsetDescription() {
 }
 
 func (o WebhookInputResourceAttributes) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -144,10 +143,10 @@ func (o *WebhookInputResourceAttributes) UnmarshalJSON(data []byte) (err error) 
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -203,3 +202,5 @@ func (v *NullableWebhookInputResourceAttributes) UnmarshalJSON(src []byte) error
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

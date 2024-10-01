@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,17 +11,17 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
 // checks if the CreateWebhookRequest type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateWebhookRequest{}
 
-// CreateWebhookRequest Request to create a new webhook. This currently only requires a `url` attribute.
+// CreateWebhookRequest Request to create a new webhook. This currently only requires a `url` attribute. 
 type CreateWebhookRequest struct {
-	// The webhook resource to create.
+	// The webhook resource to create. 
 	Data WebhookInputResource `json:"data"`
 }
 
@@ -70,7 +70,7 @@ func (o *CreateWebhookRequest) SetData(v WebhookInputResource) {
 }
 
 func (o CreateWebhookRequest) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -96,10 +96,10 @@ func (o *CreateWebhookRequest) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -155,3 +155,5 @@ func (v *NullableCreateWebhookRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

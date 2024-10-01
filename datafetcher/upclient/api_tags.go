@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -19,16 +19,17 @@ import (
 	"strings"
 )
 
+
 // TagsAPIService TagsAPI service
 type TagsAPIService service
 
 type ApiTagsGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *TagsAPIService
-	pageSize   *int32
+	pageSize *int32
 }
 
-// The number of records to return in each page.
+// The number of records to return in each page. 
 func (r ApiTagsGetRequest) PageSize(pageSize int32) ApiTagsGetRequest {
 	r.pageSize = &pageSize
 	return r
@@ -47,25 +48,25 @@ and `prev` links where present. Results are ordered lexicographically.
 The `transactions` relationship for each tag exposes a link
 to get the transactions with the given tag.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTagsGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiTagsGetRequest
 */
 func (a *TagsAPIService) TagsGet(ctx context.Context) ApiTagsGetRequest {
 	return ApiTagsGetRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ListTagsResponse
+//  @return ListTagsResponse
 func (a *TagsAPIService) TagsGetExecute(r ApiTagsGetRequest) (*ListTagsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ListTagsResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListTagsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagsAPIService.TagsGet")
@@ -137,9 +138,9 @@ func (a *TagsAPIService) TagsGetExecute(r ApiTagsGetRequest) (*ListTagsResponse,
 }
 
 type ApiTransactionsTransactionIdRelationshipsTagsDeleteRequest struct {
-	ctx                          context.Context
-	ApiService                   *TagsAPIService
-	transactionId                string
+	ctx context.Context
+	ApiService *TagsAPIService
+	transactionId string
 	updateTransactionTagsRequest *UpdateTransactionTagsRequest
 }
 
@@ -161,14 +162,15 @@ success. The associated tags, along with this request URL, are also
 exposed via the `tags` relationship on the transaction resource returned
 from `/transactions/{id}`.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param transactionId The unique identifier for the transaction.
-	@return ApiTransactionsTransactionIdRelationshipsTagsDeleteRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param transactionId The unique identifier for the transaction. 
+ @return ApiTransactionsTransactionIdRelationshipsTagsDeleteRequest
 */
 func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsDelete(ctx context.Context, transactionId string) ApiTransactionsTransactionIdRelationshipsTagsDeleteRequest {
 	return ApiTransactionsTransactionIdRelationshipsTagsDeleteRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		transactionId: transactionId,
 	}
 }
@@ -176,9 +178,9 @@ func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsDelete(ctx co
 // Execute executes the request
 func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsDeleteExecute(r ApiTransactionsTransactionIdRelationshipsTagsDeleteRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodDelete
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagsAPIService.TransactionsTransactionIdRelationshipsTagsDelete")
@@ -241,9 +243,9 @@ func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsDeleteExecute
 }
 
 type ApiTransactionsTransactionIdRelationshipsTagsPostRequest struct {
-	ctx                          context.Context
-	ApiService                   *TagsAPIService
-	transactionId                string
+	ctx context.Context
+	ApiService *TagsAPIService
+	transactionId string
 	updateTransactionTagsRequest *UpdateTransactionTagsRequest
 }
 
@@ -266,14 +268,15 @@ tags, along with this request URL, are also exposed via the `tags`
 relationship on the transaction resource returned from
 `/transactions/{id}`.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param transactionId The unique identifier for the transaction.
-	@return ApiTransactionsTransactionIdRelationshipsTagsPostRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param transactionId The unique identifier for the transaction. 
+ @return ApiTransactionsTransactionIdRelationshipsTagsPostRequest
 */
 func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsPost(ctx context.Context, transactionId string) ApiTransactionsTransactionIdRelationshipsTagsPostRequest {
 	return ApiTransactionsTransactionIdRelationshipsTagsPostRequest{
-		ApiService:    a,
-		ctx:           ctx,
+		ApiService: a,
+		ctx: ctx,
 		transactionId: transactionId,
 	}
 }
@@ -281,9 +284,9 @@ func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsPost(ctx cont
 // Execute executes the request
 func (a *TagsAPIService) TransactionsTransactionIdRelationshipsTagsPostExecute(r ApiTransactionsTransactionIdRelationshipsTagsPostRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod = http.MethodPost
-		localVarPostBody   interface{}
-		formFiles          []formFile
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagsAPIService.TransactionsTransactionIdRelationshipsTagsPost")

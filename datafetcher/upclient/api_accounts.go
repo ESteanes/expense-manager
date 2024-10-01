@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -19,30 +19,31 @@ import (
 	"strings"
 )
 
+
 // AccountsAPIService AccountsAPI service
 type AccountsAPIService service
 
 type ApiAccountsGetRequest struct {
-	ctx                 context.Context
-	ApiService          *AccountsAPIService
-	pageSize            *int32
-	filterAccountType   *AccountTypeEnum
+	ctx context.Context
+	ApiService *AccountsAPIService
+	pageSize *int32
+	filterAccountType *AccountTypeEnum
 	filterOwnershipType *OwnershipTypeEnum
 }
 
-// The number of records to return in each page.
+// The number of records to return in each page. 
 func (r ApiAccountsGetRequest) PageSize(pageSize int32) ApiAccountsGetRequest {
 	r.pageSize = &pageSize
 	return r
 }
 
-// The type of account for which to return records. This can be used to filter Savers from spending accounts.
+// The type of account for which to return records. This can be used to filter Savers from spending accounts. 
 func (r ApiAccountsGetRequest) FilterAccountType(filterAccountType AccountTypeEnum) ApiAccountsGetRequest {
 	r.filterAccountType = &filterAccountType
 	return r
 }
 
-// The account ownership structure for which to return records. This can be used to filter 2Up accounts from Up accounts.
+// The account ownership structure for which to return records. This can be used to filter 2Up accounts from Up accounts. 
 func (r ApiAccountsGetRequest) FilterOwnershipType(filterOwnershipType OwnershipTypeEnum) ApiAccountsGetRequest {
 	r.filterOwnershipType = &filterOwnershipType
 	return r
@@ -59,25 +60,25 @@ Retrieve a paginated list of all accounts for the currently
 authenticated user. The returned list is paginated and can be scrolled
 by following the `prev` and `next` links where present.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAccountsGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiAccountsGetRequest
 */
 func (a *AccountsAPIService) AccountsGet(ctx context.Context) ApiAccountsGetRequest {
 	return ApiAccountsGetRequest{
 		ApiService: a,
-		ctx:        ctx,
+		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//
-//	@return ListAccountsResponse
+//  @return ListAccountsResponse
 func (a *AccountsAPIService) AccountsGetExecute(r ApiAccountsGetRequest) (*ListAccountsResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *ListAccountsResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListAccountsResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsAPIService.AccountsGet")
@@ -155,9 +156,9 @@ func (a *AccountsAPIService) AccountsGetExecute(r ApiAccountsGetRequest) (*ListA
 }
 
 type ApiAccountsIdGetRequest struct {
-	ctx        context.Context
+	ctx context.Context
 	ApiService *AccountsAPIService
-	id         string
+	id string
 }
 
 func (r ApiAccountsIdGetRequest) Execute() (*GetAccountResponse, *http.Response, error) {
@@ -169,27 +170,27 @@ AccountsIdGet Retrieve account
 
 Retrieve a specific account by providing its unique identifier.
 
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@param id The unique identifier for the account.
-	@return ApiAccountsIdGetRequest
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id The unique identifier for the account. 
+ @return ApiAccountsIdGetRequest
 */
 func (a *AccountsAPIService) AccountsIdGet(ctx context.Context, id string) ApiAccountsIdGetRequest {
 	return ApiAccountsIdGetRequest{
 		ApiService: a,
-		ctx:        ctx,
-		id:         id,
+		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-//
-//	@return GetAccountResponse
+//  @return GetAccountResponse
 func (a *AccountsAPIService) AccountsIdGetExecute(r ApiAccountsIdGetRequest) (*GetAccountResponse, *http.Response, error) {
 	var (
-		localVarHTTPMethod  = http.MethodGet
-		localVarPostBody    interface{}
-		formFiles           []formFile
-		localVarReturnValue *GetAccountResponse
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GetAccountResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsAPIService.AccountsIdGet")

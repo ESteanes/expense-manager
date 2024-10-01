@@ -1,7 +1,7 @@
 /*
 Up API
 
-The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning.
+The Up API gives you programmatic access to your balances and transaction data. You can request past transactions or set up webhooks to receive real-time events when new transactions hit your account. It’s new, it’s exciting and it’s just the beginning. 
 
 API version: v1
 */
@@ -11,8 +11,8 @@ API version: v1
 package upclient
 
 import (
-	"bytes"
 	"encoding/json"
+	"bytes"
 	"fmt"
 )
 
@@ -21,12 +21,12 @@ var _ MappedNullable = &TransactionResourceRelationships{}
 
 // TransactionResourceRelationships struct for TransactionResourceRelationships
 type TransactionResourceRelationships struct {
-	Account         TransactionResourceRelationshipsAccount         `json:"account"`
+	Account TransactionResourceRelationshipsAccount `json:"account"`
 	TransferAccount TransactionResourceRelationshipsTransferAccount `json:"transferAccount"`
-	Category        TransactionResourceRelationshipsCategory        `json:"category"`
-	ParentCategory  CategoryResourceRelationshipsParent             `json:"parentCategory"`
-	Tags            TransactionResourceRelationshipsTags            `json:"tags"`
-	Attachment      TransactionResourceRelationshipsAttachment      `json:"attachment"`
+	Category TransactionResourceRelationshipsCategory `json:"category"`
+	ParentCategory CategoryResourceRelationshipsParent `json:"parentCategory"`
+	Tags TransactionResourceRelationshipsTags `json:"tags"`
+	Attachment TransactionResourceRelationshipsAttachment `json:"attachment"`
 }
 
 type _TransactionResourceRelationships TransactionResourceRelationships
@@ -199,7 +199,7 @@ func (o *TransactionResourceRelationships) SetAttachment(v TransactionResourceRe
 }
 
 func (o TransactionResourceRelationships) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -235,10 +235,10 @@ func (o *TransactionResourceRelationships) UnmarshalJSON(data []byte) (err error
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err
+		return err;
 	}
 
-	for _, requiredProperty := range requiredProperties {
+	for _, requiredProperty := range(requiredProperties) {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -294,3 +294,5 @@ func (v *NullableTransactionResourceRelationships) UnmarshalJSON(src []byte) err
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+
