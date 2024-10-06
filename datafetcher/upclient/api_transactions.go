@@ -13,6 +13,7 @@ package upclient
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -35,6 +36,50 @@ type ApiAccountsAccountIdTransactionsGetRequest struct {
 	filterUntil    *time.Time
 	filterCategory *string
 	filterTag      *string
+}
+
+func (r ApiAccountsAccountIdTransactionsGetRequest) String() string {
+	var (
+		pageSize       = "<nil>"
+		pageBefore     = "<nil>"
+		pageAfter      = "<nil>"
+		filterStatus   = "<nil>"
+		filterSince    = "<nil>"
+		filterUntil    = "<nil>"
+		filterCategory = "<nil>"
+		filterTag      = "<nil>"
+	)
+
+	// Dereference pointers if they are not nil
+	if r.pageSize != nil {
+		pageSize = fmt.Sprintf("%d", *r.pageSize)
+	}
+	if r.pageBefore != nil {
+		pageBefore = *r.pageBefore
+	}
+	if r.pageAfter != nil {
+		pageAfter = *r.pageAfter
+	}
+	if r.filterStatus != nil {
+		filterStatus = string(*r.filterStatus)
+	}
+	if r.filterSince != nil {
+		filterSince = r.filterSince.Format(time.RFC3339)
+	}
+	if r.filterUntil != nil {
+		filterUntil = r.filterUntil.Format(time.RFC3339)
+	}
+	if r.filterCategory != nil {
+		filterCategory = *r.filterCategory
+	}
+	if r.filterTag != nil {
+		filterTag = *r.filterTag
+	}
+
+	return fmt.Sprintf(
+		"ApiAccountsAccountIdTransactionsGetRequest{ accountId: %s, pageSize: %s, pageBefore: %s, pageAfter: %s, filterStatus: %s, filterSince: %s, filterUntil: %s, filterCategory: %s, filterTag: %s}",
+		r.accountId, pageSize, pageBefore, pageAfter, filterStatus, filterSince, filterUntil, filterCategory, filterTag,
+	)
 }
 
 // The number of records to return in each page.

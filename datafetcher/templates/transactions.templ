@@ -1,6 +1,11 @@
 package templates
 
-import "github.com/esteanes/expense-manager/datafetcher/upclient"
+import (
+	"github.com/esteanes/expense-manager/datafetcher/functions"
+	"github.com/esteanes/expense-manager/datafetcher/upclient"
+	"strconv"
+	"time"
+)
 
 func getMessage(transaction upclient.TransactionResource) string {
 	maybeString := transaction.Attributes.Message.Get()
@@ -39,9 +44,23 @@ func getCategory(transaction upclient.TransactionResource) string {
 
 }
 
+func getDateOrDefault(dateTime *time.Time, defaultTime time.Time) string {
+	if dateTime == nil {
+		return defaultTime.Format("2006-01-02")
+	}
+	return dateTime.Format("2006-01-02")
+}
+
 templ TransactionsTable(transactions chan upclient.TransactionResource) {
 	<div class="container mx-auto p-8">
 		<h1 class="text-4xl font-bold mb-6">Transactions</h1>
+		<button id="downloadButton" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center">
+			<span id="buttonText">Download Content</span>
+			<svg id="loadingSpinner" class="hidden animate-spin h-5 w-5 ml-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+				<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+			</svg>
+		</button>
 		<div class="overflow-y-auto max-h-96 border border-gray-200 rounded-lg">
 			<table class="min-w-full table-auto bg-gray-50 border border-gray-200 p-10">
 				<thead class="bg-gray-200">
@@ -75,6 +94,53 @@ templ TransactionsTable(transactions chan upclient.TransactionResource) {
 			</table>
 		</div>
 	</div>
+	<script>
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
+            const startDate = new Date(startDateInput.value).toISOString();
+            const endDate = new Date(endDateInput.value).toISOString();
+            const numTransactions = document.getElementById('slider').value;
+
+            // Build the URL with query parameters
+            const url = new URL('/transactions-csv', window.location.origin);
+            if (startDate) {
+                url.searchParams.set('startDate', startDate);
+            }
+            if (endDate) {
+                url.searchParams.set('endDate', endDate);
+            }
+            url.searchParams.set('numTransactions', numTransactions);
+            url.searchParams.set('accountId', new URLSearchParams(window.location.search).get("accountId"))
+
+            // Fetch the file with the generated URL
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    // Add any headers if necessary
+                }
+            })
+            .then(response => response.blob())  // Convert to blob
+            .then(blob => {
+                // Create a URL for the blob object
+                const downloadUrl = window.URL.createObjectURL(blob);
+
+                // Create a temporary <a> element for the download
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = 'upbank-downloads.csv';  // Specify the filename
+                document.body.appendChild(a);
+
+                // Trigger the download
+                a.click();
+
+                // Clean up
+                a.remove();
+                window.URL.revokeObjectURL(downloadUrl);
+            })
+            .catch(error => console.error('Download failed', error));
+        });
+    </script>
 }
 
 templ numTransactionSlider(numTransactions string) {
@@ -119,33 +185,32 @@ templ numTransactionSlider(numTransactions string) {
     </script>
 }
 
-templ dateSelector() {
+templ dateSelector(startDate string, endDate string) {
 	<div class="p-6 bg-white rounded-lg shadow-lg max-w-2xl">
 		<h2 class="text-xl font-bold mb-4 text-gray-700">Select Date Range</h2>
 		<div class="flex space-x-4">
 			<!-- Start Date Input -->
 			<div class="flex flex-col">
 				<label for="start-date" class="mb-2 text-sm font-medium text-gray-600">Start Date</label>
-				<input type="datetime-local" id="start-date" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
+				<input type="date" id="start-date" value={ startDate } class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
 			</div>
 			<!-- End Date Input -->
 			<div class="flex flex-col">
 				<label for="end-date" class="mb-2 text-sm font-medium text-gray-600">End Date</label>
-				<input type="datetime-local" id="end-date" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
+				<input type="date" id="end-date" value={ endDate } class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
 			</div>
 		</div>
 		<button id="dateSubmitButton" class="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 			Submit
 		</button>
 		<script>
-        const startDateInput = document.getElementById('start-date');
-        const endDateInput = document.getElementById('end-date');
-        const dateSubmitButton = document.getElementById('dateSubmitButton');
-
         // On button click, update URL with the query parameters for startDate and endDate and refresh the page
         dateSubmitButton.addEventListener('click', function() {
-            const startDate = startDateInput.value;
-            const endDate = endDateInput.value;
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
+            const dateSubmitButton = document.getElementById('dateSubmitButton');
+            const startDate = new Date(startDateInput.value).toISOString();
+            const endDate = new Date(endDateInput.value).toISOString();
 
             // Create a new URL object
             const url = new URL(window.location.href);
@@ -168,12 +233,12 @@ templ dateSelector() {
 	</div>
 }
 
-templ Transactions(title string, transactions chan upclient.TransactionResource, accounts chan upclient.AccountResource, numTransactions string) {
+templ Transactions(title string, transactions chan upclient.TransactionResource, accounts chan upclient.AccountResource, queryParams *functions.QueryParams) {
 	@Base(title) {
 		@GridOrganiser() {
 			@AccountButtons(accounts, false)
-			@numTransactionSlider(numTransactions)
-			@dateSelector()
+			@numTransactionSlider(strconv.Itoa(int(*queryParams.NumTransactions)))
+			@dateSelector(getDateOrDefault(queryParams.StartDate, time.Now().AddDate(0, 0, -1)), getDateOrDefault(queryParams.EndDate, time.Now()))
 		}
 		@TransactionsTable(transactions)
 	}

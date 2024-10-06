@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/a-h/templ"
 	"github.com/esteanes/expense-manager/datafetcher/functions"
@@ -35,30 +34,33 @@ func NewTransactionHandler(log *log.Logger, upclient *upclient.APIClient, auth c
 
 func (h *TransactionsHandler) Post(w http.ResponseWriter, r *http.Request) {}
 func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
-	queryParams := r.URL.Query()
-	numTransactions, err := strconv.ParseInt(queryParams.Get(functions.TransactionNumQueryParam), 10, 32)
-	if err != nil {
-		numTransactions = int64(10)
-	}
-	transactionsChannel := make(chan upclient.TransactionResource, numTransactions)
-	accountId := queryParams.Get(functions.AccountIdQueryParam)
-	if accountId == "" {
-		go h.getTransactionsForAllAccounts(transactionsChannel, int32(numTransactions))
+	queryParams := functions.FetchQueryParams(r.URL.Query())
+	transactionsChannel := make(chan upclient.TransactionResource, *queryParams.NumTransactions)
+	if queryParams.AccountID == nil {
+		go h.getTransactionsForAllAccounts(transactionsChannel, queryParams)
 	} else {
-		go h.getTransactionsForSpecifiedAccount(transactionsChannel, int32(numTransactions), accountId)
+		go h.getTransactionsForSpecifiedAccount(transactionsChannel, queryParams)
 	}
 	accountsChannel := make(chan upclient.AccountResource)
 	go h.AccountHandler.GetAccounts(accountsChannel, upclient.OwnershipTypeEnum("INDIVIDUAL"))
-	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, strconv.Itoa(int(numTransactions))), templ.WithStreaming()).ServeHTTP(w, r)
+	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, queryParams), templ.WithStreaming()).ServeHTTP(w, r)
 
 }
-func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel chan upclient.TransactionResource, numTransactions int32) {
+func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel chan upclient.TransactionResource, queryParams *functions.QueryParams) {
 	defer close(transactionsChannel)
 	getRequest := h.UpClient.TransactionsAPI.TransactionsGet(h.UpAuth).PageSize(h.MaxPageSize)
+
+	if queryParams.StartDate != nil {
+		getRequest = getRequest.FilterSince(*queryParams.StartDate)
+	}
+	if queryParams.EndDate != nil {
+		getRequest = getRequest.FilterUntil(*queryParams.EndDate)
+	}
+
 	var pageAfter *string
 	pageAfter = nil
 	countTransactions := int32(0)
-	for countTransactions < numTransactions {
+	for countTransactions < *queryParams.NumTransactions {
 		if pageAfter != nil {
 			pageKeyParsed, err := ExtractPageAfter(*pageAfter)
 			if err != nil {
@@ -75,29 +77,40 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 			}
 			return
 		}
-		pageAfter = resp.Links.Next.Get()
-		if pageAfter != nil {
-			h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
-		}
 		for _, transaction := range resp.Data {
-			if countTransactions < numTransactions {
+			if countTransactions < *queryParams.NumTransactions {
 				transactionsChannel <- transaction
 				countTransactions++
 			}
 		}
+		pageAfter = resp.Links.Next.Get()
+		if pageAfter == nil {
+			break
+		}
+		h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
 	}
 	if pageAfter == nil {
 		h.Log.Println("You have reached the end of all transactions")
 	}
 }
 
-func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsChannel chan upclient.TransactionResource, numTransactions int32, accountId string) {
+func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsChannel chan upclient.TransactionResource, queryParams *functions.QueryParams) {
 	defer close(transactionsChannel)
-	getRequest := h.UpClient.TransactionsAPI.AccountsAccountIdTransactionsGet(h.UpAuth, accountId).PageSize(h.MaxPageSize)
+	getRequest := h.UpClient.TransactionsAPI.AccountsAccountIdTransactionsGet(h.UpAuth, *queryParams.AccountID).PageSize(h.MaxPageSize)
+
+	if queryParams.StartDate != nil {
+		h.Log.Println(fmt.Sprintf("Setting Filter Since to: %s", *queryParams.StartDate))
+		getRequest = getRequest.FilterSince(*queryParams.StartDate)
+	}
+	if queryParams.EndDate != nil {
+		h.Log.Println(fmt.Sprintf("Setting Filter Until to: %s", *queryParams.EndDate))
+		getRequest = getRequest.FilterUntil(*queryParams.EndDate)
+	}
+
 	var pageAfter *string
 	pageAfter = nil
 	countTransactions := int32(0)
-	for countTransactions < numTransactions {
+	for countTransactions < *queryParams.NumTransactions {
 		if pageAfter != nil {
 			pageKeyParsed, err := ExtractPageAfter(*pageAfter)
 			if err != nil {
@@ -114,16 +127,17 @@ func (h *TransactionsHandler) getTransactionsForSpecifiedAccount(transactionsCha
 			}
 			return
 		}
-		pageAfter = resp.Links.Next.Get()
-		if pageAfter != nil {
-			h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
-		}
 		for _, transaction := range resp.Data {
-			if countTransactions < numTransactions {
+			if countTransactions < *queryParams.NumTransactions {
 				transactionsChannel <- transaction
 				countTransactions++
 			}
 		}
+		pageAfter = resp.Links.Next.Get()
+		if pageAfter == nil {
+			break
+		}
+		h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
 	}
 	if pageAfter == nil {
 		h.Log.Println("You have reached the end of all transactions")
