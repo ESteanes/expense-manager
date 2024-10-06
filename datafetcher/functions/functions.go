@@ -55,8 +55,6 @@ func FetchQueryParams(queryParams url.Values) *QueryParams {
 		if err == nil {
 			params.StartDate = &timeStartDate
 		}
-		log.Println(fmt.Sprintf("Parsed date is %s", timeStartDate))
-		log.Println(fmt.Sprintf("Error in parsing date is %s", err))
 	}
 
 	// Fetch "endDate"

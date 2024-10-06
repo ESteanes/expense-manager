@@ -51,10 +51,10 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 	getRequest := h.UpClient.TransactionsAPI.TransactionsGet(h.UpAuth).PageSize(h.MaxPageSize)
 
 	if queryParams.StartDate != nil {
-		getRequest.FilterSince(*queryParams.StartDate)
+		getRequest = getRequest.FilterSince(*queryParams.StartDate)
 	}
 	if queryParams.EndDate != nil {
-		getRequest.FilterUntil(*queryParams.EndDate)
+		getRequest = getRequest.FilterUntil(*queryParams.EndDate)
 	}
 
 	var pageAfter *string
@@ -77,16 +77,17 @@ func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel 
 			}
 			return
 		}
-		pageAfter = resp.Links.Next.Get()
-		if pageAfter != nil {
-			h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
-		}
 		for _, transaction := range resp.Data {
 			if countTransactions < *queryParams.NumTransactions {
 				transactionsChannel <- transaction
 				countTransactions++
 			}
 		}
+		pageAfter = resp.Links.Next.Get()
+		if pageAfter == nil {
+			break
+		}
+		h.Log.Println(fmt.Sprintf("page after link is: %s", *pageAfter))
 	}
 	if pageAfter == nil {
 		h.Log.Println("You have reached the end of all transactions")
