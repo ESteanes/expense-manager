@@ -1,6 +1,7 @@
 services:
   app:
     image: expense-manager:latest
+    container_name: expense-manager
     ports:
       - "8080:8080"
     environment:

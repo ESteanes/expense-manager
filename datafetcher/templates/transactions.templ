@@ -103,7 +103,7 @@ templ TransactionsTable(transactions chan upclient.TransactionResource) {
             const numTransactions = document.getElementById('slider').value;
 
             // Build the URL with query parameters
-            const url = new URL('/transactions-csv', window.location.origin);
+            const url = new URL('/api/v1/transactions/csv', window.location.origin);
             if (startDate) {
                 url.searchParams.set('startDate', startDate);
             }
