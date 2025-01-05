@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slices"
+	"strings"
 
 	"github.com/esteanes/expense-manager/datafetcher/functions"
 	"github.com/esteanes/expense-manager/datafetcher/upclient"
@@ -34,14 +36,7 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/csv")
 	w.Header().Set("Content-Disposition", "attachment;filename=transactions.csv")
 	csvWriter := csv.NewWriter(w)
-	transactionsChannel := make(chan upclient.TransactionResource, *queryParams.NumTransactions)
-
-	h.Log.Printf(fmt.Sprintf("Fetching data with params: %v", queryParams))
-	if queryParams.AccountID == nil {
-		go h.getTransactionsForAllAccounts(transactionsChannel, queryParams)
-	} else {
-		go h.getTransactionsForSpecifiedAccount(transactionsChannel, queryParams)
-	}
+	transactionsChannel := h.fetchAppropriateTransactions(queryParams)
 
 	header := []string{"Category", "Cost", "empty", "Empty", "rawText", "description", "empty_1", "empty_2", "createdAt", "transactionId"}
 
@@ -54,6 +49,12 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 	for transaction := range transactionsChannel {
 		h.Log.Printf(fmt.Sprintf("transaction is: %v", transaction))
+		if queryParams.TransactionTypes != nil {
+			if !slices.Contains(queryParams.TransactionTypes, *transaction.Attributes.TransactionType.Get()) {
+				h.Log.Println("Skipping transaction as it is not part of requested transactionTypes: " + strings.Join(queryParams.TransactionTypes, ", "))
+				continue
+			}
+		}
 		rawText := ""
 		if transaction.Attributes.RawText.Get() != nil {
 			rawText = *transaction.Attributes.RawText.Get()
