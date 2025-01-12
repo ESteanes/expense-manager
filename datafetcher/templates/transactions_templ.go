@@ -77,7 +77,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto p-8\"><h1 class=\"text-4xl font-bold mb-6\">Transactions</h1><button id=\"downloadButton\" class=\"px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center\"><span id=\"buttonText\">Download Content</span> <svg id=\"loadingSpinner\" class=\"hidden animate-spin h-5 w-5 ml-2 text-white\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle> <path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z\"></path></svg></button><div class=\"overflow-y-auto max-h-96 border border-gray-200 rounded-lg\"><table class=\"min-w-full table-auto bg-gray-50 border border-gray-200 p-10\"><thead class=\"bg-gray-200\"><tr><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Transaction Amount</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Description</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Status</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Time</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Message</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Category</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Purchase Method</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Card Number</th></tr></thead> <tbody class=\"bg-grey-light\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -94,7 +94,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr class=\"hover:bg-yellow-400\"><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -107,7 +107,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -120,7 +120,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -133,7 +133,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 5)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -146,7 +146,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 6)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -159,7 +159,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 7)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -172,7 +172,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 8)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -185,7 +185,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 9)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -198,7 +198,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 10)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td></tr>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -209,7 +209,7 @@ func TransactionsTable(transactions chan upclient.TransactionResource) templ.Com
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 11)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table></div></div><script>\n        document.getElementById('downloadButton').addEventListener('click', function() {\n            const startDateInput = document.getElementById('start-date');\n            const endDateInput = document.getElementById('end-date');\n            const startDate = new Date(startDateInput.value).toISOString();\n            const endDate = new Date(endDateInput.value).toISOString();\n            const numTransactions = document.getElementById('slider').value;\n\n            // Build the URL with query parameters\n            const url = new URL('/api/v1/transactions/csv', window.location.origin);\n            if (startDate) {\n                url.searchParams.set('startDate', startDate);\n            }\n            if (endDate) {\n                url.searchParams.set('endDate', endDate);\n            }\n            url.searchParams.set('numTransactions', numTransactions);\n            url.searchParams.set('accountId', new URLSearchParams(window.location.search).get(\"accountId\"))\n\n            // Fetch the file with the generated URL\n            fetch(url, {\n                method: 'GET',\n                headers: {\n                    // Add any headers if necessary\n                }\n            })\n            .then(response => response.blob())  // Convert to blob\n            .then(blob => {\n                // Create a URL for the blob object\n                const downloadUrl = window.URL.createObjectURL(blob);\n\n                // Create a temporary <a> element for the download\n                const a = document.createElement('a');\n                a.href = downloadUrl;\n                a.download = 'upbank-downloads.csv';  // Specify the filename\n                document.body.appendChild(a);\n\n                // Trigger the download\n                a.click();\n\n                // Clean up\n                a.remove();\n                window.URL.revokeObjectURL(downloadUrl);\n            })\n            .catch(error => console.error('Download failed', error));\n        });\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -235,7 +235,7 @@ func numTransactionSlider(numTransactions string) templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 12)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-6 bg-white rounded-lg shadow-lg\"><label for=\"slider\" class=\"block text-lg font-semibold mb-4\">Number of Transactions</label><!-- Slider --><input type=\"range\" id=\"slider\" min=\"1\" max=\"10000\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -248,7 +248,7 @@ func numTransactionSlider(numTransactions string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 13)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer\"><!-- Displayed value as an input field --><div class=\"mt-4 flex items-center space-x-2\"><label for=\"sliderValue\" class=\"text-sm font-medium text-gray-700\">Value:</label> <input type=\"number\" id=\"sliderValue\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -261,7 +261,7 @@ func numTransactionSlider(numTransactions string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 14)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"1\" max=\"100\" class=\"w-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div><!-- Button to grab the slider value and refresh the page --><button id=\"submitButton\" class=\"mt-6 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400\">Set Transactions</button></div><script>\n        const slider = document.getElementById('slider');\n        const sliderValueInput = document.getElementById('sliderValue');\n        const submitButton = document.getElementById('submitButton');\n\n        // Sync input field when slider changes\n        slider.addEventListener('input', function() {\n            sliderValueInput.value = slider.value;\n        });\n\n        // Sync slider when input field changes\n        sliderValueInput.addEventListener('input', function() {\n            if (sliderValueInput.value >= slider.min && sliderValueInput.value <= slider.max) {\n                slider.value = sliderValueInput.value;\n            }\n        });\n\n        // On button click, update URL with the query parameter and refresh the page\n        submitButton.addEventListener('click', function() {\n            const sliderValue = slider.value;\n            const url = new URL(window.location.href);\n            url.searchParams.set('numTransactions', sliderValue);\n            window.location.href = url.toString(); // Refresh the page with the updated query parameter\n        });\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -287,7 +287,7 @@ func dateSelector(startDate string, endDate string) templ.Component {
 			templ_7745c5c3_Var14 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 15)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-6 bg-white rounded-lg shadow-lg max-w-2xl\"><h2 class=\"text-xl font-bold mb-4 text-gray-700\">Select Date Range</h2><div class=\"flex space-x-4\"><!-- Start Date Input --><div class=\"flex flex-col\"><label for=\"start-date\" class=\"mb-2 text-sm font-medium text-gray-600\">Start Date</label> <input type=\"date\" id=\"start-date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -300,7 +300,7 @@ func dateSelector(startDate string, endDate string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 16)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div><!-- End Date Input --><div class=\"flex flex-col\"><label for=\"end-date\" class=\"mb-2 text-sm font-medium text-gray-600\">End Date</label> <input type=\"date\" id=\"end-date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -313,7 +313,7 @@ func dateSelector(startDate string, endDate string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 17)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div></div><button id=\"dateSubmitButton\" class=\"mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400\">Submit</button><script>\n        // On button click, update URL with the query parameters for startDate and endDate and refresh the page\n        dateSubmitButton.addEventListener('click', function() {\n            const startDateInput = document.getElementById('start-date');\n            const endDateInput = document.getElementById('end-date');\n            const dateSubmitButton = document.getElementById('dateSubmitButton');\n            const startDate = new Date(startDateInput.value).toISOString();\n            const endDate = new Date(endDateInput.value).toISOString();\n\n            // Create a new URL object\n            const url = new URL(window.location.href);\n\n            // Add or update the query parameters for startDate and endDate\n            if (startDate) {\n                url.searchParams.set('startDate', startDate);\n            }\n            if (endDate) {\n                url.searchParams.set('endDate', endDate);\n            }\n            if (startDate == null && endDate == null) {\n                return;\n            }\n\n            // Refresh the page with the updated URL\n            window.location.href = url.toString();\n        });\n    </script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -367,7 +367,7 @@ func Transactions(title string, transactions chan upclient.TransactionResource, 
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 18)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -375,7 +375,7 @@ func Transactions(title string, transactions chan upclient.TransactionResource, 
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 19)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -389,7 +389,7 @@ func Transactions(title string, transactions chan upclient.TransactionResource, 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 20)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
