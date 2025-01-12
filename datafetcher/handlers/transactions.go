@@ -33,19 +33,26 @@ func NewTransactionHandler(log *log.Logger, upclient *upclient.APIClient, auth c
 }
 
 func (h *TransactionsHandler) Post(w http.ResponseWriter, r *http.Request) {}
-func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
-	queryParams := functions.FetchQueryParams(r.URL.Query())
+
+func (h *TransactionsHandler) fetchAppropriateTransactions(queryParams *functions.QueryParams) chan upclient.TransactionResource {
 	transactionsChannel := make(chan upclient.TransactionResource, *queryParams.NumTransactions)
 	if queryParams.AccountID == nil {
 		go h.getTransactionsForAllAccounts(transactionsChannel, queryParams)
 	} else {
 		go h.getTransactionsForSpecifiedAccount(transactionsChannel, queryParams)
 	}
+	return transactionsChannel
+}
+
+func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
+	queryParams := functions.FetchQueryParams(r.URL.Query())
+	transactionsChannel := h.fetchAppropriateTransactions(queryParams)
 	accountsChannel := make(chan upclient.AccountResource)
 	go h.AccountHandler.GetAccounts(accountsChannel, upclient.OwnershipTypeEnum("INDIVIDUAL"))
 	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, queryParams), templ.WithStreaming()).ServeHTTP(w, r)
 
 }
+
 func (h *TransactionsHandler) getTransactionsForAllAccounts(transactionsChannel chan upclient.TransactionResource, queryParams *functions.QueryParams) {
 	defer close(transactionsChannel)
 	getRequest := h.UpClient.TransactionsAPI.TransactionsGet(h.UpAuth).PageSize(h.MaxPageSize)

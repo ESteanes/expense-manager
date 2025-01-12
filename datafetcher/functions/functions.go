@@ -14,14 +14,16 @@ const (
 	TransactionNumQueryParam = "numTransactions"
 	StartDateParam           = "startDate"
 	EndDateParam             = "endDate"
+	TransactionTypeParam     = "transactionTypes"
 )
 
 // QueryParams struct to hold the query parameters
 type QueryParams struct {
-	AccountID       *string
-	NumTransactions *int32
-	StartDate       *time.Time
-	EndDate         *time.Time
+	AccountID        *string
+	TransactionTypes []string
+	NumTransactions  *int32
+	StartDate        *time.Time
+	EndDate          *time.Time
 }
 
 func (q *QueryParams) String() string {
@@ -39,6 +41,9 @@ func FetchQueryParams(queryParams url.Values) *QueryParams {
 	if accountID := queryParams.Get(AccountIdQueryParam); accountID != "" {
 		params.AccountID = &accountID
 	}
+
+	// Fetch "transactionTypes"
+	params.TransactionTypes = queryParams["transactionTypes"]
 
 	// Fetch "numTransactions"
 	if numTransactions := queryParams.Get(TransactionNumQueryParam); numTransactions != "" {
