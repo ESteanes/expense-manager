@@ -1,9 +1,11 @@
 module github.com/esteanes/expense-manager
 
-go 1.21.5
+go 1.23
+
+toolchain go1.24.1
 
 require (
-	github.com/a-h/templ v0.2.771
+	github.com/a-h/templ v0.3.833
 	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/stretchr/testify v1.9.0
 )
