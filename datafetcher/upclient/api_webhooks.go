@@ -79,7 +79,7 @@ func (a *WebhooksAPIService) WebhooksGetExecute(r ApiWebhooksGetRequest) (*ListW
 	localVarFormParams := url.Values{}
 
 	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -522,7 +522,7 @@ func (a *WebhooksAPIService) WebhooksWebhookIdLogsGetExecute(r ApiWebhooksWebhoo
 	localVarFormParams := url.Values{}
 
 	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

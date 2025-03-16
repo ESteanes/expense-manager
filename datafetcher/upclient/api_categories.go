@@ -77,7 +77,7 @@ func (a *CategoriesAPIService) CategoriesGetExecute(r ApiCategoriesGetRequest) (
 	localVarFormParams := url.Values{}
 
 	if r.filterParent != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[parent]", r.filterParent, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[parent]", r.filterParent, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

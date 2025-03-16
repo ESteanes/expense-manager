@@ -1299,7 +1299,7 @@ paths:
                 If the `secretKey` for a webhook is lost, simply create a new webhook
                 with the same URL, capture the returned `secretKey` and delete the
                 original webhook.
-              operationId: event_webhookURLPost
+              operationId: EventWebhookURLPost
               parameters:
               - description: |
                   The SHA-256 HMAC signature of the raw request body, signed using

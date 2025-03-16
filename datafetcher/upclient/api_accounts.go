@@ -92,13 +92,13 @@ func (a *AccountsAPIService) AccountsGetExecute(r ApiAccountsGetRequest) (*ListA
 	localVarFormParams := url.Values{}
 
 	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "form", "")
 	}
 	if r.filterAccountType != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[accountType]", r.filterAccountType, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[accountType]", r.filterAccountType, "form", "")
 	}
 	if r.filterOwnershipType != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[ownershipType]", r.filterOwnershipType, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[ownershipType]", r.filterOwnershipType, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
