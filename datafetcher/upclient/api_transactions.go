@@ -13,7 +13,6 @@ package upclient
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -36,50 +35,6 @@ type ApiAccountsAccountIdTransactionsGetRequest struct {
 	filterUntil    *time.Time
 	filterCategory *string
 	filterTag      *string
-}
-
-func (r ApiAccountsAccountIdTransactionsGetRequest) String() string {
-	var (
-		pageSize       = "<nil>"
-		pageBefore     = "<nil>"
-		pageAfter      = "<nil>"
-		filterStatus   = "<nil>"
-		filterSince    = "<nil>"
-		filterUntil    = "<nil>"
-		filterCategory = "<nil>"
-		filterTag      = "<nil>"
-	)
-
-	// Dereference pointers if they are not nil
-	if r.pageSize != nil {
-		pageSize = fmt.Sprintf("%d", *r.pageSize)
-	}
-	if r.pageBefore != nil {
-		pageBefore = *r.pageBefore
-	}
-	if r.pageAfter != nil {
-		pageAfter = *r.pageAfter
-	}
-	if r.filterStatus != nil {
-		filterStatus = string(*r.filterStatus)
-	}
-	if r.filterSince != nil {
-		filterSince = r.filterSince.Format(time.RFC3339)
-	}
-	if r.filterUntil != nil {
-		filterUntil = r.filterUntil.Format(time.RFC3339)
-	}
-	if r.filterCategory != nil {
-		filterCategory = *r.filterCategory
-	}
-	if r.filterTag != nil {
-		filterTag = *r.filterTag
-	}
-
-	return fmt.Sprintf(
-		"ApiAccountsAccountIdTransactionsGetRequest{ accountId: %s, pageSize: %s, pageBefore: %s, pageAfter: %s, filterStatus: %s, filterSince: %s, filterUntil: %s, filterCategory: %s, filterTag: %s}",
-		r.accountId, pageSize, pageBefore, pageAfter, filterStatus, filterSince, filterUntil, filterCategory, filterTag,
-	)
 }
 
 // The number of records to return in each page.
@@ -181,28 +136,28 @@ func (a *TransactionsAPIService) AccountsAccountIdTransactionsGetExecute(r ApiAc
 	localVarFormParams := url.Values{}
 
 	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "form", "")
 	}
 	if r.pageBefore != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[before]", r.pageBefore, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[before]", r.pageBefore, "form", "")
 	}
 	if r.pageAfter != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[after]", r.pageAfter, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[after]", r.pageAfter, "form", "")
 	}
 	if r.filterStatus != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[status]", r.filterStatus, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[status]", r.filterStatus, "form", "")
 	}
 	if r.filterSince != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[since]", r.filterSince, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[since]", r.filterSince, "form", "")
 	}
 	if r.filterUntil != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[until]", r.filterUntil, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[until]", r.filterUntil, "form", "")
 	}
 	if r.filterCategory != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[category]", r.filterCategory, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[category]", r.filterCategory, "form", "")
 	}
 	if r.filterTag != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[tag]", r.filterTag, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[tag]", r.filterTag, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -367,28 +322,28 @@ func (a *TransactionsAPIService) TransactionsGetExecute(r ApiTransactionsGetRequ
 	localVarFormParams := url.Values{}
 
 	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[size]", r.pageSize, "form", "")
 	}
 	if r.pageBefore != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[before]", r.pageBefore, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[before]", r.pageBefore, "form", "")
 	}
 	if r.pageAfter != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page[after]", r.pageAfter, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "page[after]", r.pageAfter, "form", "")
 	}
 	if r.filterStatus != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[status]", r.filterStatus, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[status]", r.filterStatus, "form", "")
 	}
 	if r.filterSince != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[since]", r.filterSince, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[since]", r.filterSince, "form", "")
 	}
 	if r.filterUntil != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[until]", r.filterUntil, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[until]", r.filterUntil, "form", "")
 	}
 	if r.filterCategory != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[category]", r.filterCategory, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[category]", r.filterCategory, "form", "")
 	}
 	if r.filterTag != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[tag]", r.filterTag, "")
+		parameterAddToHeaderOrQuery(localVarQueryParams, "filter[tag]", r.filterTag, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
