@@ -50,7 +50,11 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 	for transaction := range transactionsChannel {
 		h.Log.Printf(fmt.Sprintf("transaction is: %v", transaction))
 		if queryParams.TransactionTypes != nil {
-			if !slices.Contains(queryParams.TransactionTypes, *transaction.Attributes.TransactionType.Get()) {
+			transactionType := transaction.Attributes.TransactionType.Get()
+			if transactionType == nil {
+				continue
+			}
+			if !slices.Contains(queryParams.TransactionTypes, *transactionType) {
 				h.Log.Println("Skipping transaction as it is not part of requested transactionTypes: " + strings.Join(queryParams.TransactionTypes, ", "))
 				continue
 			}
