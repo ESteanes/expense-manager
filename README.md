@@ -1,15 +1,16 @@
-# expense-manager
+# up-bank-go
 A Go based expense manager and visulisation with a variety of input sources
 
+
 Phase 1:
-* Use the [Up Bank API](https://github.com/up-banking/api) to fetch existing transactions and store them in a SQLite database
-* Create webhooks so that it also fetches real-time transactions
+* Use the [Up Bank API](https://github.com/up-banking/api) to fetch existing transactions and ~~store them in a SQLite database~~
+* ~~Create webhooks so that it also fetches real-time transactions~~
 * Create a simple web UI to manually interact with the system using [templ](https://github.com/a-h/templ)
-    * Have some basic static charts using [go-echarts](https://github.com/go-echarts/go-echarts) to summarise spending
+    * ~~Have some basic static charts using [go-echarts](https://github.com/go-echarts/go-echarts) to summarise spending~~
 
 Phase 2:
 * Implement some level of authentication
-* Implement this in a runnable docker container
+* Implement this in a runnable docker container :white_tick_check:
 
 Phase 3:
 * Interactable UI
@@ -18,7 +19,7 @@ Phase 3:
 
 ## Modules
 
-* expense-manager
+* up-bank-go
     * data-fetcher
     * data-storer
     * data-manager
@@ -77,7 +78,7 @@ make build
 ### Manually
 1. Generate the REST client code
 ```
-openapi-generator-cli generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/upclient
+openapi-generator-cli generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id up-bank-go/datafetcher/upclient
 ```
 Its recommended to have a file called `.openapi-generator-ignore` inside the /upclient with the following contents:
 ```
@@ -103,17 +104,17 @@ This will stop the generator from generating those files (which will mess up the
 
 5. Build an executable
 ```
-go build -o expense-manager
+go build -o up-bank-go
 ```
 
 6. Run the executable
 ```
-./expense-manager
+./up-bank-go
 ```
 
 ## Helpful Commands
 Add to your `.bashrc` file.
 ```
-alias expenseManagerBuild="templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager"
-alias expenseManagerBuildRun="templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager && ./expense-manager"
+alias expenseManagerBuild="templ generate && gofmt -s -w . && go mod tidy && go build -o up-bank-go"
+alias expenseManagerBuildRun="templ generate && gofmt -s -w . && go mod tidy && go build -o up-bank-go && ./up-bank-go"
 ```

@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/esteanes/expense-manager/datafetcher/upclient"
+	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 type Handler interface {

@@ -10,7 +10,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /expense-manager
+RUN CGO_ENABLED=0 GOOS=linux go build -o /up-bank-go
 
 
 # Run the tests in the container
@@ -22,11 +22,11 @@ FROM gcr.io/distroless/base-debian11 AS build-release-stage
 
 WORKDIR /
 
-COPY --from=build-stage /expense-manager /expense-manager
+COPY --from=build-stage /up-bank-go /up-bank-go
 COPY ./static ./static/
 
-EXPOSE 8080
+EXPOSE 63312
 
 USER nonroot:nonroot
 
-ENTRYPOINT ["/expense-manager"]
+ENTRYPOINT ["/up-bank-go"]

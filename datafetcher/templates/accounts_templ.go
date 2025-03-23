@@ -9,8 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/esteanes/expense-manager/datafetcher/functions"
-	"github.com/esteanes/expense-manager/datafetcher/upclient"
+	"github.com/esteanes/up-bank-go/datafetcher/functions"
+	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 	"strings"
 )
 

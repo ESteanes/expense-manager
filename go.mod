@@ -1,4 +1,4 @@
-module github.com/esteanes/expense-manager
+module github.com/esteanes/up-bank-go
 
 go 1.23.0
 

@@ -9,8 +9,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/esteanes/expense-manager/datafetcher/functions"
-	"github.com/esteanes/expense-manager/datafetcher/upclient"
+	"github.com/esteanes/up-bank-go/datafetcher/functions"
+	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 type TransactionsCsvHandler struct {

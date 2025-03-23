@@ -1,7 +1,7 @@
 services:
   app:
-    image: expense-manager:latest
-    container_name: expense-manager
+    image: up-bank-go:latest
+    container_name: up-bank-go
     ports:
       - "8080:8080"
     environment:
