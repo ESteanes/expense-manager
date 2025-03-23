@@ -12,10 +12,10 @@ watch:
 
 # You might need to call `openapi-generator-cli` for other platforms - `openapi-generator` is the command when installed with brew
 upclient-generate:
-	openapi-generator generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id expense-manager/datafetcher/upclient
+	openapi-generator generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id up-bank-go/datafetcher/upclient
 
 build:
-	templ generate && gofmt -s -w . && go mod tidy && go build -o expense-manager
+	templ generate && gofmt -s -w . && go mod tidy && go build -o up-bank-go
 
 docker:
-	docker build -t expense-manager:latest -f Dockerfile .
+	docker build -t up-bank-go:latest -f Dockerfile .

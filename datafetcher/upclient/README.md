@@ -27,7 +27,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import upclient "github.com/esteanes/expense-manager/datafetcher/upclient"
+import upclient "github.com/esteanes/up-bank-go/datafetcher/upclient"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:

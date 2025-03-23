@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/esteanes/expense-manager/datafetcher"
+	"github.com/esteanes/up-bank-go/datafetcher"
 )
 
 func main() {

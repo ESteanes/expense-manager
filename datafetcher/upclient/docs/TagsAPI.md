@@ -27,7 +27,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/esteanes/expense-manager/datafetcher/upclient"
+	openapiclient "github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 func main() {
@@ -93,7 +93,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/esteanes/expense-manager/datafetcher/upclient"
+	openapiclient "github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 func main() {
@@ -163,7 +163,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/esteanes/expense-manager/datafetcher/upclient"
+	openapiclient "github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 func main() {

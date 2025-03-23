@@ -11,10 +11,11 @@ package upclient
 
 import (
 	"context"
-	openapiclient "github.com/esteanes/expense-manager/datafetcher/upclient"
+	"testing"
+
+	openapiclient "github.com/esteanes/up-bank-go/datafetcher/upclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func Test_upclient_CategoriesAPIService(t *testing.T) {

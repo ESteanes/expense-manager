@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/esteanes/expense-manager/datafetcher/handlers"
-	"github.com/esteanes/expense-manager/datafetcher/templates"
-	"github.com/esteanes/expense-manager/datafetcher/upclient"
+	"github.com/esteanes/up-bank-go/datafetcher/handlers"
+	"github.com/esteanes/up-bank-go/datafetcher/templates"
+	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 
 	"github.com/alexedwards/scs/v2"
 )

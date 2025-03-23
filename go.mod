@@ -1,11 +1,11 @@
-module github.com/esteanes/expense-manager
+module github.com/esteanes/up-bank-go
 
-go 1.23
+go 1.23.0
 
 toolchain go1.24.1
 
 require (
-	github.com/a-h/templ v0.3.833
+	github.com/a-h/templ v0.3.856
 	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/stretchr/testify v1.9.0
 )

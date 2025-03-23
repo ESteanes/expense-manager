@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	"github.com/esteanes/expense-manager/datafetcher/templates"
-	"github.com/esteanes/expense-manager/datafetcher/upclient"
+	"github.com/esteanes/up-bank-go/datafetcher/templates"
+	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 type AccountHandler struct {
