@@ -18,4 +18,8 @@ build:
 	templ generate && gofmt -s -w . && go mod tidy && go build -o up-bank-go
 
 docker:
-	docker build -t up-bank-go:latest -f Dockerfile .
+	docker build --platform linux/arm64 -t esteanes/up-bank-go:latest -f Dockerfile .
+
+docker-publish:
+	docker buildx build --platform linux/amd64,linux/arm64,linux/armhf -t esteanes/up-bank-go:latest --push -f Dockerfile .
+	
