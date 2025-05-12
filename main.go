@@ -14,6 +14,7 @@ func main() {
 	bearerToken := os.Getenv("UP_BANK_TOKEN")
 	if bearerToken == "" {
 		logger.Fatalln("No bearer token was detected with the key UP_BANK_TOKEN")
+		os.Exit(1)
 	}
 	datafetcher.HandleRequests(bearerToken, logger)
 }

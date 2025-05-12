@@ -14,19 +14,22 @@ import (
 )
 
 type TransactionsCsvHandler struct {
-	*BaseHandler
+	*functions.BaseHandler
 	*TransactionsHandler
+	*functions.TransactionsLogic
 }
 
 func NewTransactionCsvHandler(log *log.Logger, upclient *upclient.APIClient, auth context.Context, transactionsHandler *TransactionsHandler) *TransactionsCsvHandler {
 	handler := &TransactionsCsvHandler{}
-	handler.BaseHandler = &BaseHandler{
-		Uri:      "/api/v1/transactions/csv",
-		Log:      log,
-		UpClient: upclient,
-		UpAuth:   auth,
-		Handler:  handler}
+	handler.BaseHandler = &functions.BaseHandler{
+		Uri:         "/api/v1/transactions/csv",
+		Log:         log,
+		UpClient:    upclient,
+		UpAuth:      auth,
+		Handler:     handler,
+		MaxPageSize: 100}
 	handler.TransactionsHandler = transactionsHandler
+	handler.TransactionsLogic = &functions.TransactionsLogic{BaseHandler: handler.BaseHandler}
 	return handler
 }
 
@@ -36,9 +39,9 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/csv")
 	w.Header().Set("Content-Disposition", "attachment;filename=transactions.csv")
 	csvWriter := csv.NewWriter(w)
-	transactionsChannel := h.fetchAppropriateTransactions(queryParams)
+	transactionsChannel := h.TransactionsLogic.FetchAppropriateTransactions(queryParams)
 
-	header := []string{"Category", "Cost", "empty", "Empty", "rawText", "description", "empty_1", "empty_2", "createdAt", "transactionId"}
+	header := []string{"Category", "Cost", "empty", "Empty", "rawText", "description", "empty_1", "empty_2", "createdAt", "transactionId", "transactionType"}
 
 	h.Log.Printf("trying to generate a CSV")
 	// Print the JSON-formatted response
@@ -48,7 +51,7 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for transaction := range transactionsChannel {
-		h.Log.Printf(fmt.Sprintf("transaction is: %v", transaction))
+		h.Log.Printf("transaction is: %v", transaction)
 		if queryParams.TransactionTypes != nil {
 			transactionType := transaction.Attributes.TransactionType.Get()
 			if transactionType == nil {
@@ -69,6 +72,10 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 				relationshipCat = relationship.Data.Get().Id
 			}
 		}
+		transactionType := ""
+		if transaction.Attributes.TransactionType.Get() != nil {
+			transactionType = *transaction.Attributes.TransactionType.Get()
+		}
 		record := []string{
 			relationshipCat,
 			transaction.Attributes.Amount.Value,
@@ -78,6 +85,7 @@ func (h *TransactionsCsvHandler) Get(w http.ResponseWriter, r *http.Request) {
 			"", "",
 			transaction.Attributes.CreatedAt.Format("2006-01-02"),
 			transaction.Id,
+			transactionType,
 		}
 		if err := csvWriter.Write(record); err != nil {
 			fmt.Fprintf(w, "Error writing CSV line %v\n", err)

@@ -1,8 +1,7 @@
-package handlers
+package functions
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -24,7 +23,7 @@ type BaseHandler struct {
 }
 
 func (h *BaseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.Log.Println(fmt.Sprintf("%s %s params: %s", r.Method, r.RequestURI, r.URL.Query()))
+	h.Log.Printf("%s %s params: %s", r.Method, r.RequestURI, r.URL.Query())
 	switch r.Method {
 	case http.MethodPost:
 		h.Handler.Post(w, r)

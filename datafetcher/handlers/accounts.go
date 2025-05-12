@@ -2,22 +2,22 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/a-h/templ"
+	"github.com/esteanes/up-bank-go/datafetcher/functions"
 	"github.com/esteanes/up-bank-go/datafetcher/templates"
 	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
 type AccountHandler struct {
-	*BaseHandler
+	*functions.BaseHandler
 }
 
 func NewAccountHandler(log *log.Logger, upclient *upclient.APIClient, auth context.Context) *AccountHandler {
 	handler := &AccountHandler{}
-	handler.BaseHandler = &BaseHandler{
+	handler.BaseHandler = &functions.BaseHandler{
 		Uri:         "/accounts",
 		Log:         log,
 		UpClient:    upclient,
@@ -42,9 +42,9 @@ func (h *AccountHandler) GetAccounts(accountChannel chan upclient.AccountResourc
 	defer close(accountChannel)
 	resp, r2, err := h.UpClient.AccountsAPI.AccountsGet(h.UpAuth).PageSize(h.MaxPageSize).FilterOwnershipType(ownershipType).Execute()
 	if err != nil {
-		h.Log.Println(fmt.Sprintf("Error when calling `AccountsAPI.AccountsGet`: %s\n", err))
+		h.Log.Printf("Error when calling `AccountsAPI.AccountsGet`: %s\n", err)
 		if r2 != nil {
-			h.Log.Println(fmt.Sprintf("Full HTTP response: %v\n", r2))
+			h.Log.Printf("Full HTTP response: %v\n", r2)
 		}
 		h.Log.Println("Unable to get account information")
 	}

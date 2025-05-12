@@ -1,19 +1,20 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/esteanes/up-bank-go/datafetcher/functions"
 )
 
 type StaticFileHandler struct {
-	*BaseHandler
+	*functions.BaseHandler
 }
 
 func NewStaticFileHandler(log *log.Logger) *StaticFileHandler {
 	handler := &StaticFileHandler{}
-	handler.BaseHandler = &BaseHandler{
+	handler.BaseHandler = &functions.BaseHandler{
 		Uri:      "/static/",
 		Log:      log,
 		UpClient: nil,
@@ -28,7 +29,7 @@ func (s *StaticFileHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 	filePath := r.URL.Path[len("/static/"):]
 	fullPath := filepath.Join(".", "static", filePath)
-	s.Log.Println(fmt.Sprintf("Attempting to serve path: %s", fullPath))
+	s.Log.Printf("Attempting to serve path: %s", fullPath)
 	http.ServeFile(w, r, fullPath)
 }
 
