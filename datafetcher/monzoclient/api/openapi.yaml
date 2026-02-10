@@ -1,0 +1,2239 @@
+openapi: 3.0.3
+info:
+  contact:
+    url: https://community.monzo.com/c/developers
+  description: |
+    The Monzo API is designed to be a predictable and intuitive interface for interacting with users' accounts.
+    We offer both a REST API and webhooks.
+
+    The API implements OAuth 2.0 for authentication and provides access to accounts, transactions, pots, and more.
+  termsOfService: https://monzo.com/legal/terms-and-conditions/
+  title: Monzo API
+  version: 1.0.0
+servers:
+- description: Production API server
+  url: https://api.monzo.com
+- description: OAuth authorization server
+  url: https://auth.monzo.com
+security:
+- MonzoOAuth2: []
+tags:
+- description: OAuth 2.0 authentication endpoints
+  name: Authentication
+- description: Account management operations
+  name: Accounts
+- description: Account balance operations
+  name: Balance
+- description: Savings pots management
+  name: Pots
+- description: Transaction operations
+  name: Transactions
+- description: Feed item management
+  name: Feed Items
+- description: Transaction attachment operations
+  name: Attachments
+- description: Transaction receipt operations
+  name: Receipts
+- description: Webhook management
+  name: Webhooks
+paths:
+  /oauth2/token:
+    post:
+      description: |
+        Exchange an authorization code for an access token, or use a refresh token to get a new access token.
+      operationId: exchangeToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/exchangeToken_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+          description: Successfully exchanged token
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      security: []
+      summary: Exchange authorization code or refresh token
+      tags:
+      - Authentication
+  /oauth2/logout:
+    post:
+      description: Invalidates the current access token immediately.
+      operationId: logout
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Successfully logged out
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Log out and invalidate access token
+      tags:
+      - Authentication
+  /ping/whoami:
+    get:
+      description: Returns information about the currently authenticated user and
+        client.
+      operationId: whoami
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WhoamiResponse"
+          description: Token information retrieved successfully
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Get information about access token
+      tags:
+      - Authentication
+  /accounts:
+    get:
+      description: Returns a list of accounts owned by the currently authorised user.
+      operationId: listAccounts
+      parameters:
+      - description: Filter by account type
+        explode: true
+        in: query
+        name: account_type
+        required: false
+        schema:
+          enum:
+          - uk_retail
+          - uk_retail_joint
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountsResponse"
+          description: List of accounts retrieved successfully
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: List accounts
+      tags:
+      - Accounts
+  /balance:
+    get:
+      description: Returns balance information for a specific account.
+      operationId: getBalance
+      parameters:
+      - description: The id of the account
+        explode: true
+        in: query
+        name: account_id
+        required: true
+        schema:
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BalanceResponse"
+          description: Balance retrieved successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Read balance
+      tags:
+      - Balance
+  /pots:
+    get:
+      description: Returns a list of pots owned by the currently authorised user that
+        are associated with the specified account.
+      operationId: listPots
+      parameters:
+      - description: The account id to retrieve pots for
+        explode: true
+        in: query
+        name: current_account_id
+        required: true
+        schema:
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PotsResponse"
+          description: List of pots retrieved successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: List pots
+      tags:
+      - Pots
+  /pots/{pot_id}/deposit:
+    put:
+      description: Move money from an account into a pot.
+      operationId: depositIntoPot
+      parameters:
+      - description: The id of the pot
+        explode: false
+        in: path
+        name: pot_id
+        required: true
+        schema:
+          example: pot_0000778xxfgh4iu8z83nWb
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/depositIntoPot_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pot"
+          description: Deposit successful
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Deposit into a pot
+      tags:
+      - Pots
+  /pots/{pot_id}/withdraw:
+    put:
+      description: Move money from a pot into an account.
+      operationId: withdrawFromPot
+      parameters:
+      - description: The id of the pot
+        explode: false
+        in: path
+        name: pot_id
+        required: true
+        schema:
+          example: pot_0000778xxfgh4iu8z83nWb
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/withdrawFromPot_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pot"
+          description: Withdrawal successful
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Withdraw from a pot
+      tags:
+      - Pots
+  /transactions:
+    get:
+      description: Returns a list of transactions on the user's account.
+      operationId: listTransactions
+      parameters:
+      - description: The account to retrieve transactions from
+        explode: true
+        in: query
+        name: account_id
+        required: true
+        schema:
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        style: form
+      - description: Start time as RFC3339 encoded timestamp or object id
+        explode: true
+        in: query
+        name: since
+        required: false
+        schema:
+          example: 2009-11-10T23:00:00Z
+          type: string
+        style: form
+      - description: End time as RFC3339 encoded timestamp
+        explode: true
+        in: query
+        name: before
+        required: false
+        schema:
+          example: 2009-11-10T23:00:00Z
+          type: string
+        style: form
+      - description: Limits the number of results per-page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 30
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: Expand merchant inline
+        explode: true
+        in: query
+        name: "expand[]"
+        required: false
+        schema:
+          enum:
+          - merchant
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionsResponse"
+          description: List of transactions retrieved successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: List transactions
+      tags:
+      - Transactions
+  /transactions/{transaction_id}:
+    get:
+      description: "Returns an individual transaction, fetched by its id."
+      operationId: getTransaction
+      parameters:
+      - description: The id of the transaction
+        explode: false
+        in: path
+        name: transaction_id
+        required: true
+        schema:
+          example: tx_00008zIcpb1TB4yeIFXMzx
+          type: string
+        style: simple
+      - description: Expand merchant inline
+        explode: true
+        in: query
+        name: "expand[]"
+        required: false
+        schema:
+          enum:
+          - merchant
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTransaction_200_response"
+          description: Transaction retrieved successfully
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found - The endpoint or resource requested does not exist
+      summary: Retrieve transaction
+      tags:
+      - Transactions
+    patch:
+      description: Store key-value annotations against a transaction in its metadata.
+      operationId: annotateTransaction
+      parameters:
+      - description: The id of the transaction
+        explode: false
+        in: path
+        name: transaction_id
+        required: true
+        schema:
+          example: tx_00008zIcpb1TB4yeIFXMzx
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              additionalProperties:
+                type: string
+              description: "Metadata key-value pairs. Use metadata[key]=value format.\
+                \ Set value to empty string to delete a key."
+              example:
+                metadata[foo]: bar
+                metadata[notes]: My custom note
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTransaction_200_response"
+          description: Transaction annotated successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found - The endpoint or resource requested does not exist
+      summary: Annotate transaction
+      tags:
+      - Transactions
+  /feed:
+    post:
+      description: Creates a new feed item on the user's feed.
+      operationId: createFeedItem
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/FeedItemRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Feed item created successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Create feed item
+      tags:
+      - Feed Items
+  /attachment/upload:
+    post:
+      description: Obtain a temporary URL to upload an attachment file.
+      operationId: uploadAttachment
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/uploadAttachment_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachmentUploadResponse"
+          description: Upload URL generated successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Upload attachment
+      tags:
+      - Attachments
+  /attachment/register:
+    post:
+      description: Register an attachment URL against a transaction.
+      operationId: registerAttachment
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/registerAttachment_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/registerAttachment_200_response"
+          description: Attachment registered successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Register attachment
+      tags:
+      - Attachments
+  /attachment/deregister:
+    post:
+      description: Remove an attachment from a transaction.
+      operationId: deregisterAttachment
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/deregisterAttachment_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Attachment deregistered successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Deregister attachment
+      tags:
+      - Attachments
+  /transaction-receipts:
+    delete:
+      description: Delete a receipt based on its external ID.
+      operationId: deleteReceipt
+      parameters:
+      - description: The external ID of the receipt
+        explode: true
+        in: query
+        name: external_id
+        required: true
+        schema:
+          example: test-receipt-1
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Receipt deleted successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found - The endpoint or resource requested does not exist
+      summary: Delete receipt
+      tags:
+      - Receipts
+    get:
+      description: Read back a receipt that you've created based on its external ID.
+      operationId: getReceipt
+      parameters:
+      - description: The external ID of the receipt
+        explode: true
+        in: query
+        name: external_id
+        required: true
+        schema:
+          example: test-receipt-1
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getReceipt_200_response"
+          description: Receipt retrieved successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found - The endpoint or resource requested does not exist
+      summary: Retrieve receipt
+      tags:
+      - Receipts
+    put:
+      description: Attach a receipt to a transaction with line-item purchase data.
+      operationId: createReceipt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Receipt"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createReceipt_200_response"
+          description: Receipt created successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Create receipt
+      tags:
+      - Receipts
+  /webhooks:
+    get:
+      description: List the webhooks registered on an account.
+      operationId: listWebhooks
+      parameters:
+      - description: The account to list registered webhooks for
+        explode: true
+        in: query
+        name: account_id
+        required: true
+        schema:
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WebhooksResponse"
+          description: List of webhooks retrieved successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: List webhooks
+      tags:
+      - Webhooks
+    post:
+      description: Register a webhook to receive real-time notifications of events
+        in an account.
+      operationId: registerWebhook
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/registerWebhook_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/registerWebhook_200_response"
+          description: Webhook registered successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Bad Request - Your request has missing arguments or is malformed
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+      summary: Register a webhook
+      tags:
+      - Webhooks
+  /webhooks/{webhook_id}:
+    delete:
+      description: Delete a webhook to stop receiving notifications.
+      operationId: deleteWebhook
+      parameters:
+      - description: The id of the webhook to delete
+        explode: false
+        in: path
+        name: webhook_id
+        required: true
+        schema:
+          example: webhook_000091yhhOmrXQaVZ1Irsv
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Webhook deleted successfully
+        "401":
+          content:
+            application/json:
+              example:
+                error: invalid_token
+                error_description: The supplied access token is invalid or has expired
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Unauthorized - Your request is not authenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Not Found - The endpoint or resource requested does not exist
+      summary: Delete a webhook
+      tags:
+      - Webhooks
+components:
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Bad Request - Your request has missing arguments or is malformed
+    Unauthorized:
+      content:
+        application/json:
+          example:
+            error: invalid_token
+            error_description: The supplied access token is invalid or has expired
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Unauthorized - Your request is not authenticated
+    Forbidden:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Forbidden - Your request is authenticated but has insufficient
+        permissions
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Not Found - The endpoint or resource requested does not exist
+    MethodNotAllowed:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Method Not Allowed - You are using an incorrect HTTP verb
+    NotAcceptable:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Not Acceptable - Your application does not accept the content format
+        returned
+    TooManyRequests:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Too Many Requests - Your application is exceeding its rate limit
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Internal Server Error - Something went wrong on Monzo's end
+    GatewayTimeout:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Gateway Timeout - Something has timed out on Monzo's end
+  schemas:
+    AuthorizationCodeRequest:
+      properties:
+        grant_type:
+          description: Must be set to authorization_code
+          enum:
+          - authorization_code
+          type: string
+        client_id:
+          description: The client ID you received from Monzo
+          type: string
+        client_secret:
+          description: The client secret which you received from Monzo
+          type: string
+        redirect_uri:
+          description: The URL in your app where users were sent after authorisation
+          format: uri
+          type: string
+        code:
+          description: The authorization code received when the user was redirected
+            back
+          type: string
+      required:
+      - client_id
+      - client_secret
+      - code
+      - grant_type
+      - redirect_uri
+      type: object
+    RefreshTokenRequest:
+      properties:
+        grant_type:
+          description: Must be set to refresh_token
+          enum:
+          - refresh_token
+          type: string
+        client_id:
+          description: Your client ID
+          type: string
+        client_secret:
+          description: Your client secret
+          type: string
+        refresh_token:
+          description: The refresh token received along with the original access token
+          type: string
+      required:
+      - client_id
+      - client_secret
+      - grant_type
+      - refresh_token
+      type: object
+    TokenResponse:
+      example:
+        access_token: access_token
+        refresh_token: refresh_token
+        user_id: user_id
+        token_type: Bearer
+        expires_in: 21600
+        client_id: client_id
+      properties:
+        access_token:
+          description: The access token to use for authenticated requests
+          type: string
+        client_id:
+          description: Your client ID
+          type: string
+        expires_in:
+          description: Number of seconds until the access token expires
+          example: 21600
+          type: integer
+        refresh_token:
+          description: The refresh token (only for confidential clients)
+          type: string
+        token_type:
+          description: The token type
+          enum:
+          - Bearer
+          type: string
+        user_id:
+          description: The user ID
+          type: string
+      type: object
+    WhoamiResponse:
+      example:
+        authenticated: true
+        user_id: user_id
+        client_id: client_id
+      properties:
+        authenticated:
+          description: Whether the request is authenticated
+          type: boolean
+        client_id:
+          description: Your client ID
+          type: string
+        user_id:
+          description: The user ID
+          type: string
+      type: object
+    Account:
+      example:
+        created: 2015-11-13T12:17:42Z
+        description: Peter Pan's Account
+        id: acc_00009237aqC8c5umZmrRdh
+      properties:
+        id:
+          description: The account ID
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        description:
+          description: The account description
+          example: Peter Pan's Account
+          type: string
+        created:
+          description: When the account was created
+          example: 2015-11-13T12:17:42Z
+          format: date-time
+          type: string
+      type: object
+    AccountsResponse:
+      example:
+        accounts:
+        - created: 2015-11-13T12:17:42Z
+          description: Peter Pan's Account
+          id: acc_00009237aqC8c5umZmrRdh
+        - created: 2015-11-13T12:17:42Z
+          description: Peter Pan's Account
+          id: acc_00009237aqC8c5umZmrRdh
+      properties:
+        accounts:
+          items:
+            $ref: "#/components/schemas/Account"
+          type: array
+      type: object
+    BalanceResponse:
+      example:
+        total_balance: 6000
+        spend_today: 0
+        balance: 5000
+        currency: GBP
+      properties:
+        balance:
+          description: The currently available balance in minor units (pennies)
+          example: 5000
+          format: int64
+          type: integer
+        total_balance:
+          description: The sum of available balance and all pots
+          example: 6000
+          format: int64
+          type: integer
+        currency:
+          description: The ISO 4217 currency code
+          example: GBP
+          type: string
+        spend_today:
+          description: The amount spent today (from ~4am) as a negative value
+          example: 0
+          format: int64
+          type: integer
+      type: object
+    Pot:
+      example:
+        deleted: false
+        balance: 133700
+        created: 2017-11-09T12:30:53.695Z
+        name: Savings
+        style: beach_ball
+        currency: GBP
+        id: pot_0000778xxfgh4iu8z83nWb
+        updated: 2017-11-09T12:30:53.695Z
+      properties:
+        id:
+          description: The pot ID
+          example: pot_0000778xxfgh4iu8z83nWb
+          type: string
+        name:
+          description: The pot name
+          example: Savings
+          type: string
+        style:
+          description: The pot background style
+          example: beach_ball
+          type: string
+        balance:
+          description: The pot balance in minor units (pennies)
+          example: 133700
+          format: int64
+          type: integer
+        currency:
+          description: The pot currency
+          example: GBP
+          type: string
+        created:
+          description: When the pot was created
+          example: 2017-11-09T12:30:53.695Z
+          format: date-time
+          type: string
+        updated:
+          description: When the pot was last updated
+          example: 2017-11-09T12:30:53.695Z
+          format: date-time
+          type: string
+        deleted:
+          description: Whether the pot is deleted
+          example: false
+          type: boolean
+      type: object
+    PotsResponse:
+      example:
+        pots:
+        - deleted: false
+          balance: 133700
+          created: 2017-11-09T12:30:53.695Z
+          name: Savings
+          style: beach_ball
+          currency: GBP
+          id: pot_0000778xxfgh4iu8z83nWb
+          updated: 2017-11-09T12:30:53.695Z
+        - deleted: false
+          balance: 133700
+          created: 2017-11-09T12:30:53.695Z
+          name: Savings
+          style: beach_ball
+          currency: GBP
+          id: pot_0000778xxfgh4iu8z83nWb
+          updated: 2017-11-09T12:30:53.695Z
+      properties:
+        pots:
+          items:
+            $ref: "#/components/schemas/Pot"
+          type: array
+      type: object
+    Address:
+      properties:
+        address:
+          example: 98 Southgate Road
+          type: string
+        city:
+          example: London
+          type: string
+        country:
+          example: GB
+          type: string
+        latitude:
+          example: 51.54151
+          format: double
+          type: number
+        longitude:
+          example: -0.08482400000002599
+          format: double
+          type: number
+        postcode:
+          example: N1 3JD
+          type: string
+        region:
+          example: Greater London
+          type: string
+      type: object
+    Merchant:
+      properties:
+        id:
+          example: merch_00008zIcpbAKe8shBxXUtl
+          type: string
+        group_id:
+          example: grp_00008zIcpbBOaAr7TTP3sv
+          type: string
+        name:
+          example: The De Beauvoir Deli Co.
+          type: string
+        logo:
+          example: https://pbs.twimg.com/profile_images/527043602623389696/68_SgUWJ.jpeg
+          format: uri
+          type: string
+        emoji:
+          example: 🍞
+          type: string
+        category:
+          enum:
+          - general
+          - eating_out
+          - expenses
+          - transport
+          - cash
+          - bills
+          - entertainment
+          - shopping
+          - holidays
+          - groceries
+          example: eating_out
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+        created:
+          example: 2015-08-22T12:20:18Z
+          format: date-time
+          type: string
+      type: object
+    Transaction:
+      example:
+        amount: -510
+        metadata:
+          key: ""
+        is_load: false
+        notes: Salmon sandwich 🍞
+        created: 2015-08-22T12:20:18Z
+        settled: 2015-08-23T12:20:18Z
+        description: THE DE BEAUVOIR DELI C LONDON GBR
+        merchant: Transaction_merchant
+        currency: GBP
+        id: tx_00008zIcpb1TB4yeIFXMzx
+        decline_reason: INSUFFICIENT_FUNDS
+        category: eating_out
+      properties:
+        id:
+          description: The transaction ID
+          example: tx_00008zIcpb1TB4yeIFXMzx
+          type: string
+        created:
+          description: When the transaction was created
+          example: 2015-08-22T12:20:18Z
+          format: date-time
+          type: string
+        description:
+          description: The transaction description
+          example: THE DE BEAUVOIR DELI C LONDON GBR
+          type: string
+        amount:
+          description: The amount in minor units (pennies). Negative for debits.
+          example: -510
+          format: int64
+          type: integer
+        currency:
+          description: The ISO 4217 currency code
+          example: GBP
+          type: string
+        merchant:
+          $ref: "#/components/schemas/Transaction_merchant"
+        notes:
+          description: User notes
+          example: Salmon sandwich 🍞
+          type: string
+        metadata:
+          additionalProperties: true
+          description: Custom metadata key-value pairs
+          type: object
+        category:
+          description: Transaction category
+          enum:
+          - general
+          - eating_out
+          - expenses
+          - transport
+          - cash
+          - bills
+          - entertainment
+          - shopping
+          - holidays
+          - groceries
+          - mondo
+          example: eating_out
+          type: string
+        is_load:
+          description: Whether this is a top-up transaction
+          example: false
+          type: boolean
+        settled:
+          description: When the transaction settled (empty string if not settled)
+          example: 2015-08-23T12:20:18Z
+          type: string
+        decline_reason:
+          description: Only present on declined transactions
+          enum:
+          - INSUFFICIENT_FUNDS
+          - CARD_INACTIVE
+          - CARD_BLOCKED
+          - INVALID_CVC
+          - OTHER
+          type: string
+      type: object
+    TransactionsResponse:
+      example:
+        transactions:
+        - amount: -510
+          metadata:
+            key: ""
+          is_load: false
+          notes: Salmon sandwich 🍞
+          created: 2015-08-22T12:20:18Z
+          settled: 2015-08-23T12:20:18Z
+          description: THE DE BEAUVOIR DELI C LONDON GBR
+          merchant: Transaction_merchant
+          currency: GBP
+          id: tx_00008zIcpb1TB4yeIFXMzx
+          decline_reason: INSUFFICIENT_FUNDS
+          category: eating_out
+        - amount: -510
+          metadata:
+            key: ""
+          is_load: false
+          notes: Salmon sandwich 🍞
+          created: 2015-08-22T12:20:18Z
+          settled: 2015-08-23T12:20:18Z
+          description: THE DE BEAUVOIR DELI C LONDON GBR
+          merchant: Transaction_merchant
+          currency: GBP
+          id: tx_00008zIcpb1TB4yeIFXMzx
+          decline_reason: INSUFFICIENT_FUNDS
+          category: eating_out
+      properties:
+        transactions:
+          items:
+            $ref: "#/components/schemas/Transaction"
+          type: array
+      type: object
+    FeedItemRequest:
+      properties:
+        account_id:
+          description: The account to create a feed item for
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        type:
+          description: Type of feed item
+          enum:
+          - basic
+          type: string
+        url:
+          description: A URL to open when the feed item is tapped
+          example: https://www.example.com/a_page_to_open_on_tap.html
+          format: uri
+          type: string
+        params[title]:
+          description: The title to display
+          example: My custom item
+          type: string
+        params[image_url]:
+          description: URL of the image to display
+          example: www.example.com/image.png
+          format: uri
+          type: string
+        params[body]:
+          description: The body text of the feed item
+          example: Some body text to display
+          type: string
+        params[background_color]:
+          description: Hex value for the background colour
+          example: "#FCF1EE"
+          pattern: "^#[0-9A-Fa-f]{6}$"
+          type: string
+        params[title_color]:
+          description: Hex value for the title text colour
+          example: "#333333"
+          pattern: "^#[0-9A-Fa-f]{6}$"
+          type: string
+        params[body_color]:
+          description: Hex value for the body text colour
+          example: "#FCF1EE"
+          pattern: "^#[0-9A-Fa-f]{6}$"
+          type: string
+      required:
+      - account_id
+      - params
+      - type
+      type: object
+    AttachmentUploadResponse:
+      example:
+        file_url: https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+        upload_url: https://mondo-image-uploads.s3.amazonaws.com/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+      properties:
+        file_url:
+          description: The URL of the file once it has been uploaded
+          example: https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+          format: uri
+          type: string
+        upload_url:
+          description: The URL to POST the file to when uploading
+          example: https://mondo-image-uploads.s3.amazonaws.com/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+          format: uri
+          type: string
+      type: object
+    Attachment:
+      example:
+        file_url: https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+        user_id: user_00009238aMBIIrS5Rdncq9
+        file_type: image/png
+        created: 2015-11-12T18:37:02Z
+        external_id: tx_00008zIcpb1TB4yeIFXMzx
+        id: attach_00009238aOAIvVqfb9LrZh
+      properties:
+        id:
+          description: The attachment ID
+          example: attach_00009238aOAIvVqfb9LrZh
+          type: string
+        user_id:
+          description: The user ID who owns this attachment
+          example: user_00009238aMBIIrS5Rdncq9
+          type: string
+        external_id:
+          description: The transaction ID this attachment is associated with
+          example: tx_00008zIcpb1TB4yeIFXMzx
+          type: string
+        file_url:
+          description: The URL at which the attachment is available
+          example: https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+          format: uri
+          type: string
+        file_type:
+          description: The file type of the attachment
+          example: image/png
+          type: string
+        created:
+          description: When the attachment was created
+          example: 2015-11-12T18:37:02Z
+          format: date-time
+          type: string
+      type: object
+    ReceiptItem:
+      example:
+        amount: 539
+        unit: kg
+        quantity: 1
+        sub_items:
+        - amount: 100
+          unit: ""
+          quantity: 1
+          description: Extra cheese
+          currency: GBP
+          tax: 0
+        - amount: 100
+          unit: ""
+          quantity: 1
+          description: Extra cheese
+          currency: GBP
+          tax: 0
+        description: Burger
+        currency: GBP
+        tax: 77
+      properties:
+        description:
+          description: The product description
+          example: Burger
+          type: string
+        amount:
+          description: The amount paid for the item in minor units (pennies)
+          example: 539
+          format: int64
+          type: integer
+        currency:
+          description: The currency code
+          example: GBP
+          type: string
+        quantity:
+          description: How many of the product were bought
+          example: 1
+          format: double
+          type: number
+        unit:
+          description: The unit the quantity is measured in
+          example: kg
+          type: string
+        tax:
+          description: The tax in minor units (pennies)
+          example: 77
+          format: int64
+          type: integer
+        sub_items:
+          items:
+            $ref: "#/components/schemas/ReceiptItem_sub_items_inner"
+          type: array
+      required:
+      - amount
+      - currency
+      - description
+      type: object
+    ReceiptTax:
+      example:
+        amount: 10
+        tax_number: "945719291"
+        description: VAT
+        currency: GBP
+      properties:
+        description:
+          description: The tax description
+          example: VAT
+          type: string
+        amount:
+          description: Total amount of the tax in minor units (pennies)
+          example: 10
+          format: int64
+          type: integer
+        currency:
+          description: The currency code
+          example: GBP
+          type: string
+        tax_number:
+          description: The tax number
+          example: "945719291"
+          type: string
+      required:
+      - amount
+      - currency
+      - description
+      type: object
+    ReceiptPayment:
+      example:
+        amount: 1000
+        gift_card_type: One4all
+        last_four: "0987"
+        bin: "543210"
+        mid: mid
+        currency: GBP
+        type: card
+        aid: aid
+        tid: tid
+        auth_code: "123456"
+      properties:
+        type:
+          description: The payment type
+          enum:
+          - card
+          - cash
+          - gift_card
+          type: string
+        amount:
+          description: Amount paid in minor units (pennies)
+          example: 1000
+          format: int64
+          type: integer
+        currency:
+          description: The currency code
+          example: GBP
+          type: string
+        bin:
+          description: Bank identification number (for card payments)
+          example: "543210"
+          type: string
+        last_four:
+          description: Last four digits of card (for card payments)
+          example: "0987"
+          type: string
+        auth_code:
+          description: Authorization code (for card payments)
+          example: "123456"
+          type: string
+        aid:
+          description: Application identifier (for card payments)
+          type: string
+        mid:
+          description: Merchant identifier (for card payments)
+          type: string
+        tid:
+          description: Terminal identifier (for card payments)
+          type: string
+        gift_card_type:
+          description: Gift card type description (for gift_card payments)
+          example: One4all
+          type: string
+      required:
+      - amount
+      - currency
+      - type
+      type: object
+    ReceiptMerchant:
+      example:
+        phone: +44 20 1234 5678
+        name: Example Store
+        store_postcode: EC1V 9LT
+        online: true
+        store_name: Old Street
+        store_address: "123 Old Street, London"
+        email: hello@example.com
+      properties:
+        name:
+          description: The merchant name
+          example: Example Store
+          type: string
+        online:
+          description: "True for e-commerce merchants, false for offline merchants"
+          type: boolean
+        phone:
+          description: The phone number of the store
+          example: +44 20 1234 5678
+          type: string
+        email:
+          description: The merchant's email address
+          example: hello@example.com
+          format: email
+          type: string
+        store_name:
+          description: The name of that particular store
+          example: Old Street
+          type: string
+        store_address:
+          description: The store's address
+          example: "123 Old Street, London"
+          type: string
+        store_postcode:
+          description: The store's postcode
+          example: EC1V 9LT
+          type: string
+      type: object
+    Receipt:
+      example:
+        transaction_id: tx_00008zIcpb1TB4yeIFXMzx
+        total: 1299
+        payments:
+        - amount: 1000
+          gift_card_type: One4all
+          last_four: "0987"
+          bin: "543210"
+          mid: mid
+          currency: GBP
+          type: card
+          aid: aid
+          tid: tid
+          auth_code: "123456"
+        - amount: 1000
+          gift_card_type: One4all
+          last_four: "0987"
+          bin: "543210"
+          mid: mid
+          currency: GBP
+          type: card
+          aid: aid
+          tid: tid
+          auth_code: "123456"
+        taxes:
+        - amount: 10
+          tax_number: "945719291"
+          description: VAT
+          currency: GBP
+        - amount: 10
+          tax_number: "945719291"
+          description: VAT
+          currency: GBP
+        merchant:
+          phone: +44 20 1234 5678
+          name: Example Store
+          store_postcode: EC1V 9LT
+          online: true
+          store_name: Old Street
+          store_address: "123 Old Street, London"
+          email: hello@example.com
+        external_id: Order-12345678
+        currency: GBP
+        items:
+        - amount: 539
+          unit: kg
+          quantity: 1
+          sub_items:
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          description: Burger
+          currency: GBP
+          tax: 77
+        - amount: 539
+          unit: kg
+          quantity: 1
+          sub_items:
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          description: Burger
+          currency: GBP
+          tax: 77
+      properties:
+        transaction_id:
+          description: The ID of the Transaction to associate the Receipt with
+          example: tx_00008zIcpb1TB4yeIFXMzx
+          type: string
+        external_id:
+          description: A unique identifier used as an idempotency key
+          example: Order-12345678
+          type: string
+        total:
+          description: The amount in minor units (pennies). Should be positive.
+          example: 1299
+          format: int64
+          type: integer
+        currency:
+          description: The currency code
+          example: GBP
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/ReceiptItem"
+          type: array
+        taxes:
+          items:
+            $ref: "#/components/schemas/ReceiptTax"
+          type: array
+        payments:
+          items:
+            $ref: "#/components/schemas/ReceiptPayment"
+          type: array
+        merchant:
+          $ref: "#/components/schemas/ReceiptMerchant"
+      required:
+      - currency
+      - external_id
+      - items
+      - total
+      - transaction_id
+      type: object
+    Webhook:
+      example:
+        account_id: acc_000091yf79yMwNaZHhHGzp
+        id: webhook_000091yhhOmrXQaVZ1Irsv
+        url: http://example.com/callback
+      properties:
+        id:
+          description: The webhook ID
+          example: webhook_000091yhhOmrXQaVZ1Irsv
+          type: string
+        account_id:
+          description: The account ID
+          example: acc_000091yf79yMwNaZHhHGzp
+          type: string
+        url:
+          description: The webhook callback URL
+          example: http://example.com/callback
+          format: uri
+          type: string
+      type: object
+    WebhooksResponse:
+      example:
+        webhooks:
+        - account_id: acc_000091yf79yMwNaZHhHGzp
+          id: webhook_000091yhhOmrXQaVZ1Irsv
+          url: http://example.com/callback
+        - account_id: acc_000091yf79yMwNaZHhHGzp
+          id: webhook_000091yhhOmrXQaVZ1Irsv
+          url: http://example.com/callback
+      properties:
+        webhooks:
+          items:
+            $ref: "#/components/schemas/Webhook"
+          type: array
+      type: object
+    WebhookTransactionCreatedEvent:
+      description: Webhook payload sent when a transaction is created
+      properties:
+        type:
+          description: The event type
+          enum:
+          - transaction.created
+          type: string
+        data:
+          $ref: "#/components/schemas/WebhookTransactionCreatedEvent_data"
+      type: object
+    Error:
+      example:
+        error_description: error_description
+        error: error
+        message: message
+      properties:
+        error:
+          description: Error code
+          type: string
+        error_description:
+          description: Human-readable error description
+          type: string
+        message:
+          description: Error message
+          type: string
+      type: object
+    exchangeToken_request:
+      oneOf:
+      - $ref: "#/components/schemas/AuthorizationCodeRequest"
+      - $ref: "#/components/schemas/RefreshTokenRequest"
+    depositIntoPot_request:
+      properties:
+        source_account_id:
+          description: The id of the account to withdraw from
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        amount:
+          description: The amount to deposit in minor units (pennies)
+          example: 100000
+          format: int64
+          type: integer
+        dedupe_id:
+          description: A unique string used to de-duplicate deposits
+          example: deposit-123456
+          type: string
+      required:
+      - amount
+      - dedupe_id
+      - source_account_id
+      type: object
+    withdrawFromPot_request:
+      properties:
+        destination_account_id:
+          description: The id of the account to deposit into
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        amount:
+          description: The amount to withdraw in minor units (pennies)
+          example: 100000
+          format: int64
+          type: integer
+        dedupe_id:
+          description: A unique string used to de-duplicate withdrawals
+          example: withdraw-123456
+          type: string
+      required:
+      - amount
+      - dedupe_id
+      - destination_account_id
+      type: object
+    getTransaction_200_response:
+      example:
+        transaction:
+          amount: -510
+          metadata:
+            key: ""
+          is_load: false
+          notes: Salmon sandwich 🍞
+          created: 2015-08-22T12:20:18Z
+          settled: 2015-08-23T12:20:18Z
+          description: THE DE BEAUVOIR DELI C LONDON GBR
+          merchant: Transaction_merchant
+          currency: GBP
+          id: tx_00008zIcpb1TB4yeIFXMzx
+          decline_reason: INSUFFICIENT_FUNDS
+          category: eating_out
+      properties:
+        transaction:
+          $ref: "#/components/schemas/Transaction"
+      type: object
+    uploadAttachment_request:
+      properties:
+        file_name:
+          description: The name of the file to be uploaded
+          example: receipt.png
+          type: string
+        file_type:
+          description: The content type of the file
+          example: image/png
+          type: string
+        content_length:
+          description: "The HTTP Content-Length of the upload request body, in bytes"
+          example: 12345
+          type: integer
+      required:
+      - content_length
+      - file_name
+      - file_type
+      type: object
+    registerAttachment_request:
+      properties:
+        external_id:
+          description: The id of the transaction to associate the attachment with
+          example: tx_00008zIcpb1TB4yeIFXMzx
+          type: string
+        file_url:
+          description: The URL of the uploaded attachment
+          example: https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/example.png
+          format: uri
+          type: string
+        file_type:
+          description: The content type of the attachment
+          example: image/png
+          type: string
+      required:
+      - external_id
+      - file_type
+      - file_url
+      type: object
+    registerAttachment_200_response:
+      example:
+        attachment:
+          file_url: https://s3-eu-west-1.amazonaws.com/mondo-image-uploads/user_00009237hliZellUicKuG1/LcCu4ogv1xW28OCcvOTL-foo.png
+          user_id: user_00009238aMBIIrS5Rdncq9
+          file_type: image/png
+          created: 2015-11-12T18:37:02Z
+          external_id: tx_00008zIcpb1TB4yeIFXMzx
+          id: attach_00009238aOAIvVqfb9LrZh
+      properties:
+        attachment:
+          $ref: "#/components/schemas/Attachment"
+      type: object
+    deregisterAttachment_request:
+      properties:
+        id:
+          description: The id of the attachment to deregister
+          example: attach_00009238aOAIvVqfb9LrZh
+          type: string
+      required:
+      - id
+      type: object
+    getReceipt_200_response_receipt:
+      allOf:
+      - properties:
+          id:
+            example: receipt_00009eNJqNeJvKeoQA
+            type: string
+        type: object
+      - $ref: "#/components/schemas/Receipt"
+      example:
+        transaction_id: tx_00008zIcpb1TB4yeIFXMzx
+        total: 1299
+        payments:
+        - amount: 1000
+          gift_card_type: One4all
+          last_four: "0987"
+          bin: "543210"
+          mid: mid
+          currency: GBP
+          type: card
+          aid: aid
+          tid: tid
+          auth_code: "123456"
+        - amount: 1000
+          gift_card_type: One4all
+          last_four: "0987"
+          bin: "543210"
+          mid: mid
+          currency: GBP
+          type: card
+          aid: aid
+          tid: tid
+          auth_code: "123456"
+        taxes:
+        - amount: 10
+          tax_number: "945719291"
+          description: VAT
+          currency: GBP
+        - amount: 10
+          tax_number: "945719291"
+          description: VAT
+          currency: GBP
+        merchant:
+          phone: +44 20 1234 5678
+          name: Example Store
+          store_postcode: EC1V 9LT
+          online: true
+          store_name: Old Street
+          store_address: "123 Old Street, London"
+          email: hello@example.com
+        external_id: Order-12345678
+        currency: GBP
+        id: receipt_00009eNJqNeJvKeoQA
+        items:
+        - amount: 539
+          unit: kg
+          quantity: 1
+          sub_items:
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          description: Burger
+          currency: GBP
+          tax: 77
+        - amount: 539
+          unit: kg
+          quantity: 1
+          sub_items:
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          - amount: 100
+            unit: ""
+            quantity: 1
+            description: Extra cheese
+            currency: GBP
+            tax: 0
+          description: Burger
+          currency: GBP
+          tax: 77
+    getReceipt_200_response:
+      example:
+        receipt:
+          transaction_id: tx_00008zIcpb1TB4yeIFXMzx
+          total: 1299
+          payments:
+          - amount: 1000
+            gift_card_type: One4all
+            last_four: "0987"
+            bin: "543210"
+            mid: mid
+            currency: GBP
+            type: card
+            aid: aid
+            tid: tid
+            auth_code: "123456"
+          - amount: 1000
+            gift_card_type: One4all
+            last_four: "0987"
+            bin: "543210"
+            mid: mid
+            currency: GBP
+            type: card
+            aid: aid
+            tid: tid
+            auth_code: "123456"
+          taxes:
+          - amount: 10
+            tax_number: "945719291"
+            description: VAT
+            currency: GBP
+          - amount: 10
+            tax_number: "945719291"
+            description: VAT
+            currency: GBP
+          merchant:
+            phone: +44 20 1234 5678
+            name: Example Store
+            store_postcode: EC1V 9LT
+            online: true
+            store_name: Old Street
+            store_address: "123 Old Street, London"
+            email: hello@example.com
+          external_id: Order-12345678
+          currency: GBP
+          id: receipt_00009eNJqNeJvKeoQA
+          items:
+          - amount: 539
+            unit: kg
+            quantity: 1
+            sub_items:
+            - amount: 100
+              unit: ""
+              quantity: 1
+              description: Extra cheese
+              currency: GBP
+              tax: 0
+            - amount: 100
+              unit: ""
+              quantity: 1
+              description: Extra cheese
+              currency: GBP
+              tax: 0
+            description: Burger
+            currency: GBP
+            tax: 77
+          - amount: 539
+            unit: kg
+            quantity: 1
+            sub_items:
+            - amount: 100
+              unit: ""
+              quantity: 1
+              description: Extra cheese
+              currency: GBP
+              tax: 0
+            - amount: 100
+              unit: ""
+              quantity: 1
+              description: Extra cheese
+              currency: GBP
+              tax: 0
+            description: Burger
+            currency: GBP
+            tax: 77
+      properties:
+        receipt:
+          $ref: "#/components/schemas/getReceipt_200_response_receipt"
+      type: object
+    createReceipt_200_response:
+      example:
+        receipt_id: receipt_00009NrKwNtI3gKqte
+      properties:
+        receipt_id:
+          example: receipt_00009NrKwNtI3gKqte
+          type: string
+      type: object
+    registerWebhook_request:
+      properties:
+        account_id:
+          description: The account to receive notifications for
+          example: acc_00009237aqC8c5umZmrRdh
+          type: string
+        url:
+          description: The URL to send notifications to
+          example: http://example.com/webhook
+          format: uri
+          type: string
+      required:
+      - account_id
+      - url
+      type: object
+    registerWebhook_200_response:
+      example:
+        webhook:
+          account_id: acc_000091yf79yMwNaZHhHGzp
+          id: webhook_000091yhhOmrXQaVZ1Irsv
+          url: http://example.com/callback
+      properties:
+        webhook:
+          $ref: "#/components/schemas/Webhook"
+      type: object
+    Transaction_merchant:
+      description: Merchant ID or expanded merchant object
+      oneOf:
+      - description: Merchant ID
+        type: string
+      - $ref: "#/components/schemas/Merchant"
+    ReceiptItem_sub_items_inner:
+      example:
+        amount: 100
+        unit: ""
+        quantity: 1
+        description: Extra cheese
+        currency: GBP
+        tax: 0
+      properties:
+        description:
+          example: Extra cheese
+          type: string
+        amount:
+          example: 100
+          format: int64
+          type: integer
+        currency:
+          example: GBP
+          type: string
+        quantity:
+          example: 1
+          format: double
+          type: number
+        unit:
+          example: ""
+          type: string
+        tax:
+          example: 0
+          format: int64
+          type: integer
+      required:
+      - amount
+      - currency
+      - description
+      type: object
+    WebhookTransactionCreatedEvent_data:
+      allOf:
+      - $ref: "#/components/schemas/Transaction"
+      - properties:
+          account_id:
+            description: The account ID
+            example: acc_00008gju41AHyfLUzBUk8A
+            type: string
+        type: object
+  securitySchemes:
+    MonzoOAuth2:
+      description: |
+        Monzo uses OAuth 2.0 for authentication. Before you begin, create a client in the developer tools at https://developers.monzo.com.
+
+        Confidential clients receive refresh tokens, while non-confidential clients must re-authenticate when access tokens expire.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.monzo.com/
+          refreshUrl: https://api.monzo.com/oauth2/token
+          scopes: {}
+          tokenUrl: https://api.monzo.com/oauth2/token
+      type: oauth2
+    BearerAuth:
+      bearerFormat: JWT
+      description: Direct Bearer token authentication (for manually providing access
+        tokens)
+      scheme: bearer
+      type: http

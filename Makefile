@@ -14,6 +14,9 @@ watch:
 upclient-generate:
 	openapi-generator generate   -i openapi.json   -g go   -o ./datafetcher/upclient   --additional-properties packageName=upclient   --git-user-id esteanes   --git-repo-id up-bank-go/datafetcher/upclient
 
+monzoclient-generate:
+	openapi-generator generate -i monzo-openapi.yaml -g go -o ./datafetcher/monzoclient --additional-properties packageName=monzoclient --git-user-id esteanes --git-repo-id up-bank-go/datafetcher/monzoclient
+
 build:
 	templ generate && gofmt -s -w . && go mod tidy && go build -o up-bank-go
 

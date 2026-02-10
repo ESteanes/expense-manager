@@ -1,0 +1,108 @@
+# Account
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**Id** | Pointer to **string** | The account ID | [optional] 
+**Description** | Pointer to **string** | The account description | [optional] 
+**Created** | Pointer to **time.Time** | When the account was created | [optional] 
+
+## Methods
+
+### NewAccount
+
+`func NewAccount() *Account`
+
+NewAccount instantiates a new Account object
+This constructor will assign default values to properties that have it defined,
+and makes sure properties required by API are set, but the set of arguments
+will change when the set of required properties is changed
+
+### NewAccountWithDefaults
+
+`func NewAccountWithDefaults() *Account`
+
+NewAccountWithDefaults instantiates a new Account object
+This constructor will only assign default values to properties that have it defined,
+but it doesn't guarantee that properties required by API are set
+
+### GetId
+
+`func (o *Account) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *Account) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *Account) SetId(v string)`
+
+SetId sets Id field to given value.
+
+### HasId
+
+`func (o *Account) HasId() bool`
+
+HasId returns a boolean if a field has been set.
+
+### GetDescription
+
+`func (o *Account) GetDescription() string`
+
+GetDescription returns the Description field if non-nil, zero value otherwise.
+
+### GetDescriptionOk
+
+`func (o *Account) GetDescriptionOk() (*string, bool)`
+
+GetDescriptionOk returns a tuple with the Description field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDescription
+
+`func (o *Account) SetDescription(v string)`
+
+SetDescription sets Description field to given value.
+
+### HasDescription
+
+`func (o *Account) HasDescription() bool`
+
+HasDescription returns a boolean if a field has been set.
+
+### GetCreated
+
+`func (o *Account) GetCreated() time.Time`
+
+GetCreated returns the Created field if non-nil, zero value otherwise.
+
+### GetCreatedOk
+
+`func (o *Account) GetCreatedOk() (*time.Time, bool)`
+
+GetCreatedOk returns a tuple with the Created field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCreated
+
+`func (o *Account) SetCreated(v time.Time)`
+
+SetCreated sets Created field to given value.
+
+### HasCreated
+
+`func (o *Account) HasCreated() bool`
+
+HasCreated returns a boolean if a field has been set.
+
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
