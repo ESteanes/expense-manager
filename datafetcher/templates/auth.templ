@@ -1,0 +1,53 @@
+package templates
+
+templ AuthCard() {
+	<div class="flex items-center justify-center min-h-screen bg-gray-100">
+		<div class="bg-white p-10 rounded-2xl shadow-xl text-center max-w-md">
+			{ children... }
+		</div>
+	</div>
+}
+
+templ MonzoAuthorized() {
+	@Base("Monzo Authorization") {
+		@AuthCard() {
+			<h1 class="text-2xl font-bold text-gray-800 mb-5">Monzo Authorization</h1>
+			<div class="bg-green-100 text-green-800 p-4 rounded-lg mb-5">
+				<strong>Status:</strong> Authorized
+			</div>
+			<p class="text-gray-600 mb-5">Your Monzo account is connected and ready to use.</p>
+			<div class="flex gap-3 justify-center">
+				<a href="/accounts" class="px-6 py-3 rounded-lg font-semibold bg-pink-500 text-white hover:bg-pink-600">
+					View Accounts
+				</a>
+				<a href="/auth/monzo/logout" class="px-6 py-3 rounded-lg font-semibold bg-red-500 text-white hover:bg-red-600">
+					Disconnect
+				</a>
+			</div>
+		}
+	}
+}
+
+templ MonzoConnect(authURL string) {
+	@Base("Connect Monzo") {
+		@AuthCard() {
+			<h1 class="text-2xl font-bold text-gray-800 mb-5">Connect Monzo</h1>
+			<div class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mb-5">
+				<strong>Status:</strong> Not Connected
+			</div>
+			<p class="text-gray-600 mb-5">Click the button below to authorize this application to access your Monzo account.</p>
+			<a href={ templ.SafeURL(authURL) } class="px-6 py-3 rounded-lg font-semibold bg-pink-500 text-white hover:bg-pink-600">
+				Connect Monzo Account
+			</a>
+		}
+	}
+}
+
+templ MonzoCallbackSuccess() {
+	@Base("Monzo Authorization") {
+		@AuthCard() {
+			<h1 class="text-2xl font-bold text-pink-500 mb-5">Authorization Successful!</h1>
+			<p class="text-gray-600">You can close this window and return to the application.</p>
+		}
+	}
+}

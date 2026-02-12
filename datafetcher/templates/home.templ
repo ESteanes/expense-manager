@@ -1,0 +1,78 @@
+package templates
+
+import (
+	"github.com/esteanes/up-bank-go/datafetcher/models"
+)
+
+templ ProviderCard(provider models.ProviderStatus) {
+	<div class="flex justify-between items-center py-4 border-b border-gray-300 last:border-b-0">
+		<div class="flex items-center gap-4">
+			if provider.IsUpBank {
+				<div class="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold bg-orange-500">
+					{ provider.IconLabel }
+				</div>
+			} else {
+				<div class="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold bg-pink-500">
+					{ provider.IconLabel }
+				</div>
+			}
+			<div>
+				<p class="font-bold text-gray-800">{ provider.Name }</p>
+				<p class="text-gray-500 text-sm">{ provider.Description }</p>
+			</div>
+		</div>
+		<div class="flex gap-3 items-center">
+			if provider.IsConnected {
+				<span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+					{ provider.Status }
+				</span>
+			} else {
+				<span class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+					{ provider.Status }
+				</span>
+			}
+			if provider.ShowAction {
+				if provider.IsConnected {
+					<a href={ templ.SafeURL(provider.ActionURL) } class="px-3 py-1 rounded-lg text-sm font-semibold bg-gray-500 text-white hover:bg-gray-600">
+						{ provider.ActionLabel }
+					</a>
+				} else {
+					<a href={ templ.SafeURL(provider.ActionURL) } class="px-3 py-1 rounded-lg text-sm font-semibold bg-blue-500 text-white hover:bg-blue-600">
+						{ provider.ActionLabel }
+					</a>
+				}
+			}
+		</div>
+	</div>
+}
+
+templ HomeContent(providers []models.ProviderStatus) {
+	<div class="flex items-center justify-center min-h-screen bg-gray-100">
+		<div class="container mx-auto p-8 max-w-3xl">
+			<h1 class="text-4xl font-bold text-center mb-8">Bank Aggregator</h1>
+			<div class="bg-white rounded-lg p-6 mb-6 shadow-lg">
+				<h2 class="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-3">Connected Banks</h2>
+				for _, provider := range providers {
+					@ProviderCard(provider)
+				}
+			</div>
+			<div class="bg-white rounded-lg p-6 shadow-lg">
+				<h2 class="text-xl font-bold mb-4 text-gray-700 border-b-2 border-gray-200 pb-3">Quick Links</h2>
+				<div class="flex gap-4 justify-center mt-5">
+					<a href="/accounts" class="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600">
+						View Accounts
+					</a>
+					<a href="/transactions" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">
+						View Transactions
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ Home(title string, providers []models.ProviderStatus) {
+	@Base(title) {
+		@HomeContent(providers)
+	}
+}

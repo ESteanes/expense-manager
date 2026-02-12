@@ -30,3 +30,5 @@ package.json
 
 # temporary directory which air uses
 tmp/
+localhost.crt
+localhost.key

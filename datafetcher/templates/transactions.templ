@@ -2,54 +2,23 @@ package templates
 
 import (
 	"github.com/esteanes/up-bank-go/datafetcher/functions"
-	"github.com/esteanes/up-bank-go/datafetcher/upclient"
+	"github.com/esteanes/up-bank-go/datafetcher/models"
 	"strconv"
 	"time"
 )
 
-func getMessage(transaction upclient.TransactionResource) string {
-	maybeString := transaction.Attributes.Message.Get()
-	if maybeString == nil {
+func getMessage(transaction models.Transaction) string {
+	if transaction.Message == nil {
 		return ""
 	}
-	return *maybeString
+	return *transaction.Message
 }
 
-func getCardPurchase(transaction upclient.TransactionResource) string {
-	maybeCardPurchase := transaction.Attributes.CardPurchaseMethod.Get()
-	if maybeCardPurchase == nil {
+func getCategory(transaction models.Transaction) string {
+	if transaction.Category == nil {
 		return ""
 	}
-	return string(maybeCardPurchase.Method)
-}
-
-func getTransactionType(transaction upclient.TransactionResource) string {
-	maybeTransactionType := transaction.Attributes.TransactionType.Get()
-	if maybeTransactionType == nil {
-		return ""
-	}
-	return string(*maybeTransactionType)
-}
-
-func getCardPurchaseNumber(transaction upclient.TransactionResource) string {
-	maybeCardPurchase := transaction.Attributes.CardPurchaseMethod.Get()
-	if maybeCardPurchase == nil {
-		return ""
-	}
-	maybePurchaseNumber := maybeCardPurchase.CardNumberSuffix.Get()
-	if maybePurchaseNumber == nil {
-		return ""
-	}
-	return *maybePurchaseNumber
-}
-
-func getCategory(transaction upclient.TransactionResource) string {
-	maybeCategory := transaction.GetRelationships().Category.Data.Get()
-	if maybeCategory == nil {
-		return ""
-	}
-	return maybeCategory.Id
-
+	return *transaction.Category
 }
 
 func getDateOrDefault(dateTime *time.Time, defaultTime time.Time) string {
@@ -59,7 +28,7 @@ func getDateOrDefault(dateTime *time.Time, defaultTime time.Time) string {
 	return dateTime.Format("2006-01-02")
 }
 
-templ TransactionsTable(transactions chan upclient.TransactionResource) {
+templ TransactionsTable(transactions <-chan models.Transaction) {
 	<div class="container mx-auto p-8">
 		<h1 class="text-4xl font-bold mb-6">Transactions</h1>
 		<button id="downloadButton" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center">
@@ -73,30 +42,31 @@ templ TransactionsTable(transactions chan upclient.TransactionResource) {
 			<table class="min-w-full table-auto bg-gray-50 border border-gray-200 p-10">
 				<thead class="bg-gray-200">
 					<tr>
+						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Provider</th>
 						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Transaction Amount</th>
 						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Description</th>
 						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Status</th>
 						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Time</th>
 						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Message</th>
 						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Category</th>
-						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Purchase Method</th>
-						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Transaction Type</th>
-						<th class="bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0">Card Number</th>
 					</tr>
 				</thead>
 				<tbody class="bg-grey-light">
 					for transaction := range(transactions) {
 						@templ.Flush() {
 							<tr class="hover:bg-yellow-400">
-								<td class="px-4 py-2 border-b border-gray-300">{ transaction.Attributes.Amount.Value }</td>
-								<td class="px-4 py-2 border-b border-gray-300">{ transaction.Attributes.Description }</td>
-								<td class="px-4 py-2 border-b border-gray-300">{ string(transaction.Attributes.Status) }</td>
-								<td class="px-4 py-2 border-b border-gray-300">{ transaction.Attributes.CreatedAt.String() }</td>
+								<td class="px-4 py-2 border-b border-gray-300">
+									<span class={ "text-xs text-white px-2 py-1 rounded", getProviderBadgeClass(transaction.Provider) }>
+										{ 
+										getProviderLabel(transaction.Provider) }
+									</span>
+								</td>
+								<td class="px-4 py-2 border-b border-gray-300">{ transaction.Amount.Value }</td>
+								<td class="px-4 py-2 border-b border-gray-300">{ transaction.Description }</td>
+								<td class="px-4 py-2 border-b border-gray-300">{ transaction.Status }</td>
+								<td class="px-4 py-2 border-b border-gray-300">{ transaction.CreatedAt.String() }</td>
 								<td class="px-4 py-2 border-b border-gray-300">{ getMessage(transaction) }</td>
 								<td class="px-4 py-2 border-b border-gray-300">{ getCategory(transaction) }</td>
-								<td class="px-4 py-2 border-b border-gray-300">{ getCardPurchase(transaction) }</td>
-								<td class="px-4 py-2 border-b border-gray-300">{ getTransactionType(transaction) }</td>
-								<td class="px-4 py-2 border-b border-gray-300">{ getCardPurchaseNumber(transaction) }</td>
 							</tr>
 						}
 					}
@@ -138,7 +108,7 @@ templ TransactionsTable(transactions chan upclient.TransactionResource) {
                 // Create a temporary <a> element for the download
                 const a = document.createElement('a');
                 a.href = downloadUrl;
-                a.download = 'upbank-downloads.csv';  // Specify the filename
+                a.download = 'bank-transactions.csv';  // Specify the filename
                 document.body.appendChild(a);
 
                 // Trigger the download
@@ -243,7 +213,7 @@ templ dateSelector(startDate string, endDate string) {
 	</div>
 }
 
-templ Transactions(title string, transactions chan upclient.TransactionResource, accounts chan upclient.AccountResource, queryParams *functions.QueryParams) {
+templ Transactions(title string, transactions <-chan models.Transaction, accounts <-chan models.Account, queryParams *functions.QueryParams) {
 	@Base(title) {
 		@GridOrganiser() {
 			@AccountButtons(accounts, false)

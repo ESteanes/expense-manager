@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"github.com/esteanes/up-bank-go/datafetcher/functions"
-	"github.com/esteanes/up-bank-go/datafetcher/templates"
 	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
+// TransactionsHandler is the legacy handler for Up Bank transactions
+// Deprecated: Use unified.TransactionsHandler instead
 type TransactionsHandler struct {
 	*functions.BaseHandler
 	*AccountHandler
@@ -24,7 +24,7 @@ func NewTransactionHandler(log *log.Logger, upclient *upclient.APIClient, auth c
 		Log:         log,
 		UpClient:    upclient,
 		UpAuth:      auth,
-		Handler:     handler, // Set the Handler interface to the specific handler
+		Handler:     handler,
 		MaxPageSize: int32(100),
 	}
 	handler.AccountHandler = accountHandler
@@ -35,10 +35,6 @@ func NewTransactionHandler(log *log.Logger, upclient *upclient.APIClient, auth c
 func (h *TransactionsHandler) Post(w http.ResponseWriter, r *http.Request) {}
 
 func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
-	queryParams := functions.FetchQueryParams(r.URL.Query())
-	transactionsChannel := h.TransactionsLogic.FetchAppropriateTransactions(queryParams)
-	accountsChannel := make(chan upclient.AccountResource)
-	go h.AccountHandler.GetAccounts(accountsChannel, upclient.OwnershipTypeEnum("INDIVIDUAL"))
-	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, queryParams), templ.WithStreaming()).ServeHTTP(w, r)
-
+	// Legacy handler - functionality moved to unified handlers
+	http.Error(w, "Use unified handlers", http.StatusNotImplemented)
 }

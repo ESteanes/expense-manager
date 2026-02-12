@@ -1,98 +1,133 @@
 package datafetcher
 
 import (
-	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/esteanes/up-bank-go/datafetcher/handlers"
-	"github.com/esteanes/up-bank-go/datafetcher/templates"
-	"github.com/esteanes/up-bank-go/datafetcher/upclient"
+	authHandlers "github.com/esteanes/up-bank-go/datafetcher/handlers/auth"
+	unifiedHandlers "github.com/esteanes/up-bank-go/datafetcher/handlers/unified"
+	upbankHandlers "github.com/esteanes/up-bank-go/datafetcher/handlers/upbank"
+	"github.com/esteanes/up-bank-go/datafetcher/providers"
+	"github.com/esteanes/up-bank-go/datafetcher/providers/monzo"
+	"github.com/esteanes/up-bank-go/datafetcher/providers/upbank"
 
 	"github.com/alexedwards/scs/v2"
 )
 
-func getInfo(w http.ResponseWriter, r *http.Request) {
-
+// MonzoConfig holds Monzo OAuth configuration
+type MonzoConfig struct {
+	ClientID     string
+	ClientSecret string
+	RedirectURL  string
 }
 
-func NewNowHandler(now func() time.Time) NowHandler {
-	return NowHandler{Now: now}
+// TLSConfig holds optional TLS configuration
+type TLSConfig struct {
+	CertFile string
+	KeyFile  string
 }
 
-type NowHandler struct {
-	Now func() time.Time
-}
-
-func (nh NowHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	templates.TimeComponent(nh.Now()).Render(r.Context(), w)
-}
-
-type GlobalState struct {
-	Count int
-}
-
-var global GlobalState
 var sessionManager *scs.SessionManager
 
-func getHandler(w http.ResponseWriter, r *http.Request) {
-	userCount := sessionManager.GetInt(r.Context(), "count")
-	component := templates.Page(global.Count, userCount)
-	component.Render(r.Context(), w)
-}
-
-func postHandler(w http.ResponseWriter, r *http.Request) {
-	// Update state.
-	r.ParseForm()
-
-	// Check to see if the global button was pressed.
-	if r.Form.Has("global") {
-		global.Count++
-	}
-	//TODO: Update session.
-	if r.Form.Has("user") {
-		currentCount := sessionManager.GetInt(r.Context(), "count")
-		sessionManager.Put(r.Context(), "count", currentCount+1)
-	}
-	// Display the form.
-	getHandler(w, r)
-}
-
-func handleInfo(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-		postHandler(w, r)
-		return
-	}
-	getHandler(w, r)
-}
-
 // HandleRequests function to define the routes and start the server
-func HandleRequests(upBankToken string, log *log.Logger) {
+func HandleRequests(upBankToken string, monzoCfg MonzoConfig, tlsCfg TLSConfig, log *log.Logger) {
 	sessionManager = scs.New()
 	sessionManager.Lifetime = 24 * time.Hour
 
-	// Registering client
-	auth := context.WithValue(context.Background(), upclient.ContextAccessToken, upBankToken)
-	configuration := upclient.NewConfiguration()
-	apiClient := upclient.NewAPIClient(configuration)
+	// Create providers
+	var bankProviders []providers.BankProvider
 
-	// Creating individual handlers
-	accountHandler := handlers.NewAccountHandler(log, apiClient, auth)
-	transactionsHandler := handlers.NewTransactionHandler(log, apiClient, auth, accountHandler)
-	transactionsCsvHandler := handlers.NewTransactionCsvHandler(log, apiClient, auth, transactionsHandler)
-	staticFileHandler := handlers.NewStaticFileHandler(log)
+	// Initialize Up Bank provider
+	if upBankToken != "" {
+		log.Println("Initializing Up Bank provider")
+		bankProviders = append(bankProviders, upbank.NewProvider(upBankToken, log))
+	}
+
+	// Initialize Monzo OAuth manager and provider
+	var monzoOAuthManager *monzo.OAuthManager
+	var monzoProvider *monzo.Provider
+
+	if monzoCfg.ClientID != "" && monzoCfg.ClientSecret != "" {
+		log.Println("Initializing Monzo OAuth manager")
+		var err error
+		monzoOAuthManager, err = monzo.NewOAuthManager(monzo.OAuthConfig{
+			ClientID:     monzoCfg.ClientID,
+			ClientSecret: monzoCfg.ClientSecret,
+			RedirectURL:  monzoCfg.RedirectURL,
+		}, log)
+		if err != nil {
+			log.Printf("Failed to initialize Monzo OAuth: %v", err)
+		} else {
+			monzoProvider = monzo.NewProvider(monzoOAuthManager, log)
+			bankProviders = append(bankProviders, monzoProvider)
+		}
+	}
+
+	// Create aggregator with all enabled providers
+	aggregator := providers.NewAggregator(log, bankProviders...)
+
+	// Creating unified handlers
+	accountHandler := unifiedHandlers.NewAccountHandler(log, aggregator)
+	transactionsHandler := unifiedHandlers.NewTransactionsHandler(log, aggregator, accountHandler)
+	transactionsCsvHandler := unifiedHandlers.NewTransactionsCsvHandler(log, aggregator)
+	staticFileHandler := upbankHandlers.NewStaticFileHandler(log)
+	homeHandler := handlers.NewHomeHandler(log, upBankToken != "", monzoOAuthManager)
+
 	mux := http.NewServeMux()
+
+	// Bank data routes
 	mux.HandleFunc(accountHandler.Uri, accountHandler.ServeHTTP)
 	mux.HandleFunc(transactionsHandler.Uri, transactionsHandler.ServeHTTP)
 	mux.HandleFunc(transactionsCsvHandler.Uri, transactionsCsvHandler.ServeHTTP)
 	mux.HandleFunc(staticFileHandler.Uri, staticFileHandler.ServeHTTP)
-	mux.HandleFunc("/info", getInfo)
-	mux.Handle("/time", NewNowHandler(time.Now))
-	mux.HandleFunc("/counter", handleInfo)
-	log.Println("Serving request at localhost:8080")
-	muxWithSessionMiddleware := sessionManager.LoadAndSave(mux)
-	if err := http.ListenAndServe("0.0.0.0:8080", muxWithSessionMiddleware); err != nil {
-		log.Printf("error listening: %v", err)
+	mux.HandleFunc(homeHandler.Uri, homeHandler.ServeHTTP)
+
+	// Monzo OAuth routes
+	if monzoOAuthManager != nil {
+		monzoAuthHandler := authHandlers.NewMonzoAuthHandler(monzoOAuthManager, log)
+		mux.HandleFunc(monzoAuthHandler.AuthUri, monzoAuthHandler.ServeAuth)
+		mux.HandleFunc(monzoAuthHandler.CallbackUri, monzoAuthHandler.ServeCallback)
+		mux.HandleFunc(monzoAuthHandler.LogoutUri, monzoAuthHandler.ServeLogout)
 	}
+
+	muxWithSessionMiddleware := sessionManager.LoadAndSave(mux)
+
+	// Start the server in a goroutine so we can handle OAuth flow
+	server := &http.Server{
+		Addr:    "127.0.0.1:8080",
+		Handler: muxWithSessionMiddleware,
+	}
+
+	go func() {
+		log.Println("Server starting on https://localhost:8080")
+		if err := server.ListenAndServeTLS(tlsCfg.CertFile, tlsCfg.KeyFile); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Error starting server: %v", err)
+		}
+	}()
+
+	// Give server a moment to start
+	time.Sleep(100 * time.Millisecond)
+
+	// Handle Monzo OAuth flow on startup if needed
+	oauthFlow := NewOAuthStartupFlow(log, monzoOAuthManager)
+	oauthFlow.Run()
+
+	// Print final status
+	fmt.Println()
+	log.Printf("Initialized %d bank provider(s)", aggregator.ProviderCount())
+	if monzoOAuthManager != nil && monzoOAuthManager.IsAuthorized() {
+		log.Println("Monzo: Connected")
+	}
+	if upBankToken != "" {
+		log.Println("Up Bank: Connected")
+	}
+	fmt.Println()
+	log.Println("Server ready at https://localhost:8080")
+	fmt.Println()
+
+	// Block forever (server is running in goroutine)
+	select {}
 }

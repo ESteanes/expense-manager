@@ -1,13 +1,15 @@
 module github.com/esteanes/up-bank-go
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.1
 
 require (
-	github.com/a-h/templ v0.3.856
+	github.com/a-h/templ v0.3.977
 	github.com/alexedwards/scs/v2 v2.8.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
+	golang.org/x/oauth2 v0.35.0
+	gopkg.in/validator.v2 v2.0.1
 )
 
 require (

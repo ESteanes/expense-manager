@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"github.com/esteanes/up-bank-go/datafetcher/functions"
-	"github.com/esteanes/up-bank-go/datafetcher/templates"
 	"github.com/esteanes/up-bank-go/datafetcher/upclient"
 )
 
+// AccountHandler is the legacy handler for Up Bank accounts
+// Deprecated: Use unified.AccountHandler instead
 type AccountHandler struct {
 	*functions.BaseHandler
 }
@@ -22,7 +22,7 @@ func NewAccountHandler(log *log.Logger, upclient *upclient.APIClient, auth conte
 		Log:         log,
 		UpClient:    upclient,
 		UpAuth:      auth,
-		Handler:     handler, // Set the Handler interface to the specific handler
+		Handler:     handler,
 		MaxPageSize: int32(100),
 	}
 	return handler
@@ -30,12 +30,8 @@ func NewAccountHandler(log *log.Logger, upclient *upclient.APIClient, auth conte
 
 func (h *AccountHandler) Post(w http.ResponseWriter, r *http.Request) {}
 func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html charset=utf-8")
-	filterOwnershipType := upclient.OwnershipTypeEnum("INDIVIDUAL")
-	accountChannel := make(chan upclient.AccountResource, 10)
-	go h.GetAccounts(accountChannel, filterOwnershipType)
-
-	templ.Handler(templates.Accounts("Account Information", accountChannel, true), templ.WithStreaming()).ServeHTTP(w, r)
+	// Legacy handler - functionality moved to unified handlers
+	http.Error(w, "Use unified handlers", http.StatusNotImplemented)
 }
 
 func (h *AccountHandler) GetAccounts(accountChannel chan upclient.AccountResource, ownershipType upclient.OwnershipTypeEnum) {
@@ -53,22 +49,16 @@ func (h *AccountHandler) GetAccounts(accountChannel chan upclient.AccountResourc
 		accountChannel <- account
 	}
 }
-func Clone[T any](inCh chan T, size int) <-chan <-chan T {
-	// The channel of channels to return at the end of this function call
-	ret := make(chan (<-chan T), size)
 
-	// This slice keeps track of all the output channels this function will be creating below.
+func Clone[T any](inCh chan T, size int) <-chan <-chan T {
+	ret := make(chan (<-chan T), size)
 	outChs := make([]chan T, size)
 
-	// Create channels, keep track of them in the slice and send them on the return channel
 	for i := 0; i < size; i++ {
-		// The buffer size of the newly created channel is the same as the input channel
 		outChs[i] = make(chan T, cap(inCh))
 		ret <- outChs[i]
 	}
 
-	// Start a goroutine to manage receiving message from the input channels and sending out to the output channels
-	// Close the output channels if the input channel has been closed.
 	go func() {
 		for {
 			msg, more := <-inCh

@@ -1,23 +1,40 @@
 package templates
 
 import (
-	"github.com/esteanes/up-bank-go/datafetcher/upclient"
-	"strings"
 	"github.com/esteanes/up-bank-go/datafetcher/functions"
+	"github.com/esteanes/up-bank-go/datafetcher/models"
+	"strings"
 )
 
-templ AccountButtons(accounts <-chan upclient.AccountResource, isExtendedInfo bool) {
+func getProviderBadgeClass(provider string) string {
+	if provider == models.ProviderMonzo {
+		return "bg-pink-500"
+	}
+	return "bg-orange-500"
+}
+
+func getProviderLabel(provider string) string {
+	if provider == models.ProviderMonzo {
+		return "Monzo"
+	}
+	return "Up Bank"
+}
+
+templ AccountButtons(accounts <-chan models.Account, isExtendedInfo bool) {
 	for account := range accounts {
 		@templ.Flush() {
 			<form action="/transactions" method="GET" class="h-full w-full">
-				<input type="hidden" name={ functions.AccountIdQueryParam } value={ account.Id }/>
-				<div class="p-6 border border-gray-300 rounded-lg bg-gray-50 hover:bg-yellow-400 cursor-pointer" onclick="this.closest('form').submit()">
-					<h2 class="text-xl text-center font-bold mb-4">{ account.Attributes.DisplayName }</h2>
-					<p><span class="font-bold">Account Type:</span> { strings.ToTitle(string(account.Attributes.AccountType)) }</p>
-					<p><span class="font-bold">Balance:</span> { account.Attributes.Balance.CurrencyCode } { account.Attributes.Balance.Value }</p>
+				<input type="hidden" name={ functions.AccountIdQueryParam } value={ account.ProviderID }/>
+				<div class="p-6 border border-gray-300 rounded-lg bg-gray-50 hover:bg-yellow-400 cursor-pointer relative" onclick="this.closest('form').submit()">
+					<span class={ "absolute top-2 right-2 text-xs text-white px-2 py-1 rounded", getProviderBadgeClass(account.Provider) }>
+						{ getProviderLabel(account.Provider) }
+					</span>
+					<h2 class="text-xl text-center font-bold mb-4">{ account.DisplayName }</h2>
+					<p><span class="font-bold">Account Type:</span> { strings.ToTitle(account.AccountType) }</p>
+					<p><span class="font-bold">Balance:</span> { account.Balance.CurrencyCode } { account.Balance.Value }</p>
 					if isExtendedInfo {
-						<p><span class="font-bold">Id:</span> { account.Id }</p>
-						<p><span class="font-bold">Created At:</span> { account.Attributes.CreatedAt.String() }</p>
+						<p><span class="font-bold">Id:</span> { account.ID }</p>
+						<p><span class="font-bold">Created At:</span> { account.CreatedAt.String() }</p>
 					}
 				</div>
 			</form>
@@ -25,7 +42,7 @@ templ AccountButtons(accounts <-chan upclient.AccountResource, isExtendedInfo bo
 	}
 }
 
-templ AccountDetails(accounts <-chan upclient.AccountResource, isExtendedInfo bool) {
+templ AccountDetails(accounts <-chan models.Account, isExtendedInfo bool) {
 	<div class="flex items-center justify-center min-h-screen bg-gray-100">
 		<div class="container mx-auto p-8 bg-gradient-to-r from-orange-50 to-orange-200 shadow-lg rounded-lg">
 			<h1 class="text-4xl font-bold text-center mb-8">Accounts - Details</h1>
@@ -36,7 +53,7 @@ templ AccountDetails(accounts <-chan upclient.AccountResource, isExtendedInfo bo
 	</div>
 }
 
-templ Accounts(title string, accounts <-chan upclient.AccountResource, isExtendedInfo bool) {
+templ Accounts(title string, accounts <-chan models.Account, isExtendedInfo bool) {
 	@Base(title) {
 		@AccountDetails(accounts, isExtendedInfo)
 	}
