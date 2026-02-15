@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -26,20 +25,19 @@ type OAuthConfig struct {
 	ClientID     string
 	ClientSecret string
 	RedirectURL  string
-	TokenFile    string // Path to store tokens for persistence
+	TokenStore   TokenStore // Optional; defaults to NewTokenStore with ~/.monzo-tokens.json
 }
 
 // OAuthManager handles Monzo OAuth2 authentication
 type OAuthManager struct {
-	config       *oauth2.Config
-	token        *oauth2.Token
-	tokenMu      sync.RWMutex
-	state        string
-	log          *log.Logger
-	tokenFile    string
-	authDone     chan struct{}
-	authErr      error
-	isAuthorized bool
+	config   *oauth2.Config
+	token    *oauth2.Token
+	tokenMu  sync.RWMutex
+	state    string
+	log      *log.Logger
+	store    TokenStore
+	authDone chan struct{}
+	authErr  error
 }
 
 // NewOAuthManager creates a new OAuth manager for Monzo
@@ -52,12 +50,12 @@ func NewOAuthManager(cfg OAuthConfig, log *log.Logger) (*OAuthManager, error) {
 		cfg.RedirectURL = "https://localhost:8080/auth/monzo/callback"
 	}
 
-	if cfg.TokenFile == "" {
+	if cfg.TokenStore == nil {
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
 			homeDir = "."
 		}
-		cfg.TokenFile = filepath.Join(homeDir, ".monzo-tokens.json")
+		cfg.TokenStore = NewTokenStore(filepath.Join(homeDir, ".monzo-tokens.json"), log)
 	}
 
 	oauthConfig := &oauth2.Config{
@@ -72,17 +70,17 @@ func NewOAuthManager(cfg OAuthConfig, log *log.Logger) (*OAuthManager, error) {
 	}
 
 	manager := &OAuthManager{
-		config:    oauthConfig,
-		log:       log,
-		tokenFile: cfg.TokenFile,
-		authDone:  make(chan struct{}),
+		config:   oauthConfig,
+		log:      log,
+		store:    cfg.TokenStore,
+		authDone: make(chan struct{}),
 	}
 
 	// Try to load existing tokens
-	if err := manager.loadTokens(); err != nil {
+	if token, err := manager.store.LoadToken(); err != nil {
 		log.Printf("No existing Monzo tokens found: %v", err)
-	} else if manager.token != nil {
-		manager.isAuthorized = true
+	} else {
+		manager.token = token
 		log.Println("Loaded existing Monzo tokens")
 	}
 
@@ -135,11 +133,9 @@ func (m *OAuthManager) ProcessCallback(r *http.Request) error {
 
 	m.tokenMu.Lock()
 	m.token = token
-	m.isAuthorized = true
 	m.tokenMu.Unlock()
 
-	// Save tokens to file
-	if err := m.saveTokens(); err != nil {
+	if err := m.store.SaveToken(token); err != nil {
 		m.log.Printf("Warning: failed to save tokens: %v", err)
 	}
 
@@ -191,8 +187,7 @@ func (m *OAuthManager) GetValidToken(ctx context.Context) (string, error) {
 
 		m.token = newToken
 
-		// Save refreshed tokens
-		if err := m.saveTokens(); err != nil {
+		if err := m.store.SaveToken(newToken); err != nil {
 			m.log.Printf("Warning: failed to save refreshed tokens: %v", err)
 		}
 
@@ -202,70 +197,15 @@ func (m *OAuthManager) GetValidToken(ctx context.Context) (string, error) {
 	return m.token.AccessToken, nil
 }
 
-// GetHTTPClient returns an HTTP client that automatically handles token refresh
-func (m *OAuthManager) GetHTTPClient(ctx context.Context) *http.Client {
-	m.tokenMu.RLock()
-	token := m.token
-	m.tokenMu.RUnlock()
-
-	if token == nil {
-		return http.DefaultClient
-	}
-
-	return m.config.Client(ctx, token)
-}
-
-// saveTokens persists tokens to file
-func (m *OAuthManager) saveTokens() error {
-	if m.tokenFile == "" || m.token == nil {
-		return nil
-	}
-
-	data, err := json.MarshalIndent(m.token, "", "  ")
-	if err != nil {
-		return fmt.Errorf("failed to marshal tokens: %w", err)
-	}
-
-	if err := os.WriteFile(m.tokenFile, data, 0600); err != nil {
-		return fmt.Errorf("failed to write token file: %w", err)
-	}
-
-	m.log.Printf("Tokens saved to %s", m.tokenFile)
-	return nil
-}
-
-// loadTokens loads tokens from file
-func (m *OAuthManager) loadTokens() error {
-	if m.tokenFile == "" {
-		return fmt.Errorf("no token file configured")
-	}
-
-	data, err := os.ReadFile(m.tokenFile)
-	if err != nil {
-		return fmt.Errorf("failed to read token file: %w", err)
-	}
-
-	var token oauth2.Token
-	if err := json.Unmarshal(data, &token); err != nil {
-		return fmt.Errorf("failed to unmarshal tokens: %w", err)
-	}
-
-	m.token = &token
-	return nil
-}
-
 // Logout clears stored tokens
 func (m *OAuthManager) Logout() error {
 	m.tokenMu.Lock()
 	m.token = nil
-	m.isAuthorized = false
 	m.authDone = make(chan struct{}) // Reset auth channel
 	m.tokenMu.Unlock()
 
-	if m.tokenFile != "" {
-		if err := os.Remove(m.tokenFile); err != nil && !os.IsNotExist(err) {
-			return fmt.Errorf("failed to remove token file: %w", err)
-		}
+	if err := m.store.ClearToken(); err != nil {
+		return fmt.Errorf("failed to clear tokens: %w", err)
 	}
 
 	m.log.Println("Monzo tokens cleared")
