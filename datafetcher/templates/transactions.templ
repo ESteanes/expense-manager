@@ -58,7 +58,7 @@ templ TransactionsTable(transactions <-chan models.Transaction) {
 							<tr class="hover:bg-yellow-400">
 								<td class="px-4 py-2 border-b border-gray-300">
 									<span class={ "text-xs text-white px-2 py-1 rounded", getProviderBadgeClass(transaction.Provider) }>
-										{ 
+										{
 										getProviderLabel(transaction.Provider) }
 									</span>
 								</td>
@@ -214,8 +214,9 @@ templ dateSelector(startDate string, endDate string) {
 	</div>
 }
 
-templ Transactions(title string, transactions <-chan models.Transaction, accounts <-chan models.Account, queryParams *functions.QueryParams) {
+templ Transactions(title string, transactions <-chan models.Transaction, accounts <-chan models.Account, alerts <-chan models.ProviderAlert, queryParams *functions.QueryParams) {
 	@Base(title) {
+		@AlertBanner(alerts)
 		@GridOrganiser() {
 			@AccountButtons(accounts, false)
 			@numTransactionSlider(strconv.Itoa(int(*queryParams.NumTransactions)))

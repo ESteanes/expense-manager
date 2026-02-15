@@ -2,10 +2,20 @@ package providers
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/esteanes/up-bank-go/datafetcher/models"
 )
+
+// SCARequiredError is returned when a provider requires Strong Customer Authentication
+type SCARequiredError struct {
+	Provider string
+}
+
+func (e *SCARequiredError) Error() string {
+	return fmt.Sprintf("%s: strong customer authentication required", e.Provider)
+}
 
 // QueryParams holds the parameters for fetching transactions
 type QueryParams struct {

@@ -226,7 +226,7 @@ func AccountButtons(accounts <-chan models.Account, isExtendedInfo bool) templ.C
 	})
 }
 
-func AccountDetails(accounts <-chan models.Account, isExtendedInfo bool) templ.Component {
+func AccountDetails(accounts <-chan models.Account, alerts <-chan models.ProviderAlert, isExtendedInfo bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -248,6 +248,10 @@ func AccountDetails(accounts <-chan models.Account, isExtendedInfo bool) templ.C
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"flex items-center justify-center min-h-screen bg-gray-100\"><div class=\"container mx-auto p-8 bg-gradient-to-r from-orange-50 to-orange-200 shadow-lg rounded-lg\"><h1 class=\"text-4xl font-bold text-center mb-8\">Accounts - Details</h1>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = AlertBanner(alerts).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -281,7 +285,7 @@ func AccountDetails(accounts <-chan models.Account, isExtendedInfo bool) templ.C
 	})
 }
 
-func Accounts(title string, accounts <-chan models.Account, isExtendedInfo bool) templ.Component {
+func Accounts(title string, accounts <-chan models.Account, alerts <-chan models.ProviderAlert, isExtendedInfo bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -314,7 +318,7 @@ func Accounts(title string, accounts <-chan models.Account, isExtendedInfo bool)
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = AccountDetails(accounts, isExtendedInfo).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = AccountDetails(accounts, alerts, isExtendedInfo).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

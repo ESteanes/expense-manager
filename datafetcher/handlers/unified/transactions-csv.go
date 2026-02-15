@@ -118,5 +118,6 @@ func (h *TransactionsCsvHandler) FetchTransactions(ctx context.Context, queryPar
 		StartDate:       queryParams.StartDate,
 		EndDate:         queryParams.EndDate,
 	}
-	return h.Aggregator.GetAllTransactions(ctx, params)
+	txChan, _ := h.Aggregator.GetAllTransactions(ctx, params)
+	return txChan
 }

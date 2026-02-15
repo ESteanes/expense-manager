@@ -42,10 +42,11 @@ templ AccountButtons(accounts <-chan models.Account, isExtendedInfo bool) {
 	}
 }
 
-templ AccountDetails(accounts <-chan models.Account, isExtendedInfo bool) {
+templ AccountDetails(accounts <-chan models.Account, alerts <-chan models.ProviderAlert, isExtendedInfo bool) {
 	<div class="flex items-center justify-center min-h-screen bg-gray-100">
 		<div class="container mx-auto p-8 bg-gradient-to-r from-orange-50 to-orange-200 shadow-lg rounded-lg">
 			<h1 class="text-4xl font-bold text-center mb-8">Accounts - Details</h1>
+			@AlertBanner(alerts)
 			@GridOrganiser() {
 				@AccountButtons(accounts, isExtendedInfo)
 			}
@@ -53,8 +54,8 @@ templ AccountDetails(accounts <-chan models.Account, isExtendedInfo bool) {
 	</div>
 }
 
-templ Accounts(title string, accounts <-chan models.Account, isExtendedInfo bool) {
+templ Accounts(title string, accounts <-chan models.Account, alerts <-chan models.ProviderAlert, isExtendedInfo bool) {
 	@Base(title) {
-		@AccountDetails(accounts, isExtendedInfo)
+		@AccountDetails(accounts, alerts, isExtendedInfo)
 	}
 }

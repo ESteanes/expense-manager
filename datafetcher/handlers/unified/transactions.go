@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"sync"
 
 	"github.com/a-h/templ"
 	"github.com/esteanes/up-bank-go/datafetcher/functions"
@@ -46,16 +47,17 @@ func (h *TransactionsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 // Get handles GET requests for transactions
 func (h *TransactionsHandler) Get(w http.ResponseWriter, r *http.Request) {
 	queryParams := functions.FetchQueryParams(r.URL.Query())
-	transactionsChannel := h.FetchTransactions(r.Context(), queryParams)
-	accountsChannel := h.Aggregator.GetAllAccounts(r.Context())
-	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, queryParams), templ.WithStreaming()).ServeHTTP(w, r)
+	transactionsChannel, txAlerts := h.FetchTransactions(r.Context(), queryParams)
+	accountsChannel, accAlerts := h.Aggregator.GetAllAccounts(r.Context())
+	alerts := mergeAlertChannels(txAlerts, accAlerts)
+	templ.Handler(templates.Transactions("Transactions", transactionsChannel, accountsChannel, alerts, queryParams), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
 // Post handles POST requests (placeholder)
 func (h *TransactionsHandler) Post(w http.ResponseWriter, r *http.Request) {}
 
-// FetchTransactions returns a channel of transactions based on query params
-func (h *TransactionsHandler) FetchTransactions(ctx context.Context, queryParams *functions.QueryParams) <-chan models.Transaction {
+// FetchTransactions returns a channel of transactions and alerts based on query params
+func (h *TransactionsHandler) FetchTransactions(ctx context.Context, queryParams *functions.QueryParams) (<-chan models.Transaction, <-chan models.ProviderAlert) {
 	params := &providers.QueryParams{
 		AccountID:       queryParams.AccountID,
 		NumTransactions: queryParams.NumTransactions,
@@ -63,4 +65,24 @@ func (h *TransactionsHandler) FetchTransactions(ctx context.Context, queryParams
 		EndDate:         queryParams.EndDate,
 	}
 	return h.Aggregator.GetAllTransactions(ctx, params)
+}
+
+// mergeAlertChannels merges multiple alert channels into one
+func mergeAlertChannels(channels ...<-chan models.ProviderAlert) <-chan models.ProviderAlert {
+	merged := make(chan models.ProviderAlert, 10)
+	var wg sync.WaitGroup
+	for _, ch := range channels {
+		wg.Add(1)
+		go func(c <-chan models.ProviderAlert) {
+			defer wg.Done()
+			for alert := range c {
+				merged <- alert
+			}
+		}(ch)
+	}
+	go func() {
+		wg.Wait()
+		close(merged)
+	}()
+	return merged
 }

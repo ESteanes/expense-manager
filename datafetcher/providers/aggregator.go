@@ -2,6 +2,8 @@ package providers
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log"
 	"sync"
 
@@ -33,12 +35,14 @@ func NewAggregator(log *log.Logger, providers ...BankProvider) *Aggregator {
 }
 
 // GetAllAccounts fetches accounts from all providers concurrently
-// Returns a channel that receives accounts from all enabled providers
-func (a *Aggregator) GetAllAccounts(ctx context.Context) <-chan models.Account {
+// Returns a channel of accounts and a channel of alerts for provider errors
+func (a *Aggregator) GetAllAccounts(ctx context.Context) (<-chan models.Account, <-chan models.ProviderAlert) {
 	accountChan := make(chan models.Account, 100)
+	alertChan := make(chan models.ProviderAlert, 10)
 
 	go func() {
 		defer close(accountChan)
+		defer close(alertChan)
 
 		var wg sync.WaitGroup
 		for _, provider := range a.providers {
@@ -55,11 +59,9 @@ func (a *Aggregator) GetAllAccounts(ctx context.Context) <-chan models.Account {
 				providerChan := make(chan models.Account, 50)
 
 				// Start fetching in a goroutine
+				errCh := make(chan error, 1)
 				go func() {
-					err := p.GetAccounts(ctx, providerChan)
-					if err != nil {
-						a.log.Printf("Error fetching accounts from %s: %v", p.ProviderType(), err)
-					}
+					errCh <- p.GetAccounts(ctx, providerChan)
 				}()
 
 				// Forward accounts to the main channel
@@ -70,25 +72,33 @@ func (a *Aggregator) GetAllAccounts(ctx context.Context) <-chan models.Account {
 						return
 					}
 				}
+
+				// Check for errors after the provider channel is drained
+				if err := <-errCh; err != nil {
+					a.log.Printf("Error fetching accounts from %s: %v", p.ProviderType(), err)
+					a.sendAlert(alertChan, p.ProviderType(), err)
+				}
 			}(provider)
 		}
 		wg.Wait()
 	}()
 
-	return accountChan
+	return accountChan, alertChan
 }
 
 // GetAllTransactions fetches transactions from all providers concurrently
-// Returns a channel that receives transactions from all enabled providers
-func (a *Aggregator) GetAllTransactions(ctx context.Context, params *QueryParams) <-chan models.Transaction {
+// Returns a channel of transactions and a channel of alerts for provider errors
+func (a *Aggregator) GetAllTransactions(ctx context.Context, params *QueryParams) (<-chan models.Transaction, <-chan models.ProviderAlert) {
 	bufSize := 1000
 	if params != nil && params.NumTransactions != nil {
 		bufSize = int(*params.NumTransactions)
 	}
 	txChan := make(chan models.Transaction, bufSize)
+	alertChan := make(chan models.ProviderAlert, 10)
 
 	go func() {
 		defer close(txChan)
+		defer close(alertChan)
 
 		var wg sync.WaitGroup
 		for _, provider := range a.providers {
@@ -105,11 +115,9 @@ func (a *Aggregator) GetAllTransactions(ctx context.Context, params *QueryParams
 				providerChan := make(chan models.Transaction, bufSize)
 
 				// Start fetching in a goroutine
+				errCh := make(chan error, 1)
 				go func() {
-					err := p.GetTransactions(ctx, providerChan, params)
-					if err != nil {
-						a.log.Printf("Error fetching transactions from %s: %v", p.ProviderType(), err)
-					}
+					errCh <- p.GetTransactions(ctx, providerChan, params)
 				}()
 
 				// Forward transactions to the main channel
@@ -120,12 +128,33 @@ func (a *Aggregator) GetAllTransactions(ctx context.Context, params *QueryParams
 						return
 					}
 				}
+
+				// Check for errors after the provider channel is drained
+				if err := <-errCh; err != nil {
+					a.log.Printf("Error fetching transactions from %s: %v", p.ProviderType(), err)
+					a.sendAlert(alertChan, p.ProviderType(), err)
+				}
 			}(provider)
 		}
 		wg.Wait()
 	}()
 
-	return txChan
+	return txChan, alertChan
+}
+
+// sendAlert sends a ProviderAlert based on the error type
+func (a *Aggregator) sendAlert(alertChan chan<- models.ProviderAlert, provider string, err error) {
+	var scaErr *SCARequiredError
+	var msg string
+	if errors.As(err, &scaErr) {
+		msg = "Strong Customer Authentication required. Please approve access in the Monzo app, then refresh this page."
+	} else {
+		msg = fmt.Sprintf("Error fetching data from %s: %v", provider, err)
+	}
+	alertChan <- models.ProviderAlert{
+		Provider: provider,
+		Message:  msg,
+	}
 }
 
 // HasProviders returns true if at least one provider is enabled

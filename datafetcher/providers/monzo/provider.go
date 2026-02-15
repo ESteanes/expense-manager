@@ -87,6 +87,7 @@ func (p *Provider) GetAccounts(ctx context.Context, accountChan chan<- models.Ac
 			p.log.Printf("HTTP Status: %d", r.StatusCode)
 			if r.StatusCode == 403 {
 				p.log.Println("403 Forbidden - You may need to approve access in the Monzo app (Strong Customer Authentication)")
+				return &providers.SCARequiredError{Provider: models.ProviderMonzo}
 			}
 		}
 		return err
@@ -177,6 +178,9 @@ func (p *Provider) getTransactionsForAccount(ctx context.Context, txChan chan<- 
 			p.log.Printf("Error fetching Monzo transactions: %v", err)
 			if r != nil {
 				p.log.Printf("HTTP Status: %d", r.StatusCode)
+				if r.StatusCode == 403 {
+					return &providers.SCARequiredError{Provider: models.ProviderMonzo}
+				}
 			}
 			return err
 		}
@@ -222,6 +226,9 @@ func (p *Provider) getTransactionsForAllAccounts(ctx context.Context, txChan cha
 		p.log.Printf("Error fetching Monzo accounts: %v", err)
 		if r != nil {
 			p.log.Printf("HTTP Status: %d", r.StatusCode)
+			if r.StatusCode == 403 {
+				return &providers.SCARequiredError{Provider: models.ProviderMonzo}
+			}
 		}
 		return err
 	}

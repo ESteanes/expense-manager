@@ -42,8 +42,8 @@ func (h *AccountHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // Get handles GET requests for accounts
 func (h *AccountHandler) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html charset=utf-8")
-	accountChannel := h.Aggregator.GetAllAccounts(r.Context())
-	templ.Handler(templates.Accounts("Account Information", accountChannel, true), templ.WithStreaming()).ServeHTTP(w, r)
+	accountChannel, alertChannel := h.Aggregator.GetAllAccounts(r.Context())
+	templ.Handler(templates.Accounts("Account Information", accountChannel, alertChannel, true), templ.WithStreaming()).ServeHTTP(w, r)
 }
 
 // Post handles POST requests (placeholder)
@@ -51,5 +51,6 @@ func (h *AccountHandler) Post(w http.ResponseWriter, r *http.Request) {}
 
 // GetAccounts returns a channel of accounts (for use by other handlers)
 func (h *AccountHandler) GetAccounts() <-chan models.Account {
-	return h.Aggregator.GetAllAccounts(nil)
+	accounts, _ := h.Aggregator.GetAllAccounts(nil)
+	return accounts
 }
