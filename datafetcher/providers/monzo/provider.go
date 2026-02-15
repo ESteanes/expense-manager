@@ -11,7 +11,10 @@ import (
 	"github.com/esteanes/up-bank-go/datafetcher/providers"
 )
 
-const maxPageSize = int32(100)
+const (
+	defaultMaxTransactions = int32(100)
+	pageSize               = int32(100)
+)
 
 // Provider implements the BankProvider interface for Monzo
 type Provider struct {
@@ -77,12 +80,14 @@ func (p *Provider) GetAccounts(ctx context.Context, accountChan chan<- models.Ac
 		return err
 	}
 
-	// Fetch accounts
 	resp, r, err := p.client.AccountsAPI.ListAccounts(authCtx).Execute()
 	if err != nil {
 		p.log.Printf("Error fetching Monzo accounts: %v", err)
 		if r != nil {
-			p.log.Printf("HTTP response: %v", r)
+			p.log.Printf("HTTP Status: %d", r.StatusCode)
+			if r.StatusCode == 403 {
+				p.log.Println("403 Forbidden - You may need to approve access in the Monzo app (Strong Customer Authentication)")
+			}
 		}
 		return err
 	}
@@ -91,13 +96,11 @@ func (p *Provider) GetAccounts(ctx context.Context, accountChan chan<- models.Ac
 		return nil
 	}
 
-	// For each account, fetch its balance
 	for _, account := range resp.Accounts {
 		if account.Id == nil {
 			continue
 		}
 
-		// Fetch balance for this account
 		balanceResp, _, balanceErr := p.client.BalanceAPI.GetBalance(authCtx).
 			AccountId(*account.Id).
 			Execute()
@@ -132,68 +135,93 @@ func (p *Provider) GetTransactions(ctx context.Context, txChan chan<- models.Tra
 		return err
 	}
 
-	maxTransactions := int32(100)
-	if params != nil && params.NumTransactions != nil {
-		maxTransactions = *params.NumTransactions
-	}
-
-	// If specific account is requested
 	if params != nil && params.AccountID != nil {
-		return p.getTransactionsForAccount(authCtx, txChan, *params.AccountID, params, maxTransactions)
+		return p.getTransactionsForAccount(authCtx, txChan, *params.AccountID, params)
 	}
 
-	// Otherwise, fetch accounts first then get transactions for each
-	return p.getTransactionsForAllAccounts(authCtx, txChan, params, maxTransactions)
+	return p.getTransactionsForAllAccounts(authCtx, txChan, params)
 }
 
-func (p *Provider) getTransactionsForAccount(ctx context.Context, txChan chan<- models.Transaction, accountID string, params *providers.QueryParams, maxTransactions int32) error {
-	req := p.client.TransactionsAPI.ListTransactions(ctx).
-		AccountId(accountID).
-		Limit(maxPageSize)
+func (p *Provider) getTransactionsForAccount(ctx context.Context, txChan chan<- models.Transaction, accountID string, params *providers.QueryParams) error {
+	maxTx := getMaxTransactions(params)
+	count := int32(0)
+
+	// Always use forward pagination with 'since' parameter.
+	// The Monzo API returns transactions oldest-first when 'since' is set,
+	// and 'since' supports object IDs for reliable cursor-based pagination.
+	// 'before' is only used as an upper-bound filter (end date), not as a pagination cursor.
+	var sinceCursor, beforeCursor string
+	var prevCursor string
 
 	if params != nil && params.StartDate != nil {
-		req = req.Since(params.StartDate.Format(time.RFC3339))
+		sinceCursor = params.StartDate.Format(time.RFC3339)
 	}
 	if params != nil && params.EndDate != nil {
-		req = req.Before(params.EndDate.Format(time.RFC3339))
+		beforeCursor = params.EndDate.Format(time.RFC3339)
 	}
 
-	resp, r, err := req.Execute()
-	if err != nil {
-		p.log.Printf("Error fetching Monzo transactions: %v", err)
-		if r != nil {
-			p.log.Printf("HTTP response: %v", r)
+	for {
+		req := p.client.TransactionsAPI.ListTransactions(ctx).
+			AccountId(accountID).
+			Limit(pageSize)
+
+		if sinceCursor != "" {
+			req = req.Since(sinceCursor)
 		}
-		return err
-	}
+		if beforeCursor != "" {
+			req = req.Before(beforeCursor)
+		}
 
-	if resp.Transactions == nil {
-		return nil
-	}
+		resp, r, err := req.Execute()
+		if err != nil {
+			p.log.Printf("Error fetching Monzo transactions: %v", err)
+			if r != nil {
+				p.log.Printf("HTTP Status: %d", r.StatusCode)
+			}
+			return err
+		}
 
-	count := int32(0)
-	for _, tx := range resp.Transactions {
-		if count >= maxTransactions {
+		if len(resp.Transactions) == 0 {
 			break
 		}
-		select {
-		case txChan <- NormalizeTransaction(tx, accountID):
-			count++
-		case <-ctx.Done():
-			return ctx.Err()
+
+		for _, tx := range resp.Transactions {
+			if count >= maxTx {
+				return nil
+			}
+			select {
+			case txChan <- NormalizeTransaction(tx, accountID):
+				count++
+			case <-ctx.Done():
+				return ctx.Err()
+			}
 		}
+
+		// Advance cursor using the last transaction's ID (oldest-first ordering
+		// means the last element is the newest in this batch).
+		// 'since' accepts object IDs per the Monzo API spec.
+		lastTx := resp.Transactions[len(resp.Transactions)-1]
+		if lastTx.Id == nil {
+			break
+		}
+		sinceCursor = *lastTx.Id
+
+		// Safety: if cursor hasn't advanced, stop to prevent infinite loops
+		if sinceCursor == prevCursor {
+			break
+		}
+		prevCursor = sinceCursor
 	}
 
 	return nil
 }
 
-func (p *Provider) getTransactionsForAllAccounts(ctx context.Context, txChan chan<- models.Transaction, params *providers.QueryParams, maxTransactions int32) error {
-	// First fetch accounts
+func (p *Provider) getTransactionsForAllAccounts(ctx context.Context, txChan chan<- models.Transaction, params *providers.QueryParams) error {
 	resp, r, err := p.client.AccountsAPI.ListAccounts(ctx).Execute()
 	if err != nil {
 		p.log.Printf("Error fetching Monzo accounts: %v", err)
 		if r != nil {
-			p.log.Printf("HTTP response: %v", r)
+			p.log.Printf("HTTP Status: %d", r.StatusCode)
 		}
 		return err
 	}
@@ -202,11 +230,10 @@ func (p *Provider) getTransactionsForAllAccounts(ctx context.Context, txChan cha
 		return nil
 	}
 
-	// Track total transactions across all accounts
+	maxTx := getMaxTransactions(params)
 	var mu sync.Mutex
 	totalCount := int32(0)
 
-	// Fetch transactions for each account concurrently
 	var wg sync.WaitGroup
 	for _, account := range resp.Accounts {
 		if account.Id == nil {
@@ -216,46 +243,98 @@ func (p *Provider) getTransactionsForAllAccounts(ctx context.Context, txChan cha
 		wg.Add(1)
 		go func(accountID string) {
 			defer wg.Done()
-
-			req := p.client.TransactionsAPI.ListTransactions(ctx).
-				AccountId(accountID).
-				Limit(maxPageSize)
-
-			if params != nil && params.StartDate != nil {
-				req = req.Since(params.StartDate.Format(time.RFC3339))
-			}
-			if params != nil && params.EndDate != nil {
-				req = req.Before(params.EndDate.Format(time.RFC3339))
-			}
-
-			txResp, _, txErr := req.Execute()
-			if txErr != nil {
-				p.log.Printf("Error fetching transactions for account %s: %v", accountID, txErr)
-				return
-			}
-
-			if txResp.Transactions == nil {
-				return
-			}
-
-			for _, tx := range txResp.Transactions {
-				mu.Lock()
-				if totalCount >= maxTransactions {
-					mu.Unlock()
-					return
-				}
-				totalCount++
-				mu.Unlock()
-
-				select {
-				case txChan <- NormalizeTransaction(tx, accountID):
-				case <-ctx.Done():
-					return
-				}
-			}
+			p.fetchTransactionsForAccountPaginated(ctx, txChan, accountID, params, maxTx, &totalCount, &mu)
 		}(*account.Id)
 	}
 
 	wg.Wait()
 	return nil
+}
+
+func (p *Provider) fetchTransactionsForAccountPaginated(
+	ctx context.Context,
+	txChan chan<- models.Transaction,
+	accountID string,
+	params *providers.QueryParams,
+	maxTx int32,
+	totalCount *int32,
+	mu *sync.Mutex,
+) {
+	var sinceCursor, beforeCursor string
+	var prevCursor string
+
+	if params != nil && params.StartDate != nil {
+		sinceCursor = params.StartDate.Format(time.RFC3339)
+	}
+	if params != nil && params.EndDate != nil {
+		beforeCursor = params.EndDate.Format(time.RFC3339)
+	}
+
+	for {
+		// Check if we've already hit the max
+		mu.Lock()
+		if *totalCount >= maxTx {
+			mu.Unlock()
+			return
+		}
+		mu.Unlock()
+
+		req := p.client.TransactionsAPI.ListTransactions(ctx).
+			AccountId(accountID).
+			Limit(pageSize)
+
+		if sinceCursor != "" {
+			req = req.Since(sinceCursor)
+		}
+		if beforeCursor != "" {
+			req = req.Before(beforeCursor)
+		}
+
+		txResp, _, txErr := req.Execute()
+		if txErr != nil {
+			p.log.Printf("Error fetching transactions for account %s: %v", accountID, txErr)
+			return
+		}
+
+		if len(txResp.Transactions) == 0 {
+			return
+		}
+
+		for _, tx := range txResp.Transactions {
+			mu.Lock()
+			if *totalCount >= maxTx {
+				mu.Unlock()
+				return
+			}
+			*totalCount++
+			mu.Unlock()
+
+			select {
+			case txChan <- NormalizeTransaction(tx, accountID):
+			case <-ctx.Done():
+				return
+			}
+		}
+
+		// Advance cursor using the last transaction's ID
+		lastTx := txResp.Transactions[len(txResp.Transactions)-1]
+		if lastTx.Id == nil {
+			return
+		}
+		sinceCursor = *lastTx.Id
+
+		// Safety: if cursor hasn't advanced, stop to prevent infinite loops
+		if sinceCursor == prevCursor {
+			return
+		}
+		prevCursor = sinceCursor
+	}
+}
+
+// getMaxTransactions returns the max transactions from params or the default
+func getMaxTransactions(params *providers.QueryParams) int32 {
+	if params != nil && params.NumTransactions != nil {
+		return *params.NumTransactions
+	}
+	return defaultMaxTransactions
 }

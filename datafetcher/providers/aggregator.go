@@ -15,16 +15,19 @@ type Aggregator struct {
 }
 
 // NewAggregator creates a new Aggregator with the given providers
+// Providers are checked for IsEnabled() at fetch time, not creation time,
+// so providers that become enabled later (e.g., after OAuth) will still work.
 func NewAggregator(log *log.Logger, providers ...BankProvider) *Aggregator {
-	// Filter to only enabled providers
-	enabled := make([]BankProvider, 0)
+	// Filter out nil providers but keep all non-nil ones
+	// IsEnabled() is checked at fetch time to support late authorization
+	validProviders := make([]BankProvider, 0)
 	for _, p := range providers {
-		if p != nil && p.IsEnabled() {
-			enabled = append(enabled, p)
+		if p != nil {
+			validProviders = append(validProviders, p)
 		}
 	}
 	return &Aggregator{
-		providers: enabled,
+		providers: validProviders,
 		log:       log,
 	}
 }
@@ -39,6 +42,12 @@ func (a *Aggregator) GetAllAccounts(ctx context.Context) <-chan models.Account {
 
 		var wg sync.WaitGroup
 		for _, provider := range a.providers {
+			// Check if provider is enabled at fetch time
+			if !provider.IsEnabled() {
+				a.log.Printf("Skipping disabled provider: %s", provider.ProviderType())
+				continue
+			}
+
 			wg.Add(1)
 			go func(p BankProvider) {
 				defer wg.Done()
@@ -72,18 +81,28 @@ func (a *Aggregator) GetAllAccounts(ctx context.Context) <-chan models.Account {
 // GetAllTransactions fetches transactions from all providers concurrently
 // Returns a channel that receives transactions from all enabled providers
 func (a *Aggregator) GetAllTransactions(ctx context.Context, params *QueryParams) <-chan models.Transaction {
-	txChan := make(chan models.Transaction, 1000)
+	bufSize := 1000
+	if params != nil && params.NumTransactions != nil {
+		bufSize = int(*params.NumTransactions)
+	}
+	txChan := make(chan models.Transaction, bufSize)
 
 	go func() {
 		defer close(txChan)
 
 		var wg sync.WaitGroup
 		for _, provider := range a.providers {
+			// Check if provider is enabled at fetch time
+			if !provider.IsEnabled() {
+				a.log.Printf("Skipping disabled provider: %s", provider.ProviderType())
+				continue
+			}
+
 			wg.Add(1)
 			go func(p BankProvider) {
 				defer wg.Done()
 				// Create a channel for this provider
-				providerChan := make(chan models.Transaction, 500)
+				providerChan := make(chan models.Transaction, bufSize)
 
 				// Start fetching in a goroutine
 				go func() {
@@ -109,12 +128,23 @@ func (a *Aggregator) GetAllTransactions(ctx context.Context, params *QueryParams
 	return txChan
 }
 
-// HasProviders returns true if at least one provider is configured
+// HasProviders returns true if at least one provider is enabled
 func (a *Aggregator) HasProviders() bool {
-	return len(a.providers) > 0
+	for _, p := range a.providers {
+		if p.IsEnabled() {
+			return true
+		}
+	}
+	return false
 }
 
-// ProviderCount returns the number of enabled providers
+// ProviderCount returns the number of currently enabled providers
 func (a *Aggregator) ProviderCount() int {
-	return len(a.providers)
+	count := 0
+	for _, p := range a.providers {
+		if p.IsEnabled() {
+			count++
+		}
+	}
+	return count
 }

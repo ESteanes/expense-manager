@@ -57,12 +57,25 @@ func TransactionsTable(transactions <-chan models.Transaction) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"container mx-auto p-8\"><h1 class=\"text-4xl font-bold mb-6\">Transactions</h1><button id=\"downloadButton\" class=\"px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center\"><span id=\"buttonText\">Download Content</span> <svg id=\"loadingSpinner\" class=\"hidden animate-spin h-5 w-5 ml-2 text-white\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle> <path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z\"></path></svg></button><div class=\"overflow-y-auto max-h-96 border border-gray-200 rounded-lg\"><table class=\"min-w-full table-auto bg-gray-50 border border-gray-200 p-10\"><thead class=\"bg-gray-200\"><tr><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Provider</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Transaction Amount</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Description</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Status</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Time</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Message</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Category</th></tr></thead> <tbody class=\"bg-grey-light\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"container mx-auto p-8\"><h1 class=\"text-4xl font-bold mb-6\">Transactions</h1><button id=\"downloadButton\" class=\"px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center\"><span id=\"buttonText\">Download Content</span> <svg id=\"loadingSpinner\" class=\"hidden animate-spin h-5 w-5 ml-2 text-white\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle> <path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z\"></path></svg></button><p>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(len(transactions))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 41, Col: 23}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p><div class=\"overflow-y-auto max-h-96 border border-gray-200 rounded-lg\"><table class=\"min-w-full table-auto bg-gray-50 border border-gray-200 p-10\"><thead class=\"bg-gray-200\"><tr><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Provider</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Transaction Amount</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Description</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Status</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Time</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Message</th><th class=\"bg-gray-200 px-4 py-2 text-left border-b border-gray-300 sticky top-0\">Category</th></tr></thead> <tbody class=\"bg-grey-light\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for transaction := range transactions {
-			templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -74,63 +87,50 @@ func TransactionsTable(transactions <-chan models.Transaction) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<tr class=\"hover:bg-yellow-400\"><td class=\"px-4 py-2 border-b border-gray-300\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<tr class=\"hover:bg-yellow-400\"><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var3 = []any{"text-xs text-white px-2 py-1 rounded", getProviderBadgeClass(transaction.Provider)}
-				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var3...)
+				var templ_7745c5c3_Var4 = []any{"text-xs text-white px-2 py-1 rounded", getProviderBadgeClass(transaction.Provider)}
+				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span class=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var3).String())
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 1, Col: 0}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<span class=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(
-					getProviderLabel(transaction.Provider))
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var4).String())
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 61, Col: 48}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 1, Col: 0}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span></td><td class=\"px-4 py-2 border-b border-gray-300\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.Amount.Value)
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(
+					getProviderLabel(transaction.Provider))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 64, Col: 81}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 62, Col: 48}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</td><td class=\"px-4 py-2 border-b border-gray-300\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</span></td><td class=\"px-4 py-2 border-b border-gray-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.Description)
+				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.Amount.Value)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 65, Col: 80}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 65, Col: 81}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -141,9 +141,9 @@ func TransactionsTable(transactions <-chan models.Transaction) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var8 string
-				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.Status)
+				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.Description)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 66, Col: 75}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 66, Col: 80}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -154,9 +154,9 @@ func TransactionsTable(transactions <-chan models.Transaction) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var9 string
-				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.CreatedAt.String())
+				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.Status)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 67, Col: 87}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 67, Col: 75}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -167,9 +167,9 @@ func TransactionsTable(transactions <-chan models.Transaction) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var10 string
-				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(getMessage(transaction))
+				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(transaction.CreatedAt.String())
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 68, Col: 80}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 68, Col: 87}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {
@@ -180,26 +180,39 @@ func TransactionsTable(transactions <-chan models.Transaction) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var11 string
-				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(getCategory(transaction))
+				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(getMessage(transaction))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 69, Col: 81}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 69, Col: 80}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</td></tr>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</td><td class=\"px-4 py-2 border-b border-gray-300\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var12 string
+				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(getCategory(transaction))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 70, Col: 81}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</td></tr>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = templ.Flush().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = templ.Flush().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</tbody></table></div></div><script>\n        document.getElementById('downloadButton').addEventListener('click', function() {\n            const startDateInput = document.getElementById('start-date');\n            const endDateInput = document.getElementById('end-date');\n            const startDate = new Date(startDateInput.value).toISOString();\n            const endDate = new Date(endDateInput.value).toISOString();\n            const numTransactions = document.getElementById('slider').value;\n\n            // Build the URL with query parameters\n            const url = new URL('/api/v1/transactions/csv', window.location.origin);\n            if (startDate) {\n                url.searchParams.set('startDate', startDate);\n            }\n            if (endDate) {\n                url.searchParams.set('endDate', endDate);\n            }\n            url.searchParams.set('numTransactions', numTransactions);\n            url.searchParams.set('accountId', new URLSearchParams(window.location.search).get(\"accountId\"))\n\n            // Fetch the file with the generated URL\n            fetch(url, {\n                method: 'GET',\n                headers: {\n                    // Add any headers if necessary\n                }\n            })\n            .then(response => response.blob())  // Convert to blob\n            .then(blob => {\n                // Create a URL for the blob object\n                const downloadUrl = window.URL.createObjectURL(blob);\n\n                // Create a temporary <a> element for the download\n                const a = document.createElement('a');\n                a.href = downloadUrl;\n                a.download = 'bank-transactions.csv';  // Specify the filename\n                document.body.appendChild(a);\n\n                // Trigger the download\n                a.click();\n\n                // Clean up\n                a.remove();\n                window.URL.revokeObjectURL(downloadUrl);\n            })\n            .catch(error => console.error('Download failed', error));\n        });\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</tbody></table></div></div><script>\n        document.getElementById('downloadButton').addEventListener('click', function() {\n            const startDateInput = document.getElementById('start-date');\n            const endDateInput = document.getElementById('end-date');\n            const startDate = new Date(startDateInput.value).toISOString();\n            const endDate = new Date(endDateInput.value).toISOString();\n            const numTransactions = document.getElementById('slider').value;\n\n            // Build the URL with query parameters\n            const url = new URL('/api/v1/transactions/csv', window.location.origin);\n            if (startDate) {\n                url.searchParams.set('startDate', startDate);\n            }\n            if (endDate) {\n                url.searchParams.set('endDate', endDate);\n            }\n            url.searchParams.set('numTransactions', numTransactions);\n            url.searchParams.set('accountId', new URLSearchParams(window.location.search).get(\"accountId\"))\n\n            // Fetch the file with the generated URL\n            fetch(url, {\n                method: 'GET',\n                headers: {\n                    // Add any headers if necessary\n                }\n            })\n            .then(response => response.blob())  // Convert to blob\n            .then(blob => {\n                // Create a URL for the blob object\n                const downloadUrl = window.URL.createObjectURL(blob);\n\n                // Create a temporary <a> element for the download\n                const a = document.createElement('a');\n                a.href = downloadUrl;\n                a.download = 'bank-transactions.csv';  // Specify the filename\n                document.body.appendChild(a);\n\n                // Trigger the download\n                a.click();\n\n                // Clean up\n                a.remove();\n                window.URL.revokeObjectURL(downloadUrl);\n            })\n            .catch(error => console.error('Download failed', error));\n        });\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -223,38 +236,38 @@ func numTransactionSlider(numTransactions string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var12 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var12 == nil {
-			templ_7745c5c3_Var12 = templ.NopComponent
+		templ_7745c5c3_Var13 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var13 == nil {
+			templ_7745c5c3_Var13 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<div class=\"p-6 bg-white rounded-lg shadow-lg\"><label for=\"slider\" class=\"block text-lg font-semibold mb-4\">Number of Transactions</label><!-- Slider --><input type=\"range\" id=\"slider\" min=\"1\" max=\"10000\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(numTransactions)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 130, Col: 77}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer\"><!-- Displayed value as an input field --><div class=\"mt-4 flex items-center space-x-2\"><label for=\"sliderValue\" class=\"text-sm font-medium text-gray-700\">Value:</label> <input type=\"number\" id=\"sliderValue\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"p-6 bg-white rounded-lg shadow-lg\"><label for=\"slider\" class=\"block text-lg font-semibold mb-4\">Number of Transactions</label><!-- Slider --><input type=\"range\" id=\"slider\" min=\"1\" max=\"10000\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(numTransactions)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 134, Col: 64}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 131, Col: 77}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" min=\"1\" max=\"100\" class=\"w-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div><!-- Button to grab the slider value and refresh the page --><button id=\"submitButton\" class=\"mt-6 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400\">Set Transactions</button></div><script>\n        const slider = document.getElementById('slider');\n        const sliderValueInput = document.getElementById('sliderValue');\n        const submitButton = document.getElementById('submitButton');\n\n        // Sync input field when slider changes\n        slider.addEventListener('input', function() {\n            sliderValueInput.value = slider.value;\n        });\n\n        // Sync slider when input field changes\n        sliderValueInput.addEventListener('input', function() {\n            if (sliderValueInput.value >= slider.min && sliderValueInput.value <= slider.max) {\n                slider.value = sliderValueInput.value;\n            }\n        });\n\n        // On button click, update URL with the query parameter and refresh the page\n        submitButton.addEventListener('click', function() {\n            const sliderValue = slider.value;\n            const url = new URL(window.location.href);\n            url.searchParams.set('numTransactions', sliderValue);\n            window.location.href = url.toString(); // Refresh the page with the updated query parameter\n        });\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" class=\"w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer\"><!-- Displayed value as an input field --><div class=\"mt-4 flex items-center space-x-2\"><label for=\"sliderValue\" class=\"text-sm font-medium text-gray-700\">Value:</label> <input type=\"number\" id=\"sliderValue\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var15 string
+		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(numTransactions)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 135, Col: 64}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\" min=\"1\" max=\"100\" class=\"w-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div><!-- Button to grab the slider value and refresh the page --><button id=\"submitButton\" class=\"mt-6 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400\">Set Transactions</button></div><script>\n        const slider = document.getElementById('slider');\n        const sliderValueInput = document.getElementById('sliderValue');\n        const submitButton = document.getElementById('submitButton');\n\n        // Sync input field when slider changes\n        slider.addEventListener('input', function() {\n            sliderValueInput.value = slider.value;\n        });\n\n        // Sync slider when input field changes\n        sliderValueInput.addEventListener('input', function() {\n            if (sliderValueInput.value >= slider.min && sliderValueInput.value <= slider.max) {\n                slider.value = sliderValueInput.value;\n            }\n        });\n\n        // On button click, update URL with the query parameter and refresh the page\n        submitButton.addEventListener('click', function() {\n            const sliderValue = slider.value;\n            const url = new URL(window.location.href);\n            url.searchParams.set('numTransactions', sliderValue);\n            window.location.href = url.toString(); // Refresh the page with the updated query parameter\n        });\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -278,38 +291,38 @@ func dateSelector(startDate string, endDate string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var15 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var15 == nil {
-			templ_7745c5c3_Var15 = templ.NopComponent
+		templ_7745c5c3_Var16 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var16 == nil {
+			templ_7745c5c3_Var16 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<div class=\"p-6 bg-white rounded-lg shadow-lg max-w-2xl\"><h2 class=\"text-xl font-bold mb-4 text-gray-700\">Select Date Range</h2><div class=\"flex space-x-4\"><!-- Start Date Input --><div class=\"flex flex-col\"><label for=\"start-date\" class=\"mb-2 text-sm font-medium text-gray-600\">Start Date</label> <input type=\"date\" id=\"start-date\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var16 string
-		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(startDate)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 175, Col: 56}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\" class=\"w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div><!-- End Date Input --><div class=\"flex flex-col\"><label for=\"end-date\" class=\"mb-2 text-sm font-medium text-gray-600\">End Date</label> <input type=\"date\" id=\"end-date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<div class=\"p-6 bg-white rounded-lg shadow-lg max-w-2xl\"><h2 class=\"text-xl font-bold mb-4 text-gray-700\">Select Date Range</h2><div class=\"flex space-x-4\"><!-- Start Date Input --><div class=\"flex flex-col\"><label for=\"start-date\" class=\"mb-2 text-sm font-medium text-gray-600\">Start Date</label> <input type=\"date\" id=\"start-date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
-		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(endDate)
+		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(startDate)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 180, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 176, Col: 56}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" class=\"w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div></div><button id=\"dateSubmitButton\" class=\"mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400\">Submit</button><script>\n        // On button click, update URL with the query parameters for startDate and endDate and refresh the page\n        dateSubmitButton.addEventListener('click', function() {\n            const startDateInput = document.getElementById('start-date');\n            const endDateInput = document.getElementById('end-date');\n            const dateSubmitButton = document.getElementById('dateSubmitButton');\n            const startDate = new Date(startDateInput.value).toISOString();\n            const endDate = new Date(endDateInput.value).toISOString();\n\n            // Create a new URL object\n            const url = new URL(window.location.href);\n\n            // Add or update the query parameters for startDate and endDate\n            if (startDate) {\n                url.searchParams.set('startDate', startDate);\n            }\n            if (endDate) {\n                url.searchParams.set('endDate', endDate);\n            }\n            if (startDate == null && endDate == null) {\n                return;\n            }\n\n            // Refresh the page with the updated URL\n            window.location.href = url.toString();\n        });\n    </script></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" class=\"w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div><!-- End Date Input --><div class=\"flex flex-col\"><label for=\"end-date\" class=\"mb-2 text-sm font-medium text-gray-600\">End Date</label> <input type=\"date\" id=\"end-date\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var18 string
+		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(endDate)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `datafetcher/templates/transactions.templ`, Line: 181, Col: 52}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\" class=\"w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"></div></div><button id=\"dateSubmitButton\" class=\"mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400\">Submit</button><script>\n        // On button click, update URL with the query parameters for startDate and endDate and refresh the page\n        dateSubmitButton.addEventListener('click', function() {\n            const startDateInput = document.getElementById('start-date');\n            const endDateInput = document.getElementById('end-date');\n            const dateSubmitButton = document.getElementById('dateSubmitButton');\n            const startDate = new Date(startDateInput.value).toISOString();\n            const endDate = new Date(endDateInput.value).toISOString();\n\n            // Create a new URL object\n            const url = new URL(window.location.href);\n\n            // Add or update the query parameters for startDate and endDate\n            if (startDate) {\n                url.searchParams.set('startDate', startDate);\n            }\n            if (endDate) {\n                url.searchParams.set('endDate', endDate);\n            }\n            if (startDate == null && endDate == null) {\n                return;\n            }\n\n            // Refresh the page with the updated URL\n            window.location.href = url.toString();\n        });\n    </script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -333,12 +346,12 @@ func Transactions(title string, transactions <-chan models.Transaction, accounts
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var18 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var18 == nil {
-			templ_7745c5c3_Var18 = templ.NopComponent
+		templ_7745c5c3_Var19 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var19 == nil {
+			templ_7745c5c3_Var19 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var19 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var20 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -350,7 +363,7 @@ func Transactions(title string, transactions <-chan models.Transaction, accounts
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var20 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var21 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -366,7 +379,7 @@ func Transactions(title string, transactions <-chan models.Transaction, accounts
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, " ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -374,7 +387,7 @@ func Transactions(title string, transactions <-chan models.Transaction, accounts
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, " ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -384,11 +397,11 @@ func Transactions(title string, transactions <-chan models.Transaction, accounts
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = GridOrganiser().Render(templ.WithChildren(ctx, templ_7745c5c3_Var20), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = GridOrganiser().Render(templ.WithChildren(ctx, templ_7745c5c3_Var21), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -398,7 +411,7 @@ func Transactions(title string, transactions <-chan models.Transaction, accounts
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = Base(title).Render(templ.WithChildren(ctx, templ_7745c5c3_Var19), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Base(title).Render(templ.WithChildren(ctx, templ_7745c5c3_Var20), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
